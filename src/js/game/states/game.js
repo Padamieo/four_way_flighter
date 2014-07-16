@@ -61,7 +61,6 @@ var indicator;
 	game.scale.fullScreenScaleMode = Phaser.ScaleManager.SHOW_ALL;
     game.input.onDown.add(gofull, this);
 	
-	
 	/*
 	stars = game.add.group();
 	stars.enableBody = true;
@@ -170,11 +169,15 @@ gameState.update = function (){
         
 		player.x--;
 		player.body.velocity.x = -160;
+		player.angle = -20;
 		
     }if (pad1.isDown(Phaser.Gamepad.XBOX360_DPAD_RIGHT) || pad1.axis(Phaser.Gamepad.XBOX360_STICK_LEFT_X) > 0.1 || cursors.right.isDown){
 
 		player.x++;
 		player.body.velocity.x = 160;
+		//player.body.angle = 10;
+		player.angle = 20;
+		
 	
     }if (pad1.isDown(Phaser.Gamepad.XBOX360_DPAD_UP) || pad1.axis(Phaser.Gamepad.XBOX360_STICK_LEFT_Y) < -0.1 || cursors.up.isDown){
        
@@ -187,7 +190,9 @@ gameState.update = function (){
 		player.body.velocity.y = 140;
 		
     }
-    
+	
+	
+    //player.angle = 0;
 	far.tilePosition.y += 1.50;
 	
 };
