@@ -43,7 +43,7 @@ var indicator;
 	
     // The player and its settings
     player = game.add.sprite(32, game.world.height - 150, 'dude');
-	//sprite.player.setTo(0.5,0.5);
+	player.anchor.setTo(0.5,0.5);
     //  We need to enable physics on the player
 
     game.physics.arcade.enable(player);
@@ -64,14 +64,6 @@ var indicator;
 	/*
 	stars = game.add.group();
 	stars.enableBody = true;
-	
-    //  Create our Timer
-    timer = game.time.create(false);
-    //  Set a TimerEvent to occur after 2 seconds
-    timer.loop(3500, updateCounter, this);
-    //  Start the timer running - this is important!
-    //  It won't start automatically, allowing you to hook it to button events and the like.
-    timer.start();
 	
 	tick = game.time.create(false);
 	tick.loop(2000, updateTick, this);
@@ -100,29 +92,50 @@ var indicator;
     // To listen to buttons from a specific pad listen directly on that pad game.input.gamepad.padX, where X = pad 1-4
     pad1 = game.input.gamepad.pad1;
 	
+	
+	game.bulletPool = game.add.group();
+	game.bulletPool.enableBody = true;
+	game.bulletPool.physicsBodyType = Phaser.Physics.ARCADE
+	game.bulletPool.createMultiple(100, 'bullet');
+	game.bulletPool.setAll('anchor.x', 0.5);
+	game.bulletPool.setAll('anchor.y', 0.5);
+	game.bulletPool.setAll('outOfBoundsKill', true);
+	game.bulletPool.setAll('checkWorldBounds', true);
  };
 	function update_energy(score){
 		scoreText.text = 'Score: ' + score;
 	}
-  
-	function updateCounter() {
-		var value = game.rnd.pick(pos);
-		var star = stars.create(game.stage.bounds.width, value, 'star');
-		star.body.velocity.x = -100;
-		//add gravity bounce to stars i think this is too much
-        //star.body.gravity.y = 100;
-		//star.body.bounce.y = 0.8 + Math.random() * 0.7;
-	}
 	
 	function updateTick() {
 		//update the score
-		score = score - 3;
-		update_energy(score);
+		//score = score - 3;
+		//update_energy(score);
 	}	
   
 	function gofull() {
 		game.scale.startFullScreen();
 	}
+	
+function fire(input) {
+	/*
+	bullet = game.add.sprite(player.x, player.y, 'bullet');
+	bullet.anchor.setTo(0.5, 0.5);
+	game.physics.enable(bullet, Phaser.Physics.ARCADE);
+	bullet.angle -= 1;
+	bullet.body.velocity.y = -500;
+	//this.bullets.push(bullet);
+	*/
+	if (game.bulletPool.countDead() === 0) {
+		return;
+	}
+	bullet = game.bulletPool.getFirstExists(false);
+	bullet.reset(player.x, player.y, 'bullet');
+	if(input = 1){
+		bullet.body.velocity.y -= 500;
+	}else if ( input = 2 ){
+		bullet.body.velocity.y += 500;
+	}
+}
   
 gameState.update = function (){
   
@@ -136,7 +149,7 @@ gameState.update = function (){
 	 
     //  Reset the players velocity (movement)
     player.body.velocity.x = 0;
-	
+	player.body.velocity.y = 0;
 	
 /*
     if (cursors.left.isDown){
@@ -165,32 +178,38 @@ gameState.update = function (){
     }
 
     // Controls
-    if ((pad1.isDown(Phaser.Gamepad.XBOX360_DPAD_LEFT) || pad1.axis(Phaser.Gamepad.XBOX360_STICK_LEFT_X) < -0.1) || cursors.left.isDown){
-        
-		player.x--;
-		player.body.velocity.x = -160;
-		player.angle = -20;
-		
-    }if (pad1.isDown(Phaser.Gamepad.XBOX360_DPAD_RIGHT) || pad1.axis(Phaser.Gamepad.XBOX360_STICK_LEFT_X) > 0.1 || cursors.right.isDown){
-
-		player.x++;
-		player.body.velocity.x = 160;
-		//player.body.angle = 10;
-		player.angle = 20;
-		
-	
-    }if (pad1.isDown(Phaser.Gamepad.XBOX360_DPAD_UP) || pad1.axis(Phaser.Gamepad.XBOX360_STICK_LEFT_Y) < -0.1 || cursors.up.isDown){
-       
-	   player.y--;
-	   player.body.velocity.y = -140;
-		
-    }if (pad1.isDown(Phaser.Gamepad.XBOX360_DPAD_DOWN) || pad1.axis(Phaser.Gamepad.XBOX360_STICK_LEFT_Y) > 0.1 || cursors.down.isDown){
-        
-		player.y++;
-		player.body.velocity.y = 140;
-		
+    if ( cursors.left.isDown){
+		fire(1);
+    }else if ( cursors.right.isDown){
+		//player.angle -= 1;
+		fire(2);
     }
 	
+	if (cursors.up.isDown){
+		fire();
+    }else if (cursors.down.isDown){
+		fire();
+    }
+	
+	if (game.input.keyboard.isDown(Phaser.Keyboard.A)) {
+		player.body.velocity.x = -160;
+		if( player.angle > -20 ){
+			player.angle -= 1;
+		}
+	}else if(game.input.keyboard.isDown(Phaser.Keyboard.D)){
+		player.body.velocity.x = 160;
+		if( player.angle < 20 ){
+			player.angle += 1;
+		}	
+	}
+	
+	if (game.input.keyboard.isDown(Phaser.Keyboard.W)) {
+		player.body.velocity.y = -140;
+		//player.animations.play('forward');
+	}else if(game.input.keyboard.isDown(Phaser.Keyboard.S)){
+		player.body.velocity.y = 140;
+		//player.animations.play('back');
+	}
 	
     //player.angle = 0;
 	far.tilePosition.y += 1.50;

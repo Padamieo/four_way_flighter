@@ -5,8 +5,8 @@ module.exports =
   , liveReloadPort: 3018
   , showStats: true
   , size:
-    { x: 770
-    , y: 433
+    { x: 1280
+    , y: 720
     }
   , analyticsId: 'UA-50892214-2'
   };

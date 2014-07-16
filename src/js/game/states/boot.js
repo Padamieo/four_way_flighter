@@ -27,7 +27,7 @@ module.exports = function(game) {
     if (properties.showStats) {
       addStats();
     }
-
+	
     game.scale.pageAlignHorizontally = false;
     game.scale.pageAlignVertically = false;
     game.scale.refresh();

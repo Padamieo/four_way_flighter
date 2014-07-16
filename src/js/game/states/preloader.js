@@ -9,6 +9,7 @@ module.exports = function(game) {
     game.load.image('star', 'images/star.png');
     game.load.spritesheet('dude', 'images/fighter.png', 32, 48);
 	game.load.spritesheet('controller-indicator', 'images/controller-indicator.png', 16,16);
+	this.load.image('bullet', 'images/bullet.png');
   };
 
   preloader.create = function () {
