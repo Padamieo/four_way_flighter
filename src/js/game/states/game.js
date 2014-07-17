@@ -128,13 +128,21 @@ function fire(input) {
 	if (game.bulletPool.countDead() === 0) {
 		return;
 	}
+	
 	bullet = game.bulletPool.getFirstExists(false);
 	bullet.reset(player.x, player.y, 'bullet');
-	if(input = 1){
-		bullet.body.velocity.y -= 500;
-	}else if ( input = 2 ){
-		bullet.body.velocity.y += 500;
+		
+	if ( cursors.left.isDown){
+		bullet.body.velocity.x -= 500;
+	}else if (cursors.right.isDown){
+		bullet.body.velocity.x += 500;
 	}
+	if (cursors.up.isDown){
+		bullet.body.velocity.y -= 500;
+	}else if (cursors.down.isDown){
+		bullet.body.velocity.y += 500;
+    }
+	
 }
   
 gameState.update = function (){
@@ -151,25 +159,6 @@ gameState.update = function (){
     player.body.velocity.x = 0;
 	player.body.velocity.y = 0;
 	
-/*
-    if (cursors.left.isDown){
-        //  Move to the left
-        player.body.velocity.x = -150;
-        player.animations.play('left');
-    }else if (cursors.right.isDown){
-        //  Move to the right
-        player.body.velocity.x = 150;
-        player.animations.play('right');
-    }else if (cursors.down.isDown){
-		player.body.velocity.y = 150;
-    }else if (cursors.up.isDown){
-        player.body.velocity.y = -150;
-    }else{
-        //  Stand still
-        //player.animations.stop();
-		player.animations.play('default');
-	}
-*/
     // Pad "connected or not" indicator
     if(game.input.gamepad.supported && game.input.gamepad.active && pad1.connected) {
         indicator.animations.frame = 0;
@@ -178,29 +167,20 @@ gameState.update = function (){
     }
 
     // Controls
-    if ( cursors.left.isDown){
-		fire(1);
-    }else if ( cursors.right.isDown){
-		//player.angle -= 1;
-		fire(2);
-    }
-	
-	if (cursors.up.isDown){
-		fire();
-    }else if (cursors.down.isDown){
+    if ( cursors.left.isDown || cursors.right.isDown || cursors.up.isDown || cursors.down.isDown){
 		fire();
     }
 	
 	if (game.input.keyboard.isDown(Phaser.Keyboard.A)) {
-		player.body.velocity.x = -160;
+		player.body.velocity.x -= 160;
 		if( player.angle > -20 ){
 			player.angle -= 1;
 		}
 	}else if(game.input.keyboard.isDown(Phaser.Keyboard.D)){
-		player.body.velocity.x = 160;
+		player.body.velocity.x += 160;
 		if( player.angle < 20 ){
 			player.angle += 1;
-		}	
+		}
 	}
 	
 	if (game.input.keyboard.isDown(Phaser.Keyboard.W)) {
@@ -210,8 +190,7 @@ gameState.update = function (){
 		player.body.velocity.y = 140;
 		//player.animations.play('back');
 	}
-	
-    //player.angle = 0;
+	    
 	far.tilePosition.y += 1.50;
 	
 };
