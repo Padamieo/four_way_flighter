@@ -4,7 +4,6 @@ module.exports = function(game) {
 	var score = 0;
 	var scoreText;
 	
-	
 var player;
 var pad1;
 var indicator;
@@ -16,31 +15,12 @@ var indicator;
     //logo.anchor.setTo(0.5, 0.5);
 	
 	//this is the standard physics with phaser
-	//game.physics.startSystem(Phaser.Physics.ARCADE);
+	game.physics.startSystem(Phaser.Physics.ARCADE);
 	
 	//this is the background
 	//game.add.sprite(30, 0, 'sky');
 	far = game.add.tileSprite(0, 0, game.stage.bounds.width, game.stage.bounds.height, 'sky');
-	
-	// The platforms group contains the ground and the 2 ledges we can jump on
-    //platforms = game.add.group();
-    // We will enable physics for any object that is created in this group
-    //platforms.enableBody = true;
-    // Here we create the ground.
-    //var ground = platforms.create(0, game.world.height - 40, 'ground');
-
-    // Scale it to fit the width of the game (the original sprite is 400x32 in size)
-    //ground.scale.setTo(2, 2);
-    // This stops it from falling away when you jump on it
-    //ground.body.immovable = true;
-
-    //  Now let's create two ledges
-    //var ledge = platforms.create(400, 400, 'ground');
-    //ledge.body.immovable = true;
-
-    //ledge = platforms.create(-150, 250, 'ground');
-    //ledge.body.immovable = true;
-	
+		
     // The player and its settings
     player = game.add.sprite(32, game.world.height - 150, 'dude');
 	player.anchor.setTo(0.5,0.5);
@@ -101,6 +81,9 @@ var indicator;
 	game.bulletPool.setAll('anchor.y', 0.5);
 	game.bulletPool.setAll('outOfBoundsKill', true);
 	game.bulletPool.setAll('checkWorldBounds', true);
+	
+game.nextShotAt = 0;
+game.shotDelay = 30;
  };
 	function update_energy(score){
 		scoreText.text = 'Score: ' + score;
@@ -117,14 +100,11 @@ var indicator;
 	}
 	
 function fire(input) {
-	/*
-	bullet = game.add.sprite(player.x, player.y, 'bullet');
-	bullet.anchor.setTo(0.5, 0.5);
-	game.physics.enable(bullet, Phaser.Physics.ARCADE);
-	bullet.angle -= 1;
-	bullet.body.velocity.y = -500;
-	//this.bullets.push(bullet);
-	*/
+	if (game.nextShotAt > game.time.now) {
+		return;
+	}
+	game.nextShotAt = game.time.now + game.shotDelay;
+	
 	if (game.bulletPool.countDead() === 0) {
 		return;
 	}
@@ -132,14 +112,14 @@ function fire(input) {
 	bullet = game.bulletPool.getFirstExists(false);
 	bullet.reset(player.x, player.y, 'bullet');
 		
-	if ( cursors.left.isDown){
+	if ( cursors.left.isDown ||  pad1.axis(Phaser.Gamepad.XBOX360_STICK_RIGHT_X) < -0.01 ){
 		bullet.body.velocity.x -= 500;
-	}else if (cursors.right.isDown){
+	}else if (cursors.right.isDown ||  pad1.axis(Phaser.Gamepad.XBOX360_STICK_RIGHT_X) > 0.01 ){
 		bullet.body.velocity.x += 500;
 	}
-	if (cursors.up.isDown){
+	if (cursors.up.isDown || pad1.axis(Phaser.Gamepad.XBOX360_STICK_RIGHT_Y) < -0.01){
 		bullet.body.velocity.y -= 500;
-	}else if (cursors.down.isDown){
+	}else if (cursors.down.isDown || pad1.axis(Phaser.Gamepad.XBOX360_STICK_RIGHT_Y) > 0.01){
 		bullet.body.velocity.y += 500;
     }
 	
@@ -167,27 +147,30 @@ gameState.update = function (){
     }
 
     // Controls
-    if ( cursors.left.isDown || cursors.right.isDown || cursors.up.isDown || cursors.down.isDown){
+    if ( cursors.left.isDown || cursors.right.isDown || cursors.up.isDown || cursors.down.isDown || pad1.axis(Phaser.Gamepad.XBOX360_STICK_RIGHT_Y) > 0.01 || pad1.axis(Phaser.Gamepad.XBOX360_STICK_RIGHT_Y) < -0.01 || pad1.axis(Phaser.Gamepad.XBOX360_STICK_RIGHT_X) < -0.01 ||  pad1.axis(Phaser.Gamepad.XBOX360_STICK_RIGHT_X) > 0.01){
 		fire();
-    }
+		speed = 160;
+    }else{
+		speed = 200;
+	}
 	
-	if (game.input.keyboard.isDown(Phaser.Keyboard.A)) {
-		player.body.velocity.x -= 160;
+	if (game.input.keyboard.isDown(Phaser.Keyboard.A) || pad1.isDown(Phaser.Gamepad.XBOX360_DPAD_LEFT) || pad1.axis(Phaser.Gamepad.XBOX360_STICK_LEFT_X) < -0.01) {
+		player.body.velocity.x -= speed;
 		if( player.angle > -20 ){
 			player.angle -= 1;
 		}
-	}else if(game.input.keyboard.isDown(Phaser.Keyboard.D)){
-		player.body.velocity.x += 160;
+	}else if(game.input.keyboard.isDown(Phaser.Keyboard.D) || pad1.isDown(Phaser.Gamepad.XBOX360_DPAD_RIGHT) || pad1.axis(Phaser.Gamepad.XBOX360_STICK_LEFT_X) > 0.01){
+		player.body.velocity.x += speed;
 		if( player.angle < 20 ){
 			player.angle += 1;
 		}
 	}
-	
-	if (game.input.keyboard.isDown(Phaser.Keyboard.W)) {
-		player.body.velocity.y = -140;
+
+	if (game.input.keyboard.isDown(Phaser.Keyboard.W) || pad1.isDown(Phaser.Gamepad.XBOX360_DPAD_UP) || pad1.axis(Phaser.Gamepad.XBOX360_STICK_LEFT_Y) < -0.01) {
+		player.body.velocity.y = -speed;
 		//player.animations.play('forward');
-	}else if(game.input.keyboard.isDown(Phaser.Keyboard.S)){
-		player.body.velocity.y = 140;
+	}else if(game.input.keyboard.isDown(Phaser.Keyboard.S) || pad1.isDown(Phaser.Gamepad.XBOX360_DPAD_DOWN) || pad1.axis(Phaser.Gamepad.XBOX360_STICK_LEFT_Y) > 0.01){
+		player.body.velocity.y = speed;
 		//player.animations.play('back');
 	}
 	    
