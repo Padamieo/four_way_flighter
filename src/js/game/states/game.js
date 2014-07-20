@@ -5,7 +5,7 @@ module.exports = function(game) {
 	var score = 0;
 	var scoreText;
 	
-	var num_players = 2;
+	var num_players = 1;
 	var players; //not needed but was trying to resolve group issue
 	var player = [];
 	var pad = [];
@@ -15,6 +15,8 @@ module.exports = function(game) {
 	
 	var enemies;
 	var enemy;
+	
+	var special_active = 0;
 	
 	var gameState = {};
 
@@ -56,31 +58,20 @@ module.exports = function(game) {
     player_combo.body.collideWorldBounds = true;
 	player_combo.kill();
 	
-	
 	enemies = game.add.group();
 	enemies.enableBody = true;
 	enemies.physicsBodyType = Phaser.Physics.ARCADE;
 	
-
 	//enemies.body.bounce.setTo(1, 1);
 	//enemies.body.velocity.setTo(200, 200);
 	//players.body.velocity.setTo(200, 200);
 	
 	enemy = enemies.create(700, 300, 'box');
 	
-	
 	/*
 	tick = game.time.create(false);
 	tick.loop(2000, updateTick, this);
 	tick.start();
-	
-	var bottomwindow = game.stage.bounds.height;
-	var i = bottomwindow;
-	while(22 < i){
-		var new_pos = (i - 22);
-		i = new_pos;
-		pos.push(new_pos);
-	}
 	*/
 	
 	//setup energy score info
@@ -97,7 +88,7 @@ module.exports = function(game) {
 	game.bulletPool = game.add.group();
 	game.bulletPool.enableBody = true;
 	game.bulletPool.physicsBodyType = Phaser.Physics.ARCADE
-	game.bulletPool.createMultiple(10, 'bullet');
+	game.bulletPool.createMultiple(10, 'bullet'); //needs to be based on amount of players
 	game.bulletPool.setAll('anchor.x', 0.5);
 	game.bulletPool.setAll('anchor.y', 0.5);
 	game.bulletPool.setAll('outOfBoundsKill', true);
@@ -154,19 +145,19 @@ module.exports = function(game) {
 		}
 	}
 
-		function update_energy(score){
-			scoreText.text = 'Score: ' + score;
-		}
-		
-		function updateTick() {
-			//update the score
-			//score = score - 3;
-			//update_energy(score);
-		}	
-	  
-		function gofull() {
-			game.scale.startFullScreen();
-		}
+	function update_energy(score){
+		scoreText.text = 'Score: ' + score;
+	}
+	
+	function updateTick() {
+		//update the score
+		//score = score - 3;
+		//update_energy(score);
+	}	
+  
+	function gofull() {
+		game.scale.startFullScreen();
+	}
 
 	
 	function fire_setup(num){
@@ -186,9 +177,11 @@ module.exports = function(game) {
 		}
 		
 		bullet = game.bulletPool.getFirstExists(false);
-		
-		bullet.reset(player[num].x, player[num].y, 'bullet');
-			
+		if(special_active == 1){
+			bullet.reset(player_combo.x, player_combo.y, 'bullet');
+		}else{
+			bullet.reset(player[num].x, player[num].y, 'bullet');
+		}
 		if ( cursors.left.isDown ||  pad[num].axis(Phaser.Gamepad.XBOX360_STICK_RIGHT_X) < -0.01 ){
 			bullet.body.velocity.x -= 500;
 		}else if (cursors.right.isDown ||  pad[num].axis(Phaser.Gamepad.XBOX360_STICK_RIGHT_X) > 0.01 ){
@@ -206,68 +199,98 @@ function controls(num){
 	cursors = game.input.keyboard.createCursorKeys();
 	
 	if ( cursors.left.isDown || cursors.right.isDown || cursors.up.isDown || cursors.down.isDown || pad[num].axis(Phaser.Gamepad.XBOX360_STICK_RIGHT_Y) > 0.01 || pad[num].axis(Phaser.Gamepad.XBOX360_STICK_RIGHT_Y) < -0.01 || pad[num].axis(Phaser.Gamepad.XBOX360_STICK_RIGHT_X) < -0.01 ||  pad[num].axis(Phaser.Gamepad.XBOX360_STICK_RIGHT_X) > 0.01){
-		fire(num);
-		speed = 3;
+		if(special_active == 1){
+			if(num_players == 0){
+				fire(num);
+			}else{
+				if(num == 1){
+					fire(1);
+				}
+			}
+		}else{
+			//need to check player is alive
+			fire(num);
+			speed = 3;
+		}
 	}else{
 		speed = 7;
 	}
 
 	if (game.input.keyboard.isDown(Phaser.Keyboard.A) || pad[num].isDown(Phaser.Gamepad.XBOX360_DPAD_LEFT) || pad[num].axis(Phaser.Gamepad.XBOX360_STICK_LEFT_X) < -0.01) {
-		player[num].x -= speed;
-		if( player[num].angle > -20 ){
-			player[num].angle -= 1;
-		}
-	}else if(game.input.keyboard.isDown(Phaser.Keyboard.D) || pad[num].isDown(Phaser.Gamepad.XBOX360_DPAD_RIGHT) || pad[num].axis(Phaser.Gamepad.XBOX360_STICK_LEFT_X) > 0.01){
-		player[num].x += speed;
-		if( player[num].angle < 20 ){
-			player[num].angle += 1;
-		}
-	}
-
-	if (game.input.keyboard.isDown(Phaser.Keyboard.W) || pad[num].isDown(Phaser.Gamepad.XBOX360_DPAD_UP) || pad[num].axis(Phaser.Gamepad.XBOX360_STICK_LEFT_Y) < -0.01) {
-		player[num].y -= speed;
-		//player.animations.play('forward');
-	}else if(game.input.keyboard.isDown(Phaser.Keyboard.S) || pad[num].isDown(Phaser.Gamepad.XBOX360_DPAD_DOWN) || pad[num].axis(Phaser.Gamepad.XBOX360_STICK_LEFT_Y) > 0.01){
-		player[num].y += speed;
-		//player.animations.play('back');
-	}
-}
-
-//not sure a second contols is needed combine and re think, also except num_player Num_pad
-function controls_alt(num){
-
-	cursors = game.input.keyboard.createCursorKeys();
-	
-	if ( cursors.left.isDown || cursors.right.isDown || cursors.up.isDown || cursors.down.isDown || pad[num].axis(Phaser.Gamepad.XBOX360_STICK_RIGHT_Y) > 0.01 || pad[num].axis(Phaser.Gamepad.XBOX360_STICK_RIGHT_Y) < -0.01 || pad[num].axis(Phaser.Gamepad.XBOX360_STICK_RIGHT_X) < -0.01 ||  pad[num].axis(Phaser.Gamepad.XBOX360_STICK_RIGHT_X) > 0.01){
-		if(num_players = 0){
-		fire(num);
-		speed = 3;
-		}else if(num_players = 1){
+		if(special_active == 1){
+			if(num_players == 0){
+				player_combo.x -= speed;
+				if( player_combo.angle > -20 ){
+					player_combo.angle -= 1;
+				}
+			}else{
+				if(num == 0){
+					player_combo.x -= speed;
+					if( player_combo.angle > -20 ){
+						player_combo.angle -= 1;
+					}
+				}
+			}
 			
-		}
-		
-	}else{
-		speed = 7;
-	}
-
-	if (game.input.keyboard.isDown(Phaser.Keyboard.A) || pad[num].isDown(Phaser.Gamepad.XBOX360_DPAD_LEFT) || pad[num].axis(Phaser.Gamepad.XBOX360_STICK_LEFT_X) < -0.01) {
-		player_combo.x -= speed;
-		if( player_combo.angle > -20 ){
-			player_combo.angle -= 1;
+		}else{
+			//need to check player is alive
+			player[num].x -= speed;
+			if( player[num].angle > -20 ){
+				player[num].angle -= 1;
+			}
 		}
 	}else if(game.input.keyboard.isDown(Phaser.Keyboard.D) || pad[num].isDown(Phaser.Gamepad.XBOX360_DPAD_RIGHT) || pad[num].axis(Phaser.Gamepad.XBOX360_STICK_LEFT_X) > 0.01){
-		player_combo.x += speed;
-		if( player_combo.angle < 20 ){
-			player_combo.angle += 1;
+		if(special_active == 1){
+			if(num_players == 0){
+				player_combo.x += speed;
+				if( player_combo.angle < 20 ){
+					player_combo.angle += 1;
+				}
+			}else{
+				if(num == 0){
+					player_combo.x += speed;
+					if( player_combo.angle < 20 ){
+						player_combo.angle += 1;
+					}
+				}
+			}
+		}else{
+			//need to check player is alive
+			player[num].x += speed;
+			if( player[num].angle < 20 ){
+				player[num].angle += 1;
+			}
 		}
 	}
 
 	if (game.input.keyboard.isDown(Phaser.Keyboard.W) || pad[num].isDown(Phaser.Gamepad.XBOX360_DPAD_UP) || pad[num].axis(Phaser.Gamepad.XBOX360_STICK_LEFT_Y) < -0.01) {
-		player_combo.y -= speed;
-		//player.animations.play('forward');
+		if(special_active == 1){
+			if(num_players == 0){
+				player_combo.y -= speed;
+			}else{
+				if(num == 0){
+					player_combo.y -= speed;
+				}
+			}
+		}else{
+			//need to check player is alive
+			player[num].y -= speed;
+			//player.animations.play('forward');
+		}
 	}else if(game.input.keyboard.isDown(Phaser.Keyboard.S) || pad[num].isDown(Phaser.Gamepad.XBOX360_DPAD_DOWN) || pad[num].axis(Phaser.Gamepad.XBOX360_STICK_LEFT_Y) > 0.01){
-		player_combo.y += speed;
-		//player.animations.play('back');
+		if(special_active == 1){
+			if(num_players == 0){
+				player_combo.y += speed;
+			}else{
+				if(num == 0){
+					player_combo.y += speed;
+				}
+			}
+		}else{
+			//need to check player is alive
+			player[num].y += speed;
+			//player.animations.play('back');
+		}
 	}
 }
 
@@ -275,19 +298,17 @@ function combo_notice(num){
 	if( pad[num].isDown(Phaser.Gamepad.XBOX360_A) ){
 		//shine and noise
 		if(players.countLiving() == num_players){
-			//also check they have engouth juice
+			//also check they have engouth juice and more than 50 health
 				return 1;
 		}
 	}
 }
 
-
-//var all = 0;
-var special_active = 0;
 gameState.update = function (){
 		
 	game.physics.arcade.overlap(players, stars, collectStar, null, this);
 	
+	//dont want player to die on contact maybe just get injured
 	game.physics.arcade.overlap(players, enemies, killplayer, null, this);
 	
 	//this is not working
@@ -296,12 +317,12 @@ gameState.update = function (){
 	all = 0;
     // Pad "connected or not" indicator
 	for (i = 0; i < num_players; i++) {
-		pad_connect_indicator(i);   
+		pad_connect_indicator(i);
+		
+		controls(i);
+		
 		if(special_active == 0){
-			controls(i);
 			all = all+combo_notice(i);
-		}else{
-			controls_alt(i);
 		}
 	}
 	
@@ -314,6 +335,7 @@ gameState.update = function (){
 		//var logo = game.add.sprite(game.world.centerX, game.world.centerY, 'logo');
 		//logo.anchor.setTo(0.5, 0.5);
 		
+		//combo health based on group health, complex i know
 		player_combo.revive(10);
 		
 		//would be nice to animate joining in center
@@ -321,9 +343,11 @@ gameState.update = function (){
 		players.forEach( killplayer, this, true);
 		
 		special_active = 1;		
+		//if health or maintance of combo drop this will become 0
 	}
 	
 	background.tilePosition.y += 1.50;
+	
 	
 };
 
@@ -332,11 +356,20 @@ function collectStar (players, star) {
     star.kill();
 	players.damage(-1);
 	console.log(players.health);
-    //  Add and update the score
+    // Add and update the score
     score += 7;
 	update_energy(score);
  
 }
+
+function lose_condition(){
+	if(special_active == 0){
+		if(players.countDead() == num_players){
+			//lose
+		}
+	}
+}
+
 
 function killplayer (players, enemies) {
     // Removes the star from the screen
@@ -348,5 +381,5 @@ function something (players, enemies) {
 	console.log("hit");
 }
 
-  return gameState;
+	return gameState;
 };
