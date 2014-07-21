@@ -5,7 +5,7 @@ module.exports = function(game) {
 	var score = 0;
 	var scoreText;
 	
-	var num_players = 1;
+	var num_players = 3;
 	var players; //not needed but was trying to resolve group issue
 	var player = [];
 	var pad = [];
@@ -34,14 +34,14 @@ module.exports = function(game) {
 	players = game.add.group();
     players.enableBody = true;
     players.physicsBodyType = Phaser.Physics.ARCADE;
-	
 	for (i = 0; i < num_players; i++) {
 		player_setup(i);
 	}
-	
 	players.setAll('anchor.x', 0.5);
 	players.setAll('anchor.y', 0.5);
 	players.setAll('health', 10);
+	
+	
     // Maintain aspect ratio
 	game.scale.fullScreenScaleMode = Phaser.ScaleManager.SHOW_ALL;
     game.input.onDown.add(gofull, this);
@@ -106,6 +106,7 @@ module.exports = function(game) {
 		
 		player[num] = players.create(pos2, pos*2, 'dude');
 		player[num].body.collideWorldBounds=true;
+		player[num].name=num;
 		//player[num].health(2);
 		//player[num].body.bounce.y=0.2;
 		
@@ -179,8 +180,10 @@ module.exports = function(game) {
 		bullet = game.bulletPool.getFirstExists(false);
 		if(special_active == 1){
 			bullet.reset(player_combo.x, player_combo.y, 'bullet');
+			//bullet.name=;
 		}else{
 			bullet.reset(player[num].x, player[num].y, 'bullet');
+			bullet.name=num;
 		}
 		if ( cursors.left.isDown ||  pad[num].axis(Phaser.Gamepad.XBOX360_STICK_RIGHT_X) < -0.01 ){
 			bullet.body.velocity.x -= 500;
@@ -208,9 +211,10 @@ function controls(num){
 				}
 			}
 		}else{
-			//need to check player is alive
-			fire(num);
-			speed = 3;
+			if(players.getAt(num).alive == 1){
+				fire(num);
+				speed = 3;
+			}
 		}
 	}else{
 		speed = 7;
@@ -314,6 +318,9 @@ gameState.update = function (){
 	//this is not working
 	game.physics.arcade.collide(players, enemies, something, null, this);
 	
+	//
+	game.physics.arcade.overlap(game.bulletPool, enemies, add_point, null, this);
+	
 	all = 0;
     // Pad "connected or not" indicator
 	for (i = 0; i < num_players; i++) {
@@ -346,16 +353,24 @@ gameState.update = function (){
 		//if health or maintance of combo drop this will become 0
 	}
 	
+	//console.log(players.getAt(0).health);
+	
 	background.tilePosition.y += 1.50;
 	
-	
 };
+
+
+function add_point (bullet, enemies){
+	console.log(bullet.name);
+	enemies.kill();
+}
 
 function collectStar (players, star) {
     // Removes the star from the screen
     star.kill();
 	players.damage(-1);
-	console.log(players.health);
+	//console.log(players.health);
+	console.log(players.name);
     // Add and update the score
     score += 7;
 	update_energy(score);
