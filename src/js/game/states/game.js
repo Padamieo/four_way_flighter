@@ -14,7 +14,7 @@ module.exports = function(game) {
 	var shotDelay = [];
 	
 	var enemies;
-	var enemy;
+	var lives;
 	
 	var special_active = 0;
 	
@@ -41,16 +41,28 @@ module.exports = function(game) {
 	players.setAll('anchor.y', 0.5);
 	players.setAll('health', 10);
 	
+	healthbars = game.add.group();
+	for (i = 0; i < num_players; i++) {
+		healthbar = healthbars.create(5,  game.stage.bounds.height-5, 'health_bar');
+	}
+	healthbars.setAll('anchor.x', 0);
+	healthbars.setAll('anchor.y', 1);
 	
     // Maintain aspect ratio
 	game.scale.fullScreenScaleMode = Phaser.ScaleManager.SHOW_ALL;
     game.input.onDown.add(gofull, this);
 		
-	stars = game.add.group();
-	stars.enableBody = true;
-	stars.physicsBodyType = Phaser.Physics.ARCADE;
-	star = stars.create(300, 300, 'star');
-	star = stars.create(500, 300, 'star');
+	// setup health pickup 
+	healths = game.add.group();
+	healths.enableBody = true;
+	healths.physicsBodyType = Phaser.Physics.ARCADE;
+	health = healths.create(300, 300, 'health');
+	health = healths.create(500, 300, 'health');
+	
+	lives = game.add.group();
+	lives.enableBody = true;
+	lives.physicsBodyType = Phaser.Physics.ARCADE;
+	live = lives.create(600, 100, 'live');
 	
 	player_combo = game.add.sprite(game.world.centerX, game.world.centerY, 'player_combo');
 	player_combo.anchor.setTo(0.5, 0.5);
@@ -58,15 +70,13 @@ module.exports = function(game) {
     player_combo.body.collideWorldBounds = true;
 	player_combo.kill();
 	
+	//enemies group
 	enemies = game.add.group();
 	enemies.enableBody = true;
 	enemies.physicsBodyType = Phaser.Physics.ARCADE;
-	
-	//enemies.body.bounce.setTo(1, 1);
-	//enemies.body.velocity.setTo(200, 200);
-	//players.body.velocity.setTo(200, 200);
-	
+	//add single enemy	
 	enemy = enemies.create(700, 300, 'box');
+	enemies.setAll('health', 10000);
 	
 	/*
 	tick = game.time.create(false);
@@ -75,10 +85,11 @@ module.exports = function(game) {
 	*/
 	
 	//setup energy score info
-	textpos = (game.stage.bounds.width)-(game.stage.bounds.width/3);
-	scoreText = game.add.text(textpos, 12, 'score: 0', { fontSize: '12px', fill: '#000' });
-	score = 20;
-	update_energy(score);
+	textpos = (game.stage.bounds.width)-(game.stage.bounds.width/2);
+	scoreText = game.add.text(textpos, game.stage.bounds.height-14, '0', { fontSize: '12px', fill: '#000' });
+	scoreText.anchor.x=0.5;
+	scoreText.anchor.y=0.5;
+	update_energy(0);
 	
 	for (i = 0; i < num_players; i++) {
 		pad_setup(i);
@@ -147,7 +158,7 @@ module.exports = function(game) {
 	}
 
 	function update_energy(score){
-		scoreText.text = 'Score: ' + score;
+		scoreText.text = '' + score + '';
 	}
 	
 	function updateTick() {
@@ -237,10 +248,11 @@ function controls(num){
 			}
 			
 		}else{
-			//need to check player is alive
-			player[num].x -= speed;
-			if( player[num].angle > -20 ){
-				player[num].angle -= 1;
+			if(players.getAt(num).alive == 1){
+				player[num].x -= speed;
+				if( player[num].angle > -20 ){
+					player[num].angle -= 1;
+				}
 			}
 		}
 	}else if(game.input.keyboard.isDown(Phaser.Keyboard.D) || pad[num].isDown(Phaser.Gamepad.XBOX360_DPAD_RIGHT) || pad[num].axis(Phaser.Gamepad.XBOX360_STICK_LEFT_X) > 0.01){
@@ -259,10 +271,11 @@ function controls(num){
 				}
 			}
 		}else{
-			//need to check player is alive
-			player[num].x += speed;
-			if( player[num].angle < 20 ){
-				player[num].angle += 1;
+			if(players.getAt(num).alive == 1){
+				player[num].x += speed;
+				if( player[num].angle < 20 ){
+					player[num].angle += 1;
+				}
 			}
 		}
 	}
@@ -277,9 +290,10 @@ function controls(num){
 				}
 			}
 		}else{
-			//need to check player is alive
-			player[num].y -= speed;
-			//player.animations.play('forward');
+			if(players.getAt(num).alive == 1){
+				player[num].y -= speed;
+				//player.animations.play('forward');
+			}
 		}
 	}else if(game.input.keyboard.isDown(Phaser.Keyboard.S) || pad[num].isDown(Phaser.Gamepad.XBOX360_DPAD_DOWN) || pad[num].axis(Phaser.Gamepad.XBOX360_STICK_LEFT_Y) > 0.01){
 		if(special_active == 1){
@@ -291,9 +305,10 @@ function controls(num){
 				}
 			}
 		}else{
-			//need to check player is alive
-			player[num].y += speed;
-			//player.animations.play('back');
+			if(players.getAt(num).alive == 1){
+				player[num].y += speed;
+				//player.animations.play('back');
+			}
 		}
 	}
 }
@@ -310,16 +325,20 @@ function combo_notice(num){
 
 gameState.update = function (){
 		
-	game.physics.arcade.overlap(players, stars, collectStar, null, this);
+	game.physics.arcade.overlap(players, healths, collecthealth, null, this);
 	
 	//dont want player to die on contact maybe just get injured
 	game.physics.arcade.overlap(players, enemies, killplayer, null, this);
+	
+	//live revive pickup this does not work yet
+	game.physics.arcade.overlap(players, lives, pickup_revive, null, this);
 	
 	//this is not working
 	game.physics.arcade.collide(players, enemies, something, null, this);
 	
 	//
 	game.physics.arcade.overlap(game.bulletPool, enemies, add_point, null, this);
+	
 	
 	all = 0;
     // Pad "connected or not" indicator
@@ -361,13 +380,30 @@ gameState.update = function (){
 
 
 function add_point (bullet, enemies){
-	console.log(bullet.name);
-	enemies.kill();
+	console.log(enemies.health);
+	//console.log(bullet.name);
+	//enemies.kill();
+	bullet.kill();
+	enemies.damage(1);
+	console.log(enemies.health);
 }
 
-function collectStar (players, star) {
-    // Removes the star from the screen
-    star.kill();
+
+function pickup_revive (players, lives){
+	//value = players.countLiving();
+	
+	//if(players.countLiving() == num_players){
+		lives.kill();
+		console.log(players.getFirstDead());
+	//}
+	console.log('revive triggered');
+}
+
+
+
+function collecthealth (players, health) {
+    // Removes the health from the screen
+    health.kill();
 	players.damage(-1);
 	//console.log(players.health);
 	console.log(players.name);
@@ -377,10 +413,11 @@ function collectStar (players, star) {
  
 }
 
+//this is not used
 function lose_condition(){
 	if(special_active == 0){
 		if(players.countDead() == num_players){
-			//lose
+			//lose game
 		}
 	}
 }
@@ -388,8 +425,8 @@ function lose_condition(){
 
 function killplayer (players, enemies) {
     // Removes the star from the screen
-    players.kill();
- 
+	//players.kill();
+	players.damage(1);
 }
 
 function something (players, enemies) {
