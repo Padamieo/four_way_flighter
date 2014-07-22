@@ -99,7 +99,7 @@ module.exports = function(game) {
 	scoreText = game.add.text(textpos, game.stage.bounds.height-14, '0', { fontSize: '12px', fill: '#000' });
 	scoreText.anchor.x=0.5;
 	scoreText.anchor.y=0.5;
-	update_energy(0);
+	update_score(0);
 	
 	for (i = 0; i < num_players; i++) {
 		pad_setup(i);
@@ -167,14 +167,14 @@ module.exports = function(game) {
 		}
 	}
 
-	function update_energy(score){
+	function update_score(score){
 		scoreText.text = '' + score + '';
 	}
 	
 	function updateTick() {
 		//update the score
 		//score = score - 3;
-		//update_energy(score);
+		//update_score(score);
 	}	
   
 	function gofull() {
@@ -425,7 +425,7 @@ function collecthealth (players, health) {
 	console.log(players.name);
     // Add and update the score
     score += 7;
-	update_energy(score);
+	update_score(score);
  
 }
 
