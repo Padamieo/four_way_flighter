@@ -5,7 +5,7 @@ module.exports = function(game) {
 	var score = 0;
 	var scoreText;
 	
-	var num_players = 3;
+	var num_players = 4;
 	var players; //not needed but was trying to resolve group issue
 	var player = [];
 	var pad = [];
@@ -41,12 +41,22 @@ module.exports = function(game) {
 	players.setAll('anchor.y', 0.5);
 	players.setAll('health', 10);
 	
+	//health bars position currently 1342
 	healthbars = game.add.group();
 	for (i = 0; i < num_players; i++) {
-		healthbar = healthbars.create(5,  game.stage.bounds.height-5, 'health_bar');
+		if(i == 0){ x = 5;}
+		if(i == 1){ x = (game.stage.bounds.width-5); }
+		if(i == 2) { x = (game.stage.bounds.width/4);}
+		if(i == 3){ x = (game.stage.bounds.width-(game.stage.bounds.width/4)); }
+		healthbar = healthbars.create(x,  game.stage.bounds.height-5, 'health_bar');
+		if(i == 0 || i == 2){
+			healthbar.anchor.x=0;
+			healthbar.anchor.y=1;
+		}else{
+			healthbar.anchor.x=1;
+			healthbar.anchor.y=1;
+		}
 	}
-	healthbars.setAll('anchor.x', 0);
-	healthbars.setAll('anchor.y', 1);
 	
     // Maintain aspect ratio
 	game.scale.fullScreenScaleMode = Phaser.ScaleManager.SHOW_ALL;
@@ -76,7 +86,7 @@ module.exports = function(game) {
 	enemies.physicsBodyType = Phaser.Physics.ARCADE;
 	//add single enemy	
 	enemy = enemies.create(700, 300, 'box');
-	enemies.setAll('health', 10000);
+	enemies.setAll('health', 100);
 	
 	/*
 	tick = game.time.create(false);
@@ -390,16 +400,22 @@ function add_point (bullet, enemies){
 
 
 function pickup_revive (players, lives){
-	//value = players.countLiving();
-	
-	//if(players.countLiving() == num_players){
-		lives.kill();
-		console.log(players.getFirstDead());
-	//}
-	console.log('revive triggered');
+	lives.kill();
+	revive_player();
 }
 
-
+function revive_player(){
+	if(players.countLiving() == num_players){
+		return;
+	}else{
+		dead_player = players.getFirstDead();
+		//move to appropriate position
+		dead_player.x = 10;
+		dead_player.y = 10;
+		dead_player.revive(10);
+		//need to trigger temp invincible
+	}
+}
 
 function collecthealth (players, health) {
     // Removes the health from the screen
