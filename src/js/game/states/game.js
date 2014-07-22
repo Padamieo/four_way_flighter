@@ -57,6 +57,7 @@ module.exports = function(game) {
 			healthbar.anchor.y=1;
 		}
 	}
+	//control height some how
 	
     // Maintain aspect ratio
 	game.scale.fullScreenScaleMode = Phaser.ScaleManager.SHOW_ALL;
@@ -69,11 +70,13 @@ module.exports = function(game) {
 	health = healths.create(300, 300, 'health');
 	health = healths.create(500, 300, 'health');
 	
+	// setup live pickup
 	lives = game.add.group();
 	lives.enableBody = true;
 	lives.physicsBodyType = Phaser.Physics.ARCADE;
 	live = lives.create(600, 100, 'live');
 	
+	//when players are combined this is what is used
 	player_combo = game.add.sprite(game.world.centerX, game.world.centerY, 'player_combo');
 	player_combo.anchor.setTo(0.5, 0.5);
     game.physics.arcade.enable(player_combo);

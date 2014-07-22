@@ -12,6 +12,10 @@ module.exports = function(game) {
 	game.load.image('live', 'images/live.png');
     game.load.spritesheet('dude', 'images/fighter.png', 32, 48);
 	
+	game.load.image('health_bar', 'images/healthbar.png');
+	
+	game.load.image('box', 'images/enemy.png');
+	
 	game.load.spritesheet('controller-indicator', 'images/controller-indicator.png', 16,16);
 	this.load.image('bullet', 'images/bullet.png');
   };
