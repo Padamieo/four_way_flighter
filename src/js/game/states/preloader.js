@@ -21,7 +21,7 @@ module.exports = function(game) {
   };
 
   preloader.create = function () {
-    game.state.start('game');
+    game.state.start('menu');
   };
 
   return preloader;

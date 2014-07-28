@@ -5,7 +5,7 @@ module.exports = function(game) {
 	var score = 0;
 	var scoreText;
 	
-	var num_players = 4;
+	var num_players;
 	var players; //not needed but was trying to resolve group issue
 	var player = [];
 	var pad = [];
@@ -23,6 +23,9 @@ module.exports = function(game) {
   gameState.create = function () {
     //var logo = game.add.sprite(game.world.centerX, game.world.centerY, 'logo');
     //logo.anchor.setTo(0.5, 0.5);
+	
+	// obtain number of players
+	num_players = game.num_players;
 	
 	//this is the standard physics with phaser
 	game.physics.startSystem(Phaser.Physics.ARCADE);
@@ -121,7 +124,16 @@ module.exports = function(game) {
 	for (i = 0; i < num_players; i++) {
 		fire_setup(i);
 	}
+	
+	invincible = game.time.create(false);
+	invincible.loop(2000, invincible_time, this);
+	//tick.start();
  };
+ 
+ function invincible_time(){
+	console.log('started');
+	invincible.stop();
+ }
  
 	function player_setup(num){
 		pos = (game.stage.bounds.height/3);
@@ -446,6 +458,8 @@ function killplayer (players, enemies) {
     // Removes the star from the screen
 	//players.kill();
 	players.damage(1);
+	invincible.start();
+	
 }
 
 function something (players, enemies) {
