@@ -136,7 +136,7 @@ var now_invincible = 0;
 function invincible_time(){
 	console.log("stop invincible");
 	now_invincible = 0;
-	invincible.stop();
+	//invincible.stop();
 }
 
 	function player_setup(num){
