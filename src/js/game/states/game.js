@@ -125,16 +125,20 @@ module.exports = function(game) {
 		fire_setup(i);
 	}
 	
+	//invincible timer
 	invincible = game.time.create(false);
 	invincible.loop(2000, invincible_time, this);
 	//tick.start();
  };
- 
- function invincible_time(){
-	console.log('started');
+
+//invincible timer
+var now_invincible = 0;
+function invincible_time(){
+	console.log("stop invincible");
+	now_invincible = 0;
 	invincible.stop();
- }
- 
+}
+
 	function player_setup(num){
 		pos = (game.stage.bounds.height/3);
 		pos2 = (game.stage.bounds.width/num_players+2);
@@ -457,9 +461,13 @@ function lose_condition(){
 function killplayer (players, enemies) {
     // Removes the star from the screen
 	//players.kill();
-	players.damage(1);
-	invincible.start();
-	
+	console.log("trigger hurt");
+	if(now_invincible == 0){
+		now_invincible = 1;
+		console.log("start invincible");
+		players.damage(1);
+		invincible.start();
+	}
 }
 
 function something (players, enemies) {
