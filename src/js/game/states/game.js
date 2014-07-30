@@ -98,6 +98,7 @@ module.exports = function(game) {
 	
 	game.physics.enable([players,enemies], Phaser.Physics.ARCADE);
 	
+	
     enemy.body.velocity.setTo(200, 200);
     enemy.body.collideWorldBounds = true;
     enemy.body.bounce.setTo(1, 1);
@@ -157,6 +158,7 @@ function invincible_time(){
 		player[num].name=num;
 		//player[num].health(2);
 		//player[num].body.bounce.y=0.2;
+		player[num].body.immovable = false;
 		
 		// animations still usefull but not being used / set
 		player[num].animations.add('default', [0, 1, 2, 3, 4, 5, 6, 7], 8, true);
@@ -286,7 +288,8 @@ function controls(num){
 			
 		}else{
 			if(players.getAt(num).alive == 1){
-				player[num].x -= speed;
+				//player[num].x -= speed;
+				player[num].body.velocity.x -= speed;
 				if( player[num].angle > -20 ){
 					player[num].angle -= 1;
 				}
@@ -309,14 +312,15 @@ function controls(num){
 			}
 		}else{
 			if(players.getAt(num).alive == 1){
-				player[num].x += speed;
-				//player[num].body.velocity.x += speed;
-				//player.body.velocity.y = 400;
+				//player[num].x += speed;
+				player[num].body.velocity.x += speed;
 				if( player[num].angle < 20 ){
 					player[num].angle += 1;
 				}
 			}
 		}
+	}else{
+		//player[num].body.velocity.setTo(1, 1);
 	}
 
 	if (game.input.keyboard.isDown(Phaser.Keyboard.W) || pad[num].isDown(Phaser.Gamepad.XBOX360_DPAD_UP) || pad[num].axis(Phaser.Gamepad.XBOX360_STICK_LEFT_Y) < -0.01) {
@@ -330,7 +334,8 @@ function controls(num){
 			}
 		}else{
 			if(players.getAt(num).alive == 1){
-				player[num].y -= speed;
+				//player[num].y -= speed;
+				player[num].body.velocity.y -= speed;
 				//player.animations.play('forward');
 			}
 		}
@@ -345,13 +350,14 @@ function controls(num){
 			}
 		}else{
 			if(players.getAt(num).alive == 1){
-				player[num].y += speed;
+				//player[num].y += speed;
+				player[num].body.velocity.y += speed;
 				//player.animations.play('back');
 			}
 		}
 	}
 	
-	 player[num].body.velocity.setTo(0, 0);
+	
 }
 
 function combo_notice(num){
