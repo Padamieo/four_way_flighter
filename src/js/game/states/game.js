@@ -70,6 +70,7 @@ module.exports = function(game) {
 	healths = game.add.group();
 	healths.enableBody = true;
 	healths.physicsBodyType = Phaser.Physics.ARCADE;
+	//individual pick ups
 	health = healths.create(300, 300, 'health');
 	health = healths.create(500, 300, 'health');
 	
@@ -77,6 +78,7 @@ module.exports = function(game) {
 	lives = game.add.group();
 	lives.enableBody = true;
 	lives.physicsBodyType = Phaser.Physics.ARCADE;
+	//individual pick ups
 	live = lives.create(600, 100, 'live');
 	
 	//when players are combined this is what is used
@@ -93,6 +95,12 @@ module.exports = function(game) {
 	//add single enemy	
 	enemy = enemies.create(700, 300, 'box');
 	enemies.setAll('health', 100);
+	
+	game.physics.enable([players,enemies], Phaser.Physics.ARCADE);
+	
+    enemy.body.velocity.setTo(200, 200);
+    enemy.body.collideWorldBounds = true;
+    enemy.body.bounce.setTo(1, 1);
 	
 	/*
 	tick = game.time.create(false);
@@ -150,7 +158,7 @@ function invincible_time(){
 		//player[num].health(2);
 		//player[num].body.bounce.y=0.2;
 		
-		// animations still usefull but not bring used set
+		// animations still usefull but not being used / set
 		player[num].animations.add('default', [0, 1, 2, 3, 4, 5, 6, 7], 8, true);
 		player[num].animations.add('left', [0, 1, 2, 3, 4, 5, 6, 7], 8, true);
 		player[num].animations.add('right', [0, 1, 2, 3, 4, 5, 6, 7], 20, true);
@@ -302,6 +310,8 @@ function controls(num){
 		}else{
 			if(players.getAt(num).alive == 1){
 				player[num].x += speed;
+				//player[num].body.velocity.x += speed;
+				//player.body.velocity.y = 400;
 				if( player[num].angle < 20 ){
 					player[num].angle += 1;
 				}
@@ -340,6 +350,8 @@ function controls(num){
 			}
 		}
 	}
+	
+	 player[num].body.velocity.setTo(0, 0);
 }
 
 function combo_notice(num){
@@ -357,15 +369,16 @@ gameState.update = function (){
 	game.physics.arcade.overlap(players, healths, collecthealth, null, this);
 	
 	//dont want player to die on contact maybe just get injured
-	game.physics.arcade.overlap(players, enemies, killplayer, null, this);
+	//game.physics.arcade.overlap(players, enemies, killplayer, null, this);
 	
 	//live revive pickup this does not work yet
 	game.physics.arcade.overlap(players, lives, pickup_revive, null, this);
 	
 	//this is not working
-	game.physics.arcade.collide(players, enemies, something, null, this);
+	//game.physics.arcade.collide(players, enemies, something, null, this);
+	game.physics.arcade.collide(players, enemies, something);
 	
-	//
+	//this is just for registering who shot what
 	game.physics.arcade.overlap(game.bulletPool, enemies, add_point, null, this);
 	
 	
