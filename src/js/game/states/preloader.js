@@ -20,7 +20,7 @@ module.exports = function(game) {
 	
 	game.load.spritesheet('controller-indicator', 'images/controller-indicator.png', 16,16);
 	this.load.image('bullet', 'images/bullet.png');
-  };
+  }; 
 
   preloader.create = function () {
     game.state.start('menu');

@@ -125,7 +125,7 @@ module.exports = function(game) {
 	game.bulletPool = game.add.group();
 	game.bulletPool.enableBody = true;
 	game.bulletPool.physicsBodyType = Phaser.Physics.ARCADE
-	game.bulletPool.createMultiple(10, 'bullet'); //needs to be based on amount of players
+	game.bulletPool.createMultiple(10*num_players, 'bullet'); //needs to be based on amount of players
 	game.bulletPool.setAll('anchor.x', 0.5);
 	game.bulletPool.setAll('anchor.y', 0.5);
 	game.bulletPool.setAll('outOfBoundsKill', true);
@@ -205,7 +205,6 @@ function invincible_time(){
 	
 			add_enemies();
 			add_revive();
-		
 		
 		//update the score
 		//score = score - 3;
@@ -406,6 +405,7 @@ gameState.update = function (){
 	
 	//this is not working
 	//game.physics.arcade.collide(players, enemies, something, null, this);
+	//but this is!!!
 	game.physics.arcade.collide(players, enemies, something);
 	
 	//this is just for registering who shot what
@@ -464,18 +464,18 @@ function add_point (bullet, enemies){
 
 function pickup_revive (players, lives){
 	lives.kill();
-	revive_player();
+	revive_player(lives); //this lives input may be an issue later
 }
 
-function revive_player(){
+function revive_player(lives){
 	if(players.countLiving() == num_players){
 		return;
 		recently_created = 0;
 	}else{
 		dead_player = players.getFirstDead();
 		//move to appropriate position
-		dead_player.x = 10;
-		dead_player.y = 10;
+		dead_player.x = lives.x;
+		dead_player.y = lives.y;
 		dead_player.revive(10);
 		//need to trigger temp invincible
 		recently_created = 0;
