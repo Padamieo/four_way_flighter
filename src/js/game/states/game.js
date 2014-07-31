@@ -15,8 +15,11 @@ module.exports = function(game) {
 	
 	var enemies;
 	var lives;
+	var recently_created = 0;
 	
 	var special_active = 0;
+	
+	var development = 1;
 	
 	var gameState = {};
 
@@ -26,13 +29,17 @@ module.exports = function(game) {
 	
 	// obtain number of players
 	num_players = game.num_players;
-	
+
 	//this is the standard physics with phaser
 	game.physics.startSystem(Phaser.Physics.ARCADE);
-	
-	//this is the background
-	background = game.add.tileSprite(0, 0, game.stage.bounds.width, game.stage.bounds.height, 'sky');
-	
+		
+	if(development == 1){
+		game.stage.backgroundColor = '#28A3CA';
+	}else{
+		//this is the background
+		background = game.add.tileSprite(0, 0, game.stage.bounds.width, game.stage.bounds.height, 'sky');
+	}
+
 	// player setup move this out to function
 	players = game.add.group();
     players.enableBody = true;
@@ -78,8 +85,7 @@ module.exports = function(game) {
 	lives = game.add.group();
 	lives.enableBody = true;
 	lives.physicsBodyType = Phaser.Physics.ARCADE;
-	//individual pick ups
-	live = lives.create(600, 100, 'live');
+	lives.setAll('outOfBoundsKill', true);
 	
 	//when players are combined this is what is used
 	player_combo = game.add.sprite(game.world.centerX, game.world.centerY, 'player_combo');
@@ -93,21 +99,16 @@ module.exports = function(game) {
 	enemies.enableBody = true;
 	enemies.physicsBodyType = Phaser.Physics.ARCADE;
 	//add single enemy	
-	enemy = enemies.create(700, 300, 'box');
-	enemies.setAll('health', 100);
-	
+	//enemy = enemies.create(700, 300, 'box');
+	//enemies.setAll('health', 100);
 	game.physics.enable([players,enemies], Phaser.Physics.ARCADE);
+    //enemy.body.velocity.setTo(200, 200);
+    //enemy.body.collideWorldBounds = true;
+    //enemy.body.bounce.setTo(1, 1);
 	
-	
-    enemy.body.velocity.setTo(200, 200);
-    enemy.body.collideWorldBounds = true;
-    enemy.body.bounce.setTo(1, 1);
-	
-	/*
 	tick = game.time.create(false);
 	tick.loop(2000, updateTick, this);
 	tick.start();
-	*/
 	
 	//setup energy score info
 	textpos = (game.stage.bounds.width)-(game.stage.bounds.width/2);
@@ -201,10 +202,33 @@ function invincible_time(){
 	}
 	
 	function updateTick() {
+	
+			add_enemies();
+			add_revive();
+		
+		
 		//update the score
 		//score = score - 3;
 		//update_score(score);
-	}	
+	}
+	
+	function add_enemies(){
+		if(enemies.countLiving() == 0){
+			enemy = enemies.create(game.world.randomX, -30, 'box');
+			enemies.setAll('health', 1);
+			enemy.body.velocity.setTo(0, 100);
+			enemy.body.collideWorldBounds = true;
+			enemy.body.bounce.setTo(1, 1);
+		}
+	}
+	
+	function add_revive(){
+		if(players.countLiving() != num_players && recently_created != 1){
+			live = lives.create(game.world.randomX, -30, 'live');
+			live.body.velocity.setTo(0, 100);
+			recently_created = 1;
+		}
+	}
   
 	function gofull() {
 		game.scale.startFullScreen();
@@ -288,8 +312,8 @@ function controls(num){
 			
 		}else{
 			if(players.getAt(num).alive == 1){
-				//player[num].x -= speed;
-				player[num].body.velocity.x -= speed;
+				player[num].x -= speed;
+				//player[num].body.velocity.x -= speed;
 				if( player[num].angle > -20 ){
 					player[num].angle -= 1;
 				}
@@ -312,8 +336,8 @@ function controls(num){
 			}
 		}else{
 			if(players.getAt(num).alive == 1){
-				//player[num].x += speed;
-				player[num].body.velocity.x += speed;
+				player[num].x += speed;
+				//player[num].body.velocity.x += speed;
 				if( player[num].angle < 20 ){
 					player[num].angle += 1;
 				}
@@ -334,8 +358,8 @@ function controls(num){
 			}
 		}else{
 			if(players.getAt(num).alive == 1){
-				//player[num].y -= speed;
-				player[num].body.velocity.y -= speed;
+				player[num].y -= speed;
+				//player[num].body.velocity.y -= speed;
 				//player.animations.play('forward');
 			}
 		}
@@ -350,8 +374,8 @@ function controls(num){
 			}
 		}else{
 			if(players.getAt(num).alive == 1){
-				//player[num].y += speed;
-				player[num].body.velocity.y += speed;
+				player[num].y += speed;
+				//player[num].body.velocity.y += speed;
 				//player.animations.play('back');
 			}
 		}
@@ -422,8 +446,9 @@ gameState.update = function (){
 	
 	//console.log(players.getAt(0).health);
 	
-	background.tilePosition.y += 1.50;
-	
+	if(development == 0){
+		background.tilePosition.y += 1.50;
+	}
 };
 
 
@@ -445,6 +470,7 @@ function pickup_revive (players, lives){
 function revive_player(){
 	if(players.countLiving() == num_players){
 		return;
+		recently_created = 0;
 	}else{
 		dead_player = players.getFirstDead();
 		//move to appropriate position
@@ -452,6 +478,7 @@ function revive_player(){
 		dead_player.y = 10;
 		dead_player.revive(10);
 		//need to trigger temp invincible
+		recently_created = 0;
 	}
 }
 
@@ -464,7 +491,6 @@ function collecthealth (players, health) {
     // Add and update the score
     score += 7;
 	update_score(score);
- 
 }
 
 //this is not used
@@ -491,6 +517,7 @@ function killplayer (players, enemies) {
 
 function something (players, enemies) {
 	console.log("hit");
+	players.kill();
 }
 
 	return gameState;
