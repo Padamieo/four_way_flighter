@@ -234,6 +234,7 @@ gameState.create = function () {
 		starting_group_health = 20;
 		
 		//feel there is a better way to check this
+		//forEachAlive(callback, callbackContext) http://docs.phaser.io/Phaser.Group.html
 		group_health = 0;
 		for (i = 0; i < num_players; i++){
 			individual_health = player[i].health;
