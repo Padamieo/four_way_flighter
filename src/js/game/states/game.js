@@ -23,7 +23,7 @@ module.exports = function(game) {
 	
 	var gameState = {};
 
-  gameState.create = function () {
+gameState.create = function () {
     //var logo = game.add.sprite(game.world.centerX, game.world.centerY, 'logo');
     //logo.anchor.setTo(0.5, 0.5);
 	
@@ -67,7 +67,7 @@ module.exports = function(game) {
 			healthbar.anchor.y=1;
 		}
 	}
-	//control height some how
+	//ref above need to control height some how
 	
     // Maintain aspect ratio
 	game.scale.fullScreenScaleMode = Phaser.ScaleManager.SHOW_ALL;
@@ -77,9 +77,7 @@ module.exports = function(game) {
 	healths = game.add.group();
 	healths.enableBody = true;
 	healths.physicsBodyType = Phaser.Physics.ARCADE;
-	//individual pick ups
-	health = healths.create(300, 300, 'health');
-	health = healths.create(500, 300, 'health');
+	healths.setAll('outOfBoundsKill', true);
 	
 	// setup live pickup
 	lives = game.add.group();
@@ -139,15 +137,15 @@ module.exports = function(game) {
 	invincible = game.time.create(false);
 	invincible.loop(2000, invincible_time, this);
 	//tick.start();
- };
+};
 
-//invincible timer
-var now_invincible = 0;
-function invincible_time(){
-	console.log("stop invincible");
-	now_invincible = 0;
-	//invincible.stop();
-}
+	//invincible timer
+	var now_invincible = 0;
+	function invincible_time(){
+		console.log("stop invincible");
+		now_invincible = 0;
+		//invincible.stop();
+	}
 
 	function player_setup(num){
 		pos = (game.stage.bounds.height/3);
@@ -205,13 +203,14 @@ function invincible_time(){
 	
 			add_enemies();
 			add_revive();
-		
+			add_health(); //wip
 		//update the score
 		//score = score - 3;
 		//update_score(score);
 	}
 	
 	function add_enemies(){
+		// enemy movement https://github.com/photonstorm/phaser/wiki/Phaser-General-Documentation-:-Groups
 		if(enemies.countLiving() == 0){
 			enemy = enemies.create(game.world.randomX, -30, 'box');
 			enemies.setAll('health', 1);
@@ -226,6 +225,27 @@ function invincible_time(){
 			live = lives.create(game.world.randomX, -30, 'live');
 			live.body.velocity.setTo(0, 100);
 			recently_created = 1;
+		}
+	}
+	
+	function add_health(){
+		
+		//needs to be defined on game start
+		starting_group_health = 20;
+		
+		//feel there is a better way to check this
+		group_health = 0;
+		for (i = 0; i < num_players; i++){
+			individual_health = player[i].health;
+			group_health = group_health + individual_health;
+		}
+		
+		console.log(group_health);
+		
+		if(group_health < starting_group_health){
+			health = healths.create(game.world.randomX, -30, 'health');
+			health.body.velocity.setTo(0, 100);
+			//recently_created = 1; //needs to work specifically for health?
 		}
 	}
   
