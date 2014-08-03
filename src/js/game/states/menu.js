@@ -2,21 +2,40 @@ module.exports = function(game) {
 
 	var menu = {};
 	var button = [];
+	var indicator = [];
 	
 	menu.preload = function () {
 		//game.num_players = 1;
 		
 		for (i = 0; i < 4; i++) {
 			switch_button(i);
+			controller_indicator(i);
 		}
 		
 		game.start = game.add.sprite(game.world.width/2, game.world.height/4, 'switch');
 		game.start.animations.frame = 0;
 		game.start.anchor.setTo(0.5, 0.5);
 		game.start.inputEnabled = true;
+		game.start.scale.y = 3;
+		game.start.scale.x = 3;
 		
 		game.stage.backgroundColor = '#565756';
 	};
+	
+	//this needs changing
+	function controller_indicator(num){
+		posy = (game.stage.bounds.height/2.8);
+		posx = (game.stage.bounds.width/4);
+		if(num == 0){ posx = (posx/2)-5; }else{ posx = posx*num+(posx/2)-5; }
+		indicator[num] = game.add.sprite(posx, posy*2, 'switch');
+		if(num == 0){
+			indicator[num].animations.frame = 1;
+		}else{
+			indicator[num].animations.frame = 0;
+		}
+		indicator[num].anchor.setTo(0.5, 0.5);
+		indicator[num].inputEnabled = true;
+	}
 
 	function switch_button(num){
 		posy = (game.stage.bounds.height/4);

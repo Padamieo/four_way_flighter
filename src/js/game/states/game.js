@@ -41,6 +41,7 @@ gameState.create = function () {
 	}
 
 	// player setup move this out to function
+	game.starting_player_health = 10;
 	players = game.add.group();
     players.enableBody = true;
     players.physicsBodyType = Phaser.Physics.ARCADE;
@@ -49,26 +50,26 @@ gameState.create = function () {
 	}
 	players.setAll('anchor.x', 0.5);
 	players.setAll('anchor.y', 0.5);
-	players.setAll('health', 10);
+	players.setAll('health', game.starting_player_health);
 	
 	//health bars position currently 1342
-	healthbars = game.add.group();
+	game.healthbars = game.add.group();
 	for (i = 0; i < num_players; i++) {
 		if(i == 0){ x = 5;}
 		if(i == 1){ x = (game.stage.bounds.width-5); }
 		if(i == 2) { x = (game.stage.bounds.width/4);}
 		if(i == 3){ x = (game.stage.bounds.width-(game.stage.bounds.width/4)); }
-		healthbar = healthbars.create(x,  game.stage.bounds.height-5, 'health_bar');
+		game.healthbar = game.healthbars.create(x,  game.stage.bounds.height-5, 'health_bar');
 		if(i == 0 || i == 2){
-			healthbar.anchor.x=0;
-			healthbar.anchor.y=1;
+			game.healthbar.anchor.x=0;
+			game.healthbar.anchor.y=1;
 		}else{
-			healthbar.anchor.x=1;
-			healthbar.anchor.y=1;
+			game.healthbar.anchor.x=1;
+			game.healthbar.anchor.y=1;
 		}
 	}
 	//ref above need to control height some how
-	
+		
     // Maintain aspect ratio
 	game.scale.fullScreenScaleMode = Phaser.ScaleManager.SHOW_ALL;
     game.input.onDown.add(gofull, this);
@@ -137,6 +138,8 @@ gameState.create = function () {
 	invincible = game.time.create(false);
 	invincible.loop(2000, invincible_time, this);
 	//tick.start();
+	
+
 };
 
 	//invincible timer
@@ -157,7 +160,7 @@ gameState.create = function () {
 		player[num].name=num;
 		//player[num].health(2);
 		//player[num].body.bounce.y=0.2;
-		player[num].body.immovable = false;
+		player[num].body.immovable = true;
 		
 		// animations still usefull but not being used / set
 		player[num].animations.add('default', [0, 1, 2, 3, 4, 5, 6, 7], 8, true);
@@ -214,7 +217,7 @@ gameState.create = function () {
 		if(enemies.countLiving() == 0){
 			enemy = enemies.create(game.world.randomX, -30, 'box');
 			enemies.setAll('health', 1);
-			enemy.body.velocity.setTo(0, 100);
+			enemy.body.velocity.setTo(0, 200);
 			enemy.body.collideWorldBounds = true;
 			enemy.body.bounce.setTo(1, 1);
 		}
@@ -231,16 +234,20 @@ gameState.create = function () {
 	function add_health(){
 		
 		//needs to be defined on game start
-		starting_group_health = 20;
-		
+		starting_group_health = 300;
+		//starting_player_health
 		//feel there is a better way to check this
 		//forEachAlive(callback, callbackContext) http://docs.phaser.io/Phaser.Group.html
+		game.startt = 0;
+		players.forEachAlive( check_health, this);
+		group_health = game.startt;
+		/*
 		group_health = 0;
 		for (i = 0; i < num_players; i++){
 			individual_health = player[i].health;
 			group_health = group_health + individual_health;
 		}
-		
+		*/
 		console.log(group_health);
 		
 		if(group_health < starting_group_health){
@@ -248,6 +255,14 @@ gameState.create = function () {
 			health.body.velocity.setTo(0, 100);
 			//recently_created = 1; //needs to work specifically for health?
 		}
+		
+	}
+	
+	function check_health(player){
+		check_h = player.health;
+		game.startt = game.startt+check_h;
+		//console.log(check_h);
+		//return check_h;
 	}
   
 	function gofull() {
@@ -279,6 +294,7 @@ gameState.create = function () {
 			bullet.reset(player[num].x, player[num].y, 'bullet');
 			bullet.name=num;
 		}
+		
 		if ( cursors.left.isDown ||  pad[num].axis(Phaser.Gamepad.XBOX360_STICK_RIGHT_X) < -0.01 ){
 			bullet.body.velocity.x -= 500;
 		}else if (cursors.right.isDown ||  pad[num].axis(Phaser.Gamepad.XBOX360_STICK_RIGHT_X) > 0.01 ){
@@ -419,7 +435,7 @@ gameState.update = function (){
 	game.physics.arcade.overlap(players, healths, collecthealth, null, this);
 	
 	//dont want player to die on contact maybe just get injured
-	//game.physics.arcade.overlap(players, enemies, killplayer, null, this);
+	game.physics.arcade.overlap(players, enemies, killplayer, null, this);
 	
 	//live revive pickup this does not work yet
 	game.physics.arcade.overlap(players, lives, pickup_revive, null, this);
@@ -427,7 +443,7 @@ gameState.update = function (){
 	//this is not working
 	//game.physics.arcade.collide(players, enemies, something, null, this);
 	//but this is!!!
-	game.physics.arcade.collide(players, enemies, something);
+	//game.physics.arcade.collide(players, enemies, something);
 	
 	//this is just for registering who shot what
 	game.physics.arcade.overlap(game.bulletPool, enemies, add_point, null, this);
@@ -508,9 +524,14 @@ function collecthealth (players, health) {
     health.kill();
 	players.damage(-1);
 	//console.log(players.health);
-	console.log(players.name);
+	//console.log(players.name);
+	//console.log(players.z);
+	
+	change = game.healthbars.getAt(players.z-1);
+	change.scale.y = players.health/5;
+	
     // Add and update the score
-    score += 7;
+    score += 1;
 	update_score(score);
 }
 
@@ -532,13 +553,15 @@ function killplayer (players, enemies) {
 		now_invincible = 1;
 		console.log("start invincible");
 		players.damage(1);
+		//players.aplha(10);
 		invincible.start();
 	}
 }
 
 function something (players, enemies) {
 	console.log("hit");
-	players.kill();
+	players.damage(1);
+	//players.kill();
 }
 
 	return gameState;
