@@ -27,9 +27,9 @@ module.exports = function(game) {
 		posy = (game.stage.bounds.height/2.8);
 		posx = (game.stage.bounds.width/4);
 		if(num == 0){ posx = (posx/2)-5; }else{ posx = posx*num+(posx/2)-5; }
-		indicator[num] = game.add.sprite(posx, posy*2, 'switch');
+		indicator[num] = game.add.sprite(posx, posy*2, 'controllers');
 		if(num == 0){
-			indicator[num].animations.frame = 1;
+			indicator[num].animations.frame = 3;
 		}else{
 			indicator[num].animations.frame = 0;
 		}
@@ -55,8 +55,10 @@ module.exports = function(game) {
 		if(this.z == 1){
 			if( this.animations.frame == 1){
 				this.animations.frame = 2;
+				indicator[this.z-1].animations.frame = 3;
 			}else if( this.animations.frame == 2){
 				this.animations.frame = 1;
+				indicator[this.z-1].animations.frame = 0;
 			}
 		}else{
 			if( this.animations.frame == 0){
