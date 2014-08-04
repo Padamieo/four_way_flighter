@@ -22,6 +22,16 @@ module.exports = function(game) {
 		game.stage.backgroundColor = '#565756';
 	};
 	
+	/*
+	function pad_connect_indicator(num){
+		if(game.input.gamepad.supported && game.input.gamepad.active && pad[num].connected) {
+			indicator[num].animations.frame = 1;
+		} else {
+			indicator[num].animations.frame = 0;
+		}
+	}
+	*/
+	
 	//this needs changing
 	function controller_indicator(num){
 		posy = (game.stage.bounds.height/2.8);
@@ -102,8 +112,11 @@ module.exports = function(game) {
 	menu.update = function (){
 		for (i = 0; i < 4; i++) {
 			button[i].events.onInputDown.add(actionOnClick, button[i]);
+			//pad_connect_indicator(i);
 		}
 		game.start.events.onInputDown.add(begin, game.start);
+		
+		
 	};
 
 	menu.create = function () {
