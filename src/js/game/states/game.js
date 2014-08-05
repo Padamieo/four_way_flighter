@@ -13,13 +13,18 @@ module.exports = function(game) {
 	var nextShotAt = [];
 	var shotDelay = [];
 	
+	var nextKillAt = [];
+	var KillDelay = [];
+	
 	var enemies;
 	var lives;
 	var recently_created = 0;
 	
+	var now_invincible = [];
 	var special_active = 0;
 	
 	var development = 1;
+	
 	
 	var gameState = {};
 
@@ -69,8 +74,10 @@ gameState.create = function () {
 			game.healthbar.anchor.x=1;
 			game.healthbar.anchor.y=1;
 		}
+		//set initial height
+		change = game.healthbars.getAt(i);
+		change.scale.y = player[i].health/5;
 	}
-	//ref above need to control height some how
 		
     // Maintain aspect ratio
 	game.scale.fullScreenScaleMode = Phaser.ScaleManager.SHOW_ALL;
@@ -134,24 +141,10 @@ gameState.create = function () {
 
 	for (i = 0; i < num_players; i++) {
 		fire_setup(i);
+		now_invincible[i] = 0;
 	}
 	
-	//invincible timer
-	invincible = game.time.create(false);
-	invincible.loop(2000, invincible_time, this);
-	//tick.start();
-	
-
 };
-
-	//invincible timer
-	var now_invincible = 0;
-	function invincible_time(){
-		console.log("stop invincible");
-		now_invincible = 0;
-		//player[num].animations.frame = 0;
-		//invincible.stop();
-	}
 
 	function player_setup(num){
 		pos = (game.stage.bounds.height/3);
@@ -214,6 +207,7 @@ gameState.create = function () {
 		//update the score
 		//score = score - 3;
 		//update_score(score);
+		
 	}
 	
 	function add_enemies(){
@@ -221,9 +215,12 @@ gameState.create = function () {
 		if(enemies.countLiving() == 0){
 			enemy = enemies.create(game.world.randomX, -30, 'box');
 			enemies.setAll('health', 1);
+			enemies.setAll('anchor.x', 0.5);
+			enemies.setAll('anchor.y', 0.5);
 			enemy.body.velocity.setTo(0, 200);
 			enemy.body.collideWorldBounds = true;
 			enemy.body.bounce.setTo(1, 1);
+			
 		}
 	}
 	
@@ -252,7 +249,7 @@ gameState.create = function () {
 			group_health = group_health + individual_health;
 		}
 		*/
-		console.log(group_health);
+		//console.log(group_health);
 		
 		if(group_health < starting_group_health){
 			health = healths.create(game.world.randomX, -30, 'health');
@@ -275,9 +272,11 @@ gameState.create = function () {
 
 	
 	function fire_setup(num){
-		
 		nextShotAt[num] = 0;
-		shotDelay[num] = 30;
+		shotDelay[num] = 50;
+		
+		nextKillAt[num] = 0;
+		KillDelay[num] = 600;
 	}
 
 	function fire(num) {
@@ -314,6 +313,8 @@ gameState.create = function () {
 function controls(num){
 
 	cursors = game.input.keyboard.createCursorKeys();
+	test_one = 0;
+	test_two = 0;
 	
 	if ( cursors.left.isDown || cursors.right.isDown || cursors.up.isDown || cursors.down.isDown || pad[num].axis(Phaser.Gamepad.XBOX360_STICK_RIGHT_Y) > 0.01 || pad[num].axis(Phaser.Gamepad.XBOX360_STICK_RIGHT_Y) < -0.01 || pad[num].axis(Phaser.Gamepad.XBOX360_STICK_RIGHT_X) < -0.01 ||  pad[num].axis(Phaser.Gamepad.XBOX360_STICK_RIGHT_X) > 0.01){
 		if(special_active == 1){
@@ -385,6 +386,7 @@ function controls(num){
 		}
 	}else{
 		//player[num].body.velocity.setTo(1, 1);
+		test_one = 1;
 	}
 
 	if (game.input.keyboard.isDown(Phaser.Keyboard.W) || pad[num].isDown(Phaser.Gamepad.XBOX360_DPAD_UP) || pad[num].axis(Phaser.Gamepad.XBOX360_STICK_LEFT_Y) < -0.01) {
@@ -401,7 +403,7 @@ function controls(num){
 				player[num].y -= speed;
 				//player[num].body.velocity.y -= speed;
 				//player.animations.play('forward');
-				if(now_invincible == 0){
+				if(now_invincible[num] == 0){
 					player[num].animations.frame = 2;
 				}
 			}
@@ -420,13 +422,32 @@ function controls(num){
 				player[num].y += speed;
 				//player[num].body.velocity.y += speed;
 				//player.animations.play('back');
-				if(now_invincible == 0){
+				if(now_invincible[num] == 0){
 					player[num].animations.frame = 3;
 				}
 			}
 		}
+	}else{
+		test_two = 2;
 	}
 	
+	if( test_one+test_two == 3){
+		if( player[num].angle != 0){
+			if(player[num].angle < -0){
+				player[num].angle += 1;
+			}
+			if(player[num].angle > 0){
+				player[num].angle -= 1;
+			}
+		}
+
+		if(now_invincible[num] == 0){
+			if(player[num].animations.frame != 0){
+				player[num].animations.frame = 0;
+			}
+		}
+		
+	}
 	
 }
 
@@ -469,6 +490,14 @@ gameState.update = function (){
 		if(special_active == 0){
 			all = all+combo_notice(i);
 		}
+		
+		if(now_invincible[i] == 1){
+			player[i].animations.frame = 1;
+		}
+		
+		if (nextKillAt[i] < game.time.now) {
+			now_invincible[i] = 0;
+		}
 	}
 	
 	if(all == num_players){
@@ -500,12 +529,11 @@ gameState.update = function (){
 
 
 function add_point (bullet, enemies){
-	console.log(enemies.health);
+	//console.log(enemies.health);
 	//console.log(bullet.name);
 	//enemies.kill();
 	bullet.kill();
 	enemies.damage(1);
-	console.log(enemies.health);
 }
 
 
@@ -558,13 +586,18 @@ function lose_condition(){
 function killplayer (players, enemies) {
     // Removes the star from the screen
 	//players.kill();
-	console.log("trigger hurt");
-	if(now_invincible == 0){
-		now_invincible = 1;
-		console.log("start invincible");
+	num = players.z-1;
+	if (nextKillAt[num] > game.time.now) {
+		now_invincible[num] = 1;
+	}else{
+		now_invincible[num] = 0;
+		nextKillAt[num] = game.time.now + KillDelay[num];
+		console.log(players.health);
 		players.damage(1);
-		players.animations.frame = 1;
-		invincible.start();
+		
+		//this need functioning out
+		change = game.healthbars.getAt(num);
+		change.scale.y = players.health/5;
 	}
 }
 

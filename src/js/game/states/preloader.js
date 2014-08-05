@@ -12,7 +12,7 @@ module.exports = function(game) {
 	
 	game.load.image('health', 'images/health.png');
 	game.load.image('live', 'images/live.png');
-    game.load.spritesheet('dude', 'images/fighter.svg', 32, 48);
+    game.load.spritesheet('dude', 'images/fighter.png', 32, 48);
 	
 	game.load.spritesheet('controllers', 'images/controllers.png', 260, 107);
 	

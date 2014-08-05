@@ -24,7 +24,7 @@ module.exports = function(game) {
 	
 	//I think this works
 	function pad_connect_indicator(num){
-		if(indicator[num].animations.frame = 3 && num == 0){
+		if(num == 4){
 			return;
 		}else{
 			if(game.input.gamepad.supported && game.input.gamepad.active && pad[num].connected) {
