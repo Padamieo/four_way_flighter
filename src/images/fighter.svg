@@ -1,22 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- Generator: Adobe Illustrator 15.0.0, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
 <!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
-<svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="32px"
-	 height="48px" viewBox="0 0 32 48" enable-background="new 0 0 32 48" xml:space="preserve">
-<g id="Layer_1">
-	<polygon fill="#F26522" points="16,40.005 0,46.111 16,0 32,46.111 	"/>
-	<polygon opacity="0.2" points="16,0 16,40.005 0,46.111 	"/>
+<svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="128px"
+	 height="48px" viewBox="0 0 128 48" enable-background="new 0 0 128 48" xml:space="preserve">
+<g id="section_x5F_indicator" display="none">
+	<rect display="inline" fill="#FBB040" width="32" height="48"/>
+	<rect x="32" display="inline" fill="#EF4136" width="32" height="48"/>
+	<rect x="96" y="0" display="inline" fill="#009444" width="32" height="48"/>
+	<rect x="64" y="0" display="inline" fill="#7F3F98" width="32" height="48"/>
 </g>
-<g id="Layer_3" display="none">
-	<polygon display="inline" fill="#F26522" points="16,40.005 1.6,46.111 16,0 30.4,46.111 	"/>
-	<polygon display="inline" opacity="0.2" points="16,0 16,40.005 1.6,46.111 	"/>
+<g id="standard">
+	<polygon fill="#F16522" points="16,40.949 0,47.056 16,0.944 32,47.056 	"/>
+	<polygon opacity="0.2" fill="#231F20" points="16,0.944 16,40.949 0,47.056 	"/>
 </g>
-<g id="Layer_2" display="none">
-	<g display="inline">
-		<path fill="#F26522" d="M16,41.294c-6.401,1.84-9.601,2.684-16,5.014C5.332,31.649,10.664,16.994,16,2.338
-			c5.334,14.656,10.664,29.313,16,43.969C25.602,43.978,22.399,43.134,16,41.294z"/>
-		<path opacity="0.2" d="M16,2.338C16,15.323,16,28.308,16,41.294c-6.401,1.84-9.601,2.684-16,5.014
-			C5.332,31.649,10.664,16.994,16,2.338z"/>
+<g id="Layer_5">
+	<g>
+		<polygon fill="#F16522" points="112,42.01 96,47.816 112,3.971 128,47.816 		"/>
+		<polygon opacity="0.2" fill="#231F20" points="112,3.971 112,42.01 96,47.816 		"/>
 	</g>
+</g>
+<g id="invincible">
+	<polygon opacity="0.5" fill="#F16522" points="48,40.949 32,47.056 48,0.944 64,47.056 	"/>
+	<polygon opacity="0.2" fill="#231F20" points="48,0.944 48,40.949 32,47.056 	"/>
+</g>
+<g id="forward">
+	<polygon fill="#F16522" points="80,40.949 65.6,47.056 80,0.944 94.4,47.056 	"/>
+	<polygon opacity="0.2" fill="#231F20" points="80,0.944 80,40.949 65.6,47.056 	"/>
 </g>
 </svg>

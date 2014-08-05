@@ -29,6 +29,8 @@ gameState.create = function () {
 	
 	// obtain number of players
 	num_players = game.num_players;
+	//obtain if keyboard is active
+	keyboard_offset = game.keyboard_offset;
 
 	//this is the standard physics with phaser
 	game.physics.startSystem(Phaser.Physics.ARCADE);
@@ -147,6 +149,7 @@ gameState.create = function () {
 	function invincible_time(){
 		console.log("stop invincible");
 		now_invincible = 0;
+		//player[num].animations.frame = 0;
 		//invincible.stop();
 	}
 
@@ -162,10 +165,11 @@ gameState.create = function () {
 		//player[num].body.bounce.y=0.2;
 		player[num].body.immovable = true;
 		
+		player[num].animations.frame = 2;
 		// animations still usefull but not being used / set
-		player[num].animations.add('default', [0, 1, 2, 3, 4, 5, 6, 7], 8, true);
-		player[num].animations.add('left', [0, 1, 2, 3, 4, 5, 6, 7], 8, true);
-		player[num].animations.add('right', [0, 1, 2, 3, 4, 5, 6, 7], 20, true);
+		//player[num].animations.add('default', [0, 1, 2, 3, 4, 5, 6, 7], 8, true);
+		//player[num].animations.add('left', [0, 1, 2, 3, 4, 5, 6, 7], 8, true);
+		//player[num].animations.add('right', [0, 1, 2, 3, 4, 5, 6, 7], 20, true);
 	}
 
 	function pad_setup(num){
@@ -397,6 +401,9 @@ function controls(num){
 				player[num].y -= speed;
 				//player[num].body.velocity.y -= speed;
 				//player.animations.play('forward');
+				if(now_invincible == 0){
+					player[num].animations.frame = 2;
+				}
 			}
 		}
 	}else if(game.input.keyboard.isDown(Phaser.Keyboard.S) || pad[num].isDown(Phaser.Gamepad.XBOX360_DPAD_DOWN) || pad[num].axis(Phaser.Gamepad.XBOX360_STICK_LEFT_Y) > 0.01){
@@ -413,6 +420,9 @@ function controls(num){
 				player[num].y += speed;
 				//player[num].body.velocity.y += speed;
 				//player.animations.play('back');
+				if(now_invincible == 0){
+					player[num].animations.frame = 3;
+				}
 			}
 		}
 	}
@@ -553,7 +563,7 @@ function killplayer (players, enemies) {
 		now_invincible = 1;
 		console.log("start invincible");
 		players.damage(1);
-		//players.aplha(10);
+		players.animations.frame = 1;
 		invincible.start();
 	}
 }

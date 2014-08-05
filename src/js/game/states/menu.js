@@ -22,15 +22,18 @@ module.exports = function(game) {
 		game.stage.backgroundColor = '#565756';
 	};
 	
-	/*
+	//I think this works
 	function pad_connect_indicator(num){
-		if(game.input.gamepad.supported && game.input.gamepad.active && pad[num].connected) {
-			indicator[num].animations.frame = 1;
-		} else {
-			indicator[num].animations.frame = 0;
+		if(indicator[num].animations.frame = 3 && num == 0){
+			return;
+		}else{
+			if(game.input.gamepad.supported && game.input.gamepad.active && pad[num].connected) {
+				indicator[num].animations.frame = 1;
+			} else {
+				indicator[num].animations.frame = 0;
+			}
 		}
 	}
-	*/
 	
 	//this needs changing
 	function controller_indicator(num){
@@ -87,21 +90,21 @@ module.exports = function(game) {
 			store = store + count;
 		}
 		
-		console.log(store);
-		
 		if(button[0].animations.frame == 2){
 			game.keyboard_offset = 1;
 			store = store-1;
 		}else{
 			game.keyboard_offset = 0;
 		}
+		console.log("keyboard"+game.keyboard_offset);
 		
 		if(store == 5){
 			game.num_players = 4;
 		}else{
 			game.num_players = store;
 		}
-
+		console.log("players"+game.num_players);
+		
 		game.state.start('game');
 	}
 
@@ -112,11 +115,10 @@ module.exports = function(game) {
 	menu.update = function (){
 		for (i = 0; i < 4; i++) {
 			button[i].events.onInputDown.add(actionOnClick, button[i]);
-			//pad_connect_indicator(i);
+			pad_connect_indicator(i);
 		}
 		game.start.events.onInputDown.add(begin, game.start);
-		
-		
+
 	};
 
 	menu.create = function () {
