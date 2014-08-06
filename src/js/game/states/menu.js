@@ -3,14 +3,19 @@ module.exports = function(game) {
 	var menu = {};
 	var button = [];
 	var indicator = [];
+	var pad = [];
+	var count = 0;
 	
 	menu.preload = function () {
-		//game.num_players = 1;
-		
+	
 		for (i = 0; i < 4; i++) {
 			switch_button(i);
+			pad_setup(i);
 			controller_indicator(i);
+			test(i);
 		}
+		game.input.gamepad.start();
+		
 		
 		game.start = game.add.sprite(game.world.width/2, game.world.height/4, 'switch');
 		game.start.animations.frame = 0;
@@ -22,20 +27,59 @@ module.exports = function(game) {
 		game.stage.backgroundColor = '#565756';
 	};
 	
-	//I think this works
+	//add currently active pads up
 	function pad_connect_indicator(num){
-		if(num == 4){
+		if(game.input.gamepad.supported && game.input.gamepad.active && pad[num].connected) {
+			count = count+1;
+		}else{
+			count = count+0;
+		}
+	}
+	
+	//set-up initial indicator to not connected
+	function test(num){
+		if(num == 0){
 			return;
 		}else{
-			if(game.input.gamepad.supported && game.input.gamepad.active && pad[num].connected) {
+			indicator[num].animations.frame = 0;
+		}
+	}
+	
+	function count_change(count_input, num){
+		if(button[0].animations.frame == 2){
+			if(num+1 < 4){
+				if(num < count_input){
+					indicator[num+1].animations.frame = 1;
+				}else{
+					indicator[num+1].animations.frame = 0;
+				}
+			}
+		}else{
+			if(num < count_input){
 				indicator[num].animations.frame = 1;
-			} else {
+			}else{
 				indicator[num].animations.frame = 0;
 			}
 		}
 	}
 	
-	//this needs changing
+	//arborteroraly assign pads
+	function pad_setup(num){
+		if(num == 0){
+			pad[num] = game.input.gamepad.pad1;
+		}
+		if(num == 1){
+			pad[num] = game.input.gamepad.pad2;
+		}
+		if(num == 2){
+			pad[num] = game.input.gamepad.pad3;
+		}
+		if(num == 3){
+			pad[num] = game.input.gamepad.pad4;
+		}
+	}
+	
+	//set-up default indicators
 	function controller_indicator(num){
 		posy = (game.stage.bounds.height/2.8);
 		posx = (game.stage.bounds.width/4);
@@ -49,7 +93,8 @@ module.exports = function(game) {
 		indicator[num].anchor.setTo(0.5, 0.5);
 		indicator[num].inputEnabled = true;
 	}
-
+	
+	//define button switches
 	function switch_button(num){
 		posy = (game.stage.bounds.height/4);
 		posx = (game.stage.bounds.width/4);
@@ -63,7 +108,8 @@ module.exports = function(game) {
 		button[num].anchor.setTo(0.5, 0.5);
 		button[num].inputEnabled = true;
 	}
-
+	
+	//button action
 	function actionOnClick () {
 		if(this.z == 1){
 			if( this.animations.frame == 1){
@@ -81,7 +127,8 @@ module.exports = function(game) {
 			}
 		}
 	}
-
+	
+	//calculations for starting a game
 	function begin(){
 		//count frames determine players
 		store = 0;
@@ -107,15 +154,19 @@ module.exports = function(game) {
 		
 		game.state.start('game');
 	}
-
+	
+	//start it now
 	function start_game(){
 		game.state.start('game');
 	}
 	
+	//update loop
 	menu.update = function (){
+		count = 0;
 		for (i = 0; i < 4; i++) {
 			button[i].events.onInputDown.add(actionOnClick, button[i]);
 			pad_connect_indicator(i);
+			count_change(count, i);
 		}
 		game.start.events.onInputDown.add(begin, game.start);
 
