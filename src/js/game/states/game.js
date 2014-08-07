@@ -24,7 +24,7 @@ module.exports = function(game) {
 	var special_active = 0;
 	
 	var development = 1;
-	
+	var development_alt_controls = 0;
 	
 	var gameState = {};
 
@@ -156,7 +156,11 @@ gameState.create = function () {
 		player[num].name=num;
 		//player[num].health(2);
 		//player[num].body.bounce.y=0.2;
-		player[num].body.immovable = true;
+		if(development_alt_controls){
+			player[num].body.immovable = false;
+		}else{
+			player[num].body.immovable = true;
+		}
 		
 		player[num].animations.frame = 2;
 		// animations still usefull but not being used / set
@@ -217,9 +221,12 @@ gameState.create = function () {
 			enemies.setAll('health', 1);
 			enemies.setAll('anchor.x', 0.5);
 			enemies.setAll('anchor.y', 0.5);
-			enemy.body.velocity.setTo(0, 200);
+			enemy.body.velocity.setTo(25, 200);
 			enemy.body.collideWorldBounds = true;
 			enemy.body.bounce.setTo(1, 1);
+			
+			enemy = enemies.create(game.world.randomX, game.world.randomY, 'box');
+			enemy.body.collideWorldBounds = true;
 			
 		}
 	}
@@ -353,8 +360,13 @@ function controls(num){
 			
 		}else{
 			if(players.getAt(num).alive == 1){
-				player[num].x -= speed;
-				//player[num].body.velocity.x -= speed;
+				//yet to be decided
+				if(development_alt_controls){
+					player[num].body.velocity.x -= speed;
+				}else{
+					player[num].x -= speed;
+				}
+				
 				if( player[num].angle > -20 ){
 					player[num].angle -= 1;
 				}
@@ -377,15 +389,19 @@ function controls(num){
 			}
 		}else{
 			if(players.getAt(num).alive == 1){
-				player[num].x += speed;
-				//player[num].body.velocity.x += speed;
+				//yet to be decided
+				if(development_alt_controls){
+					player[num].body.velocity.x += speed;
+				}else{
+					player[num].x += speed;
+				}
+				
 				if( player[num].angle < 20 ){
 					player[num].angle += 1;
 				}
 			}
 		}
 	}else{
-		//player[num].body.velocity.setTo(1, 1);
 		test_one = 1;
 	}
 
@@ -400,8 +416,13 @@ function controls(num){
 			}
 		}else{
 			if(players.getAt(num).alive == 1){
-				player[num].y -= speed;
-				//player[num].body.velocity.y -= speed;
+				//yet to be decided
+				if(development_alt_controls){
+					player[num].body.velocity.y -= speed;
+				}else{
+					player[num].y -= speed;
+				}
+				
 				//player.animations.play('forward');
 				if(now_invincible[num] == 0){
 					player[num].animations.frame = 2;
@@ -419,8 +440,12 @@ function controls(num){
 			}
 		}else{
 			if(players.getAt(num).alive == 1){
-				player[num].y += speed;
-				//player[num].body.velocity.y += speed;
+				//yet to be decided
+				if(development_alt_controls){
+					player[num].body.velocity.y += speed;
+				}else{
+					player[num].y += speed;
+				}			
 				//player.animations.play('back');
 				if(now_invincible[num] == 0){
 					player[num].animations.frame = 3;
@@ -447,6 +472,9 @@ function controls(num){
 			}
 		}
 		
+		player[num].body.velocity.y *= 0.98;
+		player[num].body.velocity.x *= 0.98;
+		
 	}
 	
 }
@@ -472,9 +500,7 @@ gameState.update = function (){
 	game.physics.arcade.overlap(players, lives, pickup_revive, null, this);
 	
 	//this is not working
-	//game.physics.arcade.collide(players, enemies, something, null, this);
-	//but this is!!!
-	//game.physics.arcade.collide(players, enemies, something);
+	game.physics.arcade.collide(players, enemies, killplayer, null, this);
 	
 	//this is just for registering who shot what
 	game.physics.arcade.overlap(game.bulletPool, enemies, add_point, null, this);
@@ -537,7 +563,7 @@ function add_point (bullet, enemies){
 }
 
 
-function pickup_revive (players, lives){
+function pickup_revive(players, lives){
 	lives.kill();
 	revive_player(lives); //this lives input may be an issue later
 }
@@ -587,6 +613,7 @@ function killplayer (players, enemies) {
     // Removes the star from the screen
 	//players.kill();
 	num = players.z-1;
+	console.log(num);
 	if (nextKillAt[num] > game.time.now) {
 		now_invincible[num] = 1;
 	}else{
@@ -599,6 +626,7 @@ function killplayer (players, enemies) {
 		change = game.healthbars.getAt(num);
 		change.scale.y = players.health/5;
 	}
+
 }
 
 function something (players, enemies) {
