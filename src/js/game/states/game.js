@@ -156,11 +156,16 @@ gameState.create = function () {
 		player[num].name=num;
 		//player[num].health(2);
 		//player[num].body.bounce.y=0.2;
+		/*
 		if(development_alt_controls){
+		*/
 			player[num].body.immovable = false;
+		/*
 		}else{
+		
 			player[num].body.immovable = true;
 		}
+		*/
 		
 		player[num].animations.frame = 2;
 		// animations still usefull but not being used / set
@@ -362,7 +367,7 @@ function controls(num){
 			if(players.getAt(num).alive == 1){
 				//yet to be decided
 				if(development_alt_controls){
-					player[num].body.velocity.x -= speed;
+					player[num].body.velocity.x = -250;
 				}else{
 					player[num].x -= speed;
 				}
@@ -391,7 +396,7 @@ function controls(num){
 			if(players.getAt(num).alive == 1){
 				//yet to be decided
 				if(development_alt_controls){
-					player[num].body.velocity.x += speed;
+					player[num].body.velocity.x = 250;
 				}else{
 					player[num].x += speed;
 				}
@@ -418,7 +423,7 @@ function controls(num){
 			if(players.getAt(num).alive == 1){
 				//yet to be decided
 				if(development_alt_controls){
-					player[num].body.velocity.y -= speed;
+					player[num].body.velocity.y = -250;
 				}else{
 					player[num].y -= speed;
 				}
@@ -442,7 +447,7 @@ function controls(num){
 			if(players.getAt(num).alive == 1){
 				//yet to be decided
 				if(development_alt_controls){
-					player[num].body.velocity.y += speed;
+					player[num].body.velocity.y = 250;
 				}else{
 					player[num].y += speed;
 				}			
@@ -472,8 +477,8 @@ function controls(num){
 			}
 		}
 		
-		player[num].body.velocity.y *= 0.98;
-		player[num].body.velocity.x *= 0.98;
+		player[num].body.velocity.y *= 0.96;
+		player[num].body.velocity.x *= 0.96;
 		
 	}
 	
