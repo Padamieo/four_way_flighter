@@ -504,17 +504,20 @@ function combo_notice(num){
 }
 
 gameState.update = function (){
-		
-	game.physics.arcade.overlap(players, healths, collecthealth, null, this);
 	
-	//dont want player to die on contact maybe just get injured
-	game.physics.arcade.overlap(players, enemies, killplayer, null, this);
+	//notice a player collects health
+	game.physics.arcade.overlap(players, healths, pickup_health, null, this);
 	
-	//live revive pickup this does not work yet
+	//notice a player collects revive
 	game.physics.arcade.overlap(players, lives, pickup_revive, null, this);
 	
+	//dont want player to die on contact maybe just get injured
+	game.physics.arcade.overlap(players, enemies, collision_notice, null, this);
+	
+
+	
 	//this is not working
-	game.physics.arcade.collide(players, enemies, killplayer, null, this);
+	game.physics.arcade.collide(players, enemies, collision_notice, null, this);
 	
 	//this is just for registering who shot what
 	game.physics.arcade.overlap(game.bulletPool, enemies, add_point, null, this);
@@ -554,7 +557,7 @@ gameState.update = function (){
 		
 		//would be nice to animate joining in center
 		//players.forEach(game.physics.arcade.moveToObject, this, this, logo);
-		players.forEach( killplayer, this, true);
+		players.forEach( collision_notice, this, true);
 		
 		special_active = 1;		
 		//if health or maintance of combo drop this will become 0
@@ -597,7 +600,7 @@ function revive_player(lives){
 	}
 }
 
-function collecthealth (players, health) {
+function pickup_health (players, health) {
     // Removes the health from the screen
     health.kill();
 	players.damage(-1);
@@ -613,7 +616,7 @@ function collecthealth (players, health) {
 	update_score(score);
 }
 
-//this is not used
+//this is not used yet
 function lose_condition(){
 	if(special_active == 0){
 		if(players.countDead() == num_players){
@@ -623,7 +626,7 @@ function lose_condition(){
 }
 
 
-function killplayer (players, enemies) {
+function collision_notice (players, enemies) {
     // Removes the star from the screen
 	//players.kill();
 	num = players.z-1;
