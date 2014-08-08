@@ -24,7 +24,7 @@ module.exports = function(game) {
 	var special_active = 0;
 	
 	var development = 1;
-	var development_alt_controls = 0;
+	var development_alt_controls = 1;
 	
 	var gameState = {};
 
@@ -340,11 +340,20 @@ function controls(num){
 		}else{
 			if(players.getAt(num).alive == 1){
 				fire(num);
-				speed = 3;
+				if(development_alt_controls){
+					speed = 220;
+				}else{
+					speed = 3;
+				}
+				
 			}
 		}
 	}else{
-		speed = 7;
+		if(development_alt_controls){
+			speed = 290;
+		}else{
+			speed = 7;
+		}
 	}
 
 	if (game.input.keyboard.isDown(Phaser.Keyboard.A) || pad[num].isDown(Phaser.Gamepad.XBOX360_DPAD_LEFT) || pad[num].axis(Phaser.Gamepad.XBOX360_STICK_LEFT_X) < -0.01) {
@@ -367,7 +376,7 @@ function controls(num){
 			if(players.getAt(num).alive == 1){
 				//yet to be decided
 				if(development_alt_controls){
-					player[num].body.velocity.x = -250;
+					player[num].body.velocity.x = -speed;
 				}else{
 					player[num].x -= speed;
 				}
@@ -396,7 +405,7 @@ function controls(num){
 			if(players.getAt(num).alive == 1){
 				//yet to be decided
 				if(development_alt_controls){
-					player[num].body.velocity.x = 250;
+					player[num].body.velocity.x = speed;
 				}else{
 					player[num].x += speed;
 				}
@@ -423,7 +432,7 @@ function controls(num){
 			if(players.getAt(num).alive == 1){
 				//yet to be decided
 				if(development_alt_controls){
-					player[num].body.velocity.y = -250;
+					player[num].body.velocity.y = -speed;
 				}else{
 					player[num].y -= speed;
 				}
@@ -447,7 +456,7 @@ function controls(num){
 			if(players.getAt(num).alive == 1){
 				//yet to be decided
 				if(development_alt_controls){
-					player[num].body.velocity.y = 250;
+					player[num].body.velocity.y = speed;
 				}else{
 					player[num].y += speed;
 				}			
