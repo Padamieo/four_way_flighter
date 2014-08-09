@@ -17,6 +17,7 @@ module.exports = function(game) {
 	var KillDelay = [];
 	
 	var enemies;
+	
 	var lives;
 	var recently_created = 0;
 	
@@ -31,7 +32,7 @@ module.exports = function(game) {
 gameState.create = function () {
     //var logo = game.add.sprite(game.world.centerX, game.world.centerY, 'logo');
     //logo.anchor.setTo(0.5, 0.5);
-	
+
 	// obtain number of players
 	num_players = game.num_players;
 	//obtain if keyboard is active
@@ -81,7 +82,7 @@ gameState.create = function () {
 		
     // Maintain aspect ratio
 	game.scale.fullScreenScaleMode = Phaser.ScaleManager.SHOW_ALL;
-    game.input.onDown.add(gofull, this);
+	//game.input.onDown.add(gofull, this);
 		
 	// setup health pickup 
 	healths = game.add.group();
@@ -104,12 +105,12 @@ gameState.create = function () {
 	
 	//enemies group
 	enemies = game.add.group();
-	enemies.enableBody = true;
-	enemies.physicsBodyType = Phaser.Physics.ARCADE;
+	// --- enemies.enableBody = true;
+	// --- enemies.physicsBodyType = Phaser.Physics.ARCADE;
 	//add single enemy	
 	//enemy = enemies.create(700, 300, 'box');
 	//enemies.setAll('health', 100);
-	game.physics.enable([players,enemies], Phaser.Physics.ARCADE);
+	// --- game.physics.enable([players,enemies], Phaser.Physics.ARCADE);
     //enemy.body.velocity.setTo(200, 200);
     //enemy.body.collideWorldBounds = true;
     //enemy.body.bounce.setTo(1, 1);
@@ -144,7 +145,67 @@ gameState.create = function () {
 		now_invincible[i] = 0;
 	}
 	
+	
+    // Create a white rectangle that we'll use to represent the flash
+    game.flash = game.add.graphics(0, 0);
+    game.flash.beginFill(0xffffff, 1);
+    game.flash.drawRect(0, 0, game.width, game.height);
+    game.flash.endFill();
+    game.flash.alpha = 0;
+
+    // Make the world a bit bigger than the stage so we can shake the camera
+    this.game.world.setBounds(-10, -10, this.game.width + 20, this.game.height + 20);
+	
+	
 };
+
+////
+// e_follower constructor
+var e_follower = function(game, x, y, target) {
+    Phaser.Sprite.call(this, game, x, y, 'box');
+	
+    // Save the target that this e_follower will follow
+    // The target is any object with x and y properties
+    this.target = target;
+
+    // Set the pivot point for this sprite to the center
+    this.anchor.setTo(0.5, 0.5);
+	this.health = 1;
+	
+	//this.enableBody = true;
+	//this.physicsBodyType = Phaser.Physics.ARCADE;
+	
+    // Enable physics on this object
+    this.game.physics.enable(this, Phaser.Physics.ARCADE);
+
+    // Define constants that affect motion
+    this.MAX_SPEED = 250; // pixels/second
+    this.MIN_DISTANCE = 90; // pixels
+};
+
+// e_followers are a type of Phaser.Sprite
+e_follower.prototype = Object.create(Phaser.Sprite.prototype);
+e_follower.prototype.constructor = e_follower;
+
+
+e_follower.prototype.update = function() {
+    // Calculate distance to target
+    var distance = this.game.math.distance(this.x, this.y, this.target.x, this.target.y);
+	
+    // If the distance > MIN_DISTANCE then move
+    if (distance > this.MIN_DISTANCE) {
+        // Calculate the angle to the target
+        var rotation = this.game.math.angleBetween(this.x, this.y, this.target.x, this.target.y);
+
+        // Calculate velocity vector based on rotation and this.MAX_SPEED
+        this.body.velocity.x = Math.cos(rotation) * this.MAX_SPEED;
+        this.body.velocity.y = Math.sin(rotation) * this.MAX_SPEED;
+		this.body.angle -= 10;
+    } else {
+        this.body.velocity.setTo(0, 0);
+    }
+};
+////
 
 	function player_setup(num){
 		pos = (game.stage.bounds.height/3);
@@ -204,37 +265,50 @@ gameState.create = function () {
 		}
 	}
 
-	function update_score(score){
+	function update_score(new_score){
+		score = score + new_score;
 		scoreText.text = '' + score + '';
 	}
 	
 	function updateTick() {
 	
-			add_enemies();
-			add_revive();
-			add_health(); //wip
-		//update the score
-		//score = score - 3;
-		//update_score(score);
-		
-	}
+		//maybe look into array to store what comes when
 	
-	function add_enemies(){
-		// enemy movement https://github.com/photonstorm/phaser/wiki/Phaser-General-Documentation-:-Groups
-		if(enemies.countLiving() == 0){
-			enemy = enemies.create(game.world.randomX, -30, 'box');
-			enemies.setAll('health', 1);
-			enemies.setAll('anchor.x', 0.5);
-			enemies.setAll('anchor.y', 0.5);
-			enemy.body.velocity.setTo(25, 200);
-			enemy.body.collideWorldBounds = true;
-			enemy.body.bounce.setTo(1, 1);
+		if (enemies.countLiving() < 2) {
 			
-			enemy = enemies.create(game.world.randomX, game.world.randomY, 'box');
-			enemy.body.collideWorldBounds = true;
+			//add six enemies
+			for (i = 0; i < 6; i++) {
+				game.launchMissile(this.game.rnd.integerInRange(0, this.game.width), -30);
+			}
 			
 		}
+			
+			add_revive();
+			add_health(); //wip	
 	}
+
+game.launchMissile = function(x, y) {
+    // Get the first dead missile from the missileGroup
+    var missile = enemies.getFirstDead();
+
+    // If there aren't any available, create a new one
+    if (missile === null) {
+        missile = new e_follower(game, 0, 0, player[0]);
+        enemies.add(missile);
+    }
+
+    // Revive the missile (set it's alive property to true)
+    // You can also define a onRevived event handler in your explosion objects
+    // to do stuff when they are revived.
+    missile.revive();
+
+    // Move the missile to the given coordinates
+    missile.x = x;
+    missile.y = y;
+
+    return missile;
+};
+
 	
 	function add_revive(){
 		if(players.countLiving() != num_players && recently_created != 1){
@@ -350,7 +424,7 @@ function controls(num){
 		}
 	}else{
 		if(development_alt_controls){
-			speed = 290;
+			speed = 300;
 		}else{
 			speed = 7;
 		}
@@ -511,17 +585,15 @@ gameState.update = function (){
 	//notice a player collects revive
 	game.physics.arcade.overlap(players, lives, pickup_revive, null, this);
 	
-	//dont want player to die on contact maybe just get injured
+	//this catches on development_alt_controls=0 state but 1 allows collide below to work
 	game.physics.arcade.overlap(players, enemies, collision_notice, null, this);
-	
-
-	
 	//this is not working
 	game.physics.arcade.collide(players, enemies, collision_notice, null, this);
 	
-	//this is just for registering who shot what
-	game.physics.arcade.overlap(game.bulletPool, enemies, add_point, null, this);
+	//game.physics.arcade.collide(enemies, enemies); //do we want overlap!
 	
+	//this is just for registering who shot what
+	game.physics.arcade.overlap(game.bulletPool, enemies, add_point, null, this);	
 	
 	all = 0;
     // Pad "connected or not" indicator
@@ -559,7 +631,7 @@ gameState.update = function (){
 		//players.forEach(game.physics.arcade.moveToObject, this, this, logo);
 		players.forEach( collision_notice, this, true);
 		
-		special_active = 1;		
+		special_active = 1;
 		//if health or maintance of combo drop this will become 0
 	}
 	
@@ -568,15 +640,34 @@ gameState.update = function (){
 	if(development == 0){
 		background.tilePosition.y += 1.50;
 	}
+	
 };
 
+
+function flash(){
+	// Create the flash
+	game.flash.alpha = 1;
+	game.add.tween(game.flash)
+		.to({ alpha: 0 }, 100, Phaser.Easing.Cubic.In)
+		.start();
+}
+
+function shake(){
+	game.camera.y = 0;
+	game.add.tween(game.camera)
+		.to({ y: -10 }, 40, Phaser.Easing.Sinusoidal.InOut, false, 0, 5, true)
+		.start();
+}
 
 function add_point (bullet, enemies){
 	//console.log(enemies.health);
 	//console.log(bullet.name);
 	//enemies.kill();
+	
 	bullet.kill();
 	enemies.damage(1);
+	
+	update_score(1);
 }
 
 
@@ -600,7 +691,7 @@ function revive_player(lives){
 	}
 }
 
-function pickup_health (players, health) {
+function pickup_health(players, health) {
     // Removes the health from the screen
     health.kill();
 	players.damage(-1);
@@ -611,9 +702,7 @@ function pickup_health (players, health) {
 	change = game.healthbars.getAt(players.z-1);
 	change.scale.y = players.health/5;
 	
-    // Add and update the score
-    score += 1;
-	update_score(score);
+	update_score(1);
 }
 
 //this is not used yet
@@ -625,28 +714,28 @@ function lose_condition(){
 	}
 }
 
-
-function collision_notice (players, enemies) {
+function collision_notice(players, enemies) {
     // Removes the star from the screen
 	//players.kill();
 	num = players.z-1;
-	console.log(num);
 	if (nextKillAt[num] > game.time.now) {
 		now_invincible[num] = 1;
 	}else{
 		now_invincible[num] = 0;
 		nextKillAt[num] = game.time.now + KillDelay[num];
-		console.log(players.health);
+		
 		players.damage(1);
+		enemies.damage(1);
+
+        shake();
 		
 		//this need functioning out
 		change = game.healthbars.getAt(num);
 		change.scale.y = players.health/5;
 	}
-
 }
 
-function something (players, enemies) {
+function something(players, enemies) {
 	console.log("hit");
 	players.damage(1);
 	//players.kill();
