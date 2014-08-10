@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Generator: Adobe Illustrator 15.0.0, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
+<!-- Generator: Adobe Illustrator 16.0.0, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
 <!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
 <svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="128px"
 	 height="48px" viewBox="0 0 128 48" enable-background="new 0 0 128 48" xml:space="preserve">
@@ -15,8 +15,8 @@
 </g>
 <g id="Layer_5">
 	<g>
-		<polygon fill="#F16522" points="112,42.01 96,47.816 112,3.971 128,47.816 		"/>
-		<polygon opacity="0.2" fill="#231F20" points="112,3.971 112,42.01 96,47.816 		"/>
+		<polygon fill="#F16522" points="112,44.01 96,47.816 112,3.971 128,47.816 		"/>
+		<polygon opacity="0.2" fill="#231F20" points="112,3.971 112,44.01 96,47.816 		"/>
 	</g>
 </g>
 <g id="invincible">
@@ -24,7 +24,11 @@
 	<polygon opacity="0.2" fill="#231F20" points="48,0.944 48,40.949 32,47.056 	"/>
 </g>
 <g id="forward">
-	<polygon fill="#F16522" points="80,40.949 65.6,47.056 80,0.944 94.4,47.056 	"/>
-	<polygon opacity="0.2" fill="#231F20" points="80,0.944 80,40.949 65.6,47.056 	"/>
+	<polygon fill="#F16522" points="80,40.477 65.6,46.583 80,0.472 94.4,46.583 	"/>
+	<polygon opacity="0.2" fill="#231F20" points="80,0.472 80,40.477 65.6,46.583 	"/>
+	<path opacity="0.7" fill="#FFFFFF" d="M82.002,44.192c0,1.842-2.002,3.335-2.002,3.335s-2.002-1.493-2.002-3.335
+		s0.16-3.335,2.002-3.335S82.002,42.351,82.002,44.192z"/>
+	<path opacity="0.5" fill="#FFFFFF" d="M81.478,43.317c0,1.359-1.477,2.46-1.477,2.46s-1.478-1.101-1.478-2.46
+		c0-1.358,0.119-2.46,1.478-2.46S81.478,41.959,81.478,43.317z"/>
 </g>
 </svg>

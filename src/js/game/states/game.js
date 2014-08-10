@@ -148,6 +148,15 @@ gameState.create = function () {
 		now_invincible[i] = 0;
 	}
 	
+	//bullet pool could be individual
+	game.e_bulletPool = game.add.group();
+	game.e_bulletPool.enableBody = true;
+	game.e_bulletPool.physicsBodyType = Phaser.Physics.ARCADE
+	game.e_bulletPool.createMultiple(10*num_players, 'bullet'); //needs to be based on amount of players
+	game.e_bulletPool.setAll('anchor.x', 0.5);
+	game.e_bulletPool.setAll('anchor.y', 0.5);
+	game.e_bulletPool.setAll('outOfBoundsKill', true);
+	game.e_bulletPool.setAll('checkWorldBounds', true);
 	
     // Create a white rectangle that we'll use to represent the flash
     game.flash = game.add.graphics(0, 0);
@@ -231,6 +240,7 @@ var e_basic = function(game, x, y) {
     // Define constants that affect motion
     this.MAX_SPEED = 250; // pixels/second
     this.MIN_DISTANCE = 90; // pixels
+	this.bypass = 0;
 };
 
 // e_followers are a type of Phaser.Sprite
@@ -254,10 +264,82 @@ e_basic.prototype.update = function() {
     //} else {
         //this.body.velocity.setTo(0, 0);
     //}
-		this.body.velocity.x = 0;
-		this.body.velocity.y = 100;
-		this.body.rotate += 10;
 	
+	//the following is really not right
+	if(this.bypass == 0){
+		console.log("h"+game.height+"pos"+this.body.y);
+		if(this.body.y < game.height-100){
+			this.body.velocity.x = 0;
+			this.body.velocity.y = 50;
+			this.body.rotate += 10;
+		}else{
+			this.bypass = 1;
+		}
+	}else{
+		if(this.body.y < game.height-100){
+			this.body.velocity.y = -25;
+		}else{
+			this.bypass = 0;
+		}
+	}
+	
+};
+
+
+// Missile constructor
+var e_missile = function(game, x, y) {
+    Phaser.Sprite.call(this, game, x, y, 'box');
+
+    // Set the pivot point for this sprite to the center
+    this.anchor.setTo(0.5, 0.5);
+
+    // Enable physics on the missile
+    game.physics.enable(this, Phaser.Physics.ARCADE);
+
+    // Define constants that affect motion
+    this.SPEED = 250; // missile speed pixels/second
+    this.TURN_RATE = 2; // turn rate in degrees/frame
+};
+
+// Missiles are a type of Phaser.Sprite
+e_missile.prototype = Object.create(Phaser.Sprite.prototype);
+e_missile.prototype.constructor = e_missile;
+
+e_missile.prototype.update = function() {
+    // Calculate the angle from the e_missile to the mouse cursor game.input.x
+    // and game.input.y are the mouse position; substitute with whatever
+    // target coordinates you need.
+    var targetAngle = this.game.math.angleBetween(
+        this.x, this.y,
+        this.game.input.activePointer.x, this.game.input.activePointer.y
+    );
+
+    // Gradually (this.TURN_RATE) aim the e_missile towards the target angle
+    if (this.rotation !== targetAngle) {
+        // Calculate difference between the current angle and targetAngle
+        var delta = targetAngle - this.rotation;
+
+        // Keep it in range from -180 to 180 to make the most efficient turns.
+        if (delta > Math.PI) delta -= Math.PI * 2;
+        if (delta < -Math.PI) delta += Math.PI * 2;
+
+        if (delta > 0) {
+            // Turn clockwise
+            this.angle += this.TURN_RATE;
+        } else {
+            // Turn counter-clockwise
+            this.angle -= this.TURN_RATE;
+        }
+
+        // Just set angle to target angle if they are close
+        if (Math.abs(delta) < this.game.math.degToRad(this.TURN_RATE)) {
+            this.rotation = targetAngle;
+        }
+    }
+
+    // Calculate velocity vector based on this.rotation and this.SPEED
+    this.body.velocity.x = Math.cos(this.rotation) * this.SPEED;
+    this.body.velocity.y = Math.sin(this.rotation) * this.SPEED;
 };
 
 	function player_setup(num){
@@ -332,13 +414,18 @@ e_basic.prototype.update = function() {
 		if (enemies.countLiving() < 2) {
 			
 			//add six enemies
-			for (i = 0; i < 6; i++) {
+			for (i = 0; i < 2; i++) {
 				game.launchMissile(this.game.rnd.integerInRange(0, this.game.width), -30, 1);
 			}
 			
 			for (i = 0; i < 2; i++) {
 				game.launchMissile(this.game.rnd.integerInRange(0, this.game.width), -30, 0);
 			}
+			
+			for (i = 0; i < 2; i++) {
+				game.launchMissile(this.game.rnd.integerInRange(0, this.game.width), -30, 2);
+			}
+			
 			
 		}
 			
@@ -356,6 +443,16 @@ game.launchMissile = function(x, y, type) {
 			missile = new e_follower(game, 0, 0, player[0]);
 			enemies.add(missile);
 		}
+	}else if(type == 2){
+		// Get the first dead missile from the missileGroup
+		var missile = enemies.getFirstDead();
+
+		// If there aren't any available, create a new one
+		if (missile === null) {
+			missile = new e_missile(game, 0, 0);
+			enemies.add(missile);
+		}
+		
 	}else{
 		// Get the first dead missile from the missileGroup
 		var missile = enemies.getFirstDead();
@@ -860,9 +957,6 @@ gameState.update = function (){
 			if(!i == 0){
 				controls_pad(i , (i-1));
 			}
-			if(num_players == 1){
-				controls_pad(i , i);
-			}
 		}else{
 			controls_pad(i , i);
 		}		
@@ -870,7 +964,7 @@ gameState.update = function (){
 		if(special_active == 0){
 			all = all+combo_notice(i);
 		}
-		
+
 		if(now_invincible[i] == 1){
 			player[i].animations.frame = 1;
 		}
