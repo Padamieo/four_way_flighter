@@ -20,6 +20,7 @@ module.exports = function(game) {
 	
 	game.load.image('box', 'images/enemy.png');
 	game.load.image('e_follow', 'images/e_follow.png');
+	game.load.image('e_swift', 'images/e_swift.png');
 	
 	game.load.spritesheet('controller-indicator', 'images/controller-indicator.png', 16,16);
 	this.load.image('bullet', 'images/bullet.png');

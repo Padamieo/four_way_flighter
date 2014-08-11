@@ -164,6 +164,13 @@ gameState.create = function () {
     game.flash.drawRect(0, 0, game.width, game.height);
     game.flash.endFill();
     game.flash.alpha = 0;
+	
+    // Create a white rectangle that we'll use to represent the flash
+    game.pause_background = game.add.graphics(0, 0);
+    game.pause_background.beginFill(0x000000, 1);
+    game.pause_background.drawRect(0, 0, game.width, game.height);
+    game.pause_background.endFill();
+    game.pause_background.alpha = 0;
 
     // Make the world a bit bigger than the stage so we can shake the camera
     this.game.world.setBounds(-10, -10, this.game.width + 20, this.game.height + 20);
@@ -260,7 +267,7 @@ e_basic.prototype.update = function() {
         // Calculate velocity vector based on rotation and this.MAX_SPEED
         //this.body.velocity.x = Math.cos(rotation) * this.MAX_SPEED;
         //this.body.velocity.y = Math.sin(rotation) * this.MAX_SPEED;
-		//this.body.angle -= 10;
+		
     //} else {
         //this.body.velocity.setTo(0, 0);
     //}
@@ -284,21 +291,24 @@ e_basic.prototype.update = function() {
 	}
 	
 };
-
+var next_e_ShotAt = [];
+var e_shotDelay = [];
 
 // Missile constructor
 var e_missile = function(game, x, y) {
-    Phaser.Sprite.call(this, game, x, y, 'box');
-
+    Phaser.Sprite.call(this, game, x, y, 'e_swift');
     // Set the pivot point for this sprite to the center
     this.anchor.setTo(0.5, 0.5);
-
+	//this.body.rotation = 90;
+	
     // Enable physics on the missile
     game.physics.enable(this, Phaser.Physics.ARCADE);
-
+	
     // Define constants that affect motion
-    this.SPEED = 230; // missile speed pixels/second
+    this.SPEED = 290; // missile speed pixels/second
     this.TURN_RATE = 2; // turn rate in degrees/frame
+	this.MIN_DISTANCE = 150;
+	this.MAX_DISTANCE = 300;	
 };
 
 // Missiles are a type of Phaser.Sprite
@@ -309,38 +319,84 @@ e_missile.prototype.update = function() {
     // Calculate the angle from the e_missile to the mouse cursor game.input.x
     // and game.input.y are the mouse position; substitute with whatever
     // target coordinates you need.
-    var targetAngle = this.game.math.angleBetween(
-        this.x, this.y,
-        this.game.input.activePointer.x, this.game.input.activePointer.y
-    );
+	if(this.alive){	
+		if( game.stuck_on_path == 0){
+			var distance = this.game.math.distance(this.x, this.y, this.game.input.activePointer.x, this.game.input.activePointer.y);
+			var targetAngle = this.game.math.angleBetween(
+				this.x, this.y,
+				this.game.input.activePointer.x, this.game.input.activePointer.y
+			);
+		}
+	
+		if( game.stuck_on_path == 1){
+			var distance = this.game.math.distance(this.x, this.y, 0, 0);
+			/*
+			var faketargetAngle = this.game.math.angleBetween(
+				this.x, this.y,
+				this.game.input.activePointer.x+(this.game.rnd.integerInRange(0, game.stage.bounds.width)), this.game.input.activePointer.y+(this.game.rnd.integerInRange(0, game.stage.bounds.width))
+			);
+			*/
+			var targetAngle = this.game.math.angleBetween(
+				this.x, this.y,
+				0, 0
+			);
+		}
+	
+		if (distance < this.MIN_DISTANCE) {
+			game.stuck_on_path = 1;
+		}else if(distance < this.MAX_DISTANCE){
+			game.stuck_on_path = 0;
+		}
+	
+		// Gradually (this.TURN_RATE) aim the e_missile towards the target angle
+		if (this.rotation !== targetAngle) {
+			//console.log(this.z+"aiming at");
+			// Calculate difference between the current angle and targetAngle
+			var delta = targetAngle - this.rotation;
 
-    // Gradually (this.TURN_RATE) aim the e_missile towards the target angle
-    if (this.rotation !== targetAngle) {
-        // Calculate difference between the current angle and targetAngle
-        var delta = targetAngle - this.rotation;
+			// Keep it in range from -180 to 180 to make the most efficient turns.
+			if (delta > Math.PI) delta -= Math.PI * 2;
+			if (delta < -Math.PI) delta += Math.PI * 2;
 
-        // Keep it in range from -180 to 180 to make the most efficient turns.
-        if (delta > Math.PI) delta -= Math.PI * 2;
-        if (delta < -Math.PI) delta += Math.PI * 2;
+			if (delta > 0) {
+				// Turn clockwise
+				this.angle += this.TURN_RATE;
+			} else {
+				// Turn counter-clockwise
+				this.angle -= this.TURN_RATE;
+			}
 
-        if (delta > 0) {
-            // Turn clockwise
-            this.angle += this.TURN_RATE;
-        } else {
-            // Turn counter-clockwise
-            this.angle -= this.TURN_RATE;
-        }
-
-        // Just set angle to target angle if they are close
-        if (Math.abs(delta) < this.game.math.degToRad(this.TURN_RATE)) {
-            this.rotation = targetAngle;
-        }
-    }
-
-    // Calculate velocity vector based on this.rotation and this.SPEED
-    this.body.velocity.x = Math.cos(this.rotation) * this.SPEED;
-    this.body.velocity.y = Math.sin(this.rotation) * this.SPEED;
+			// Just set angle to target angle if they are close
+			if (Math.abs(delta) < this.game.math.degToRad(this.TURN_RATE)) {
+				this.rotation = targetAngle;
+				e_fire(this, targetAngle);
+			}
+		}
+		// Calculate velocity vector based on this.rotation and this.SPEED
+		this.body.velocity.x = Math.cos(this.rotation) * this.SPEED;
+		this.body.velocity.y = Math.sin(this.rotation) * this.SPEED;
+	}
 };
+
+function e_fire(e, targetAngle){
+	console.log("fire"+e.z);
+	if (next_e_ShotAt[e.z] > game.time.now) {
+		return;
+	}
+	next_e_ShotAt[e.z] = game.time.now + e_shotDelay[e.z];
+
+	if (game.e_bulletPool.countDead() === 0) {
+		return;
+	}
+	
+	e_bullet = game.e_bulletPool.getFirstExists(false);
+	e_bullet.reset(e.x, e.y, 'bullet');
+	e_bullet.rotation = targetAngle;
+	e_bullet.SPEED = 400;
+	e_bullet.body.velocity.x = Math.cos(e_bullet.rotation) * e_bullet.SPEED;
+	e_bullet.body.velocity.y = Math.sin(e_bullet.rotation) * e_bullet.SPEED;
+			
+}
 
 	function player_setup(num){
 		pos = (game.stage.bounds.height/3);
@@ -418,11 +474,13 @@ e_missile.prototype.update = function() {
 				game.launchMissile(this.game.rnd.integerInRange(0, this.game.width), -30, 1);
 			}
 			
+			/*
 			for (i = 0; i < 2; i++) {
 				game.launchMissile(this.game.rnd.integerInRange(0, this.game.width), -30, 0);
 			}
+			*/
 			
-			for (i = 0; i < 2; i++) {
+			for (i = 0; i < 1; i++) {
 				game.launchMissile(this.game.rnd.integerInRange(0, this.game.width), -30, 2);
 			}
 			
@@ -451,6 +509,10 @@ game.launchMissile = function(x, y, type) {
 		if (missile === null) {
 			missile = new e_missile(game, 0, 0);
 			enemies.add(missile);
+			console.log("ww"+missile.z);
+			next_e_ShotAt[missile.z] = 0;
+			e_shotDelay[missile.z] = 500;
+			game.stuck_on_path = 0;
 		}
 		
 	}else{
@@ -601,13 +663,13 @@ function controls_pad(play_num, pad_num){
 	if ( pad[pad_num].isDown(Phaser.Gamepad.XBOX360_DPAD_LEFT) || pad[pad_num].axis(Phaser.Gamepad.XBOX360_STICK_LEFT_X) < -0.01) {
 		if(special_active == 1){
 			if(num_players == 0){
-				player_combo.x -= speed;
+				player_combo.body.velocity.x = -speed;
 				if( player_combo.angle > -20 ){
 					player_combo.angle -= 1;
 				}
 			}else{
 				if(play_num == 0){
-					player_combo.x -= speed;
+					player_combo.body.velocity.x = -speed;
 					if( player_combo.angle > -20 ){
 						player_combo.angle -= 1;
 					}
@@ -631,13 +693,13 @@ function controls_pad(play_num, pad_num){
 	}else if( pad[pad_num].isDown(Phaser.Gamepad.XBOX360_DPAD_RIGHT) || pad[pad_num].axis(Phaser.Gamepad.XBOX360_STICK_LEFT_X) > 0.01){
 		if(special_active == 1){
 			if(num_players == 0){
-				player_combo.x += speed;
+				player_combo.body.velocity.x = speed;
 				if( player_combo.angle < 20 ){
 					player_combo.angle += 1;
 				}
 			}else{
 				if(play_num == 0){
-					player_combo.x += speed;
+					player_combo.body.velocity.x = speed;
 					if( player_combo.angle < 20 ){
 						player_combo.angle += 1;
 					}
@@ -664,10 +726,10 @@ function controls_pad(play_num, pad_num){
 	if ( pad[pad_num].isDown(Phaser.Gamepad.XBOX360_DPAD_UP) || pad[pad_num].axis(Phaser.Gamepad.XBOX360_STICK_LEFT_Y) < -0.01) {
 		if(special_active == 1){
 			if(num_players == 0){
-				//player_combo.y -= speed;
+				//player_combo.body.velocity.y = -speed;
 			}else{
 				if(play_num == 0){
-					player_combo.y -= speed;
+					player_combo.body.velocity.y = -speed;
 				}
 			}
 		}else{
@@ -688,10 +750,10 @@ function controls_pad(play_num, pad_num){
 	}else if( pad[pad_num].isDown(Phaser.Gamepad.XBOX360_DPAD_DOWN) || pad[pad_num].axis(Phaser.Gamepad.XBOX360_STICK_LEFT_Y) > 0.01){
 		if(special_active == 1){
 			if(num_players == 0){
-				player_combo.y += speed;
+				player_combo.body.velocity.y = speed;
 			}else{
 				if(play_num == 0){
-					player_combo.y += speed;
+					player_combo.body.velocity.y = speed;
 				}
 			}
 		}else{
@@ -772,13 +834,13 @@ function controls_key(num){
 	if ( game.input.keyboard.isDown(Phaser.Keyboard.A) ) {
 		if(special_active == 1){
 			if(num_players == 0){
-				player_combo.x -= speed;
+				player_combo.body.velocity.x = -speed;
 				if( player_combo.angle > -20 ){
 					player_combo.angle -= 1;
 				}
 			}else{
 				if(num == 0){
-					player_combo.x -= speed;
+					player_combo.body.velocity.x = -speed;
 					if( player_combo.angle > -20 ){
 						player_combo.angle -= 1;
 					}
@@ -802,13 +864,13 @@ function controls_key(num){
 	}else if( game.input.keyboard.isDown(Phaser.Keyboard.D) ){
 		if(special_active == 1){
 			if(num_players == 0){
-				player_combo.x += speed;
+				player_combo.body.velocity.x = speed;
 				if( player_combo.angle < 20 ){
 					player_combo.angle += 1;
 				}
 			}else{
 				if(num == 0){
-					player_combo.x += speed;
+					player_combo.body.velocity.x = speed;
 					if( player_combo.angle < 20 ){
 						player_combo.angle += 1;
 					}
@@ -835,10 +897,10 @@ function controls_key(num){
 	if ( game.input.keyboard.isDown(Phaser.Keyboard.W) ) {
 		if(special_active == 1){
 			if(num_players == 0){
-				player_combo.y -= speed;
+				player_combo.body.velocity.y = -speed;
 			}else{
 				if(num == 0){
-					player_combo.y -= speed;
+					player_combo.body.velocity.y = -speed;
 				}
 			}
 		}else{
@@ -859,10 +921,10 @@ function controls_key(num){
 	}else if(game.input.keyboard.isDown(Phaser.Keyboard.S) ){
 		if(special_active == 1){
 			if(num_players == 0){
-				player_combo.y += speed;
+				player_combo.body.velocity.y = speed;
 			}else{
 				if(num == 0){
-					player_combo.y += speed;
+					player_combo.body.velocity.y = speed;
 				}
 			}
 		}else{
