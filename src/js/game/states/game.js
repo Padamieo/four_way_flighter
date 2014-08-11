@@ -297,7 +297,7 @@ var e_missile = function(game, x, y) {
     game.physics.enable(this, Phaser.Physics.ARCADE);
 
     // Define constants that affect motion
-    this.SPEED = 250; // missile speed pixels/second
+    this.SPEED = 230; // missile speed pixels/second
     this.TURN_RATE = 2; // turn rate in degrees/frame
 };
 
