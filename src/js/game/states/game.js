@@ -309,6 +309,7 @@ var e_missile = function(game, x, y) {
 //this.body.polygon.rotate = Math.PI/180;
 //this.angle = 90;
 //this.body.polygon.translate 0, obj.height;
+this.TARGET = 0;//select random alive target
 this.RANDOM_Y = game.rnd.integerInRange(0, game.stage.bounds.width);
 this.RANDOM_X = game.rnd.integerInRange(0, game.stage.bounds.height);
     // Define constants that affect motion
@@ -330,12 +331,14 @@ e_missile.prototype.update = function() {
 		//console.log(this.RANDOM);
 		if( game.stuck_on_path == 0){
 		
-			choose_player_target();
+			pos = choose_player_target(this, this.TARGET);
+			console.log("x"+pos[0]+"y"+pos[1]);
 			
-			var distance = this.game.math.distance(this.x, this.y, this.game.input.activePointer.x, this.game.input.activePointer.y);
+			var distance = this.game.math.distance(this.x, this.y, pos[0], pos[1]);
+			
 			var targetAngle = this.game.math.angleBetween(
 				this.x, this.y,
-				this.game.input.activePointer.x, this.game.input.activePointer.y
+				pos[0], pos[1]
 			);
 			
 		}
@@ -391,23 +394,35 @@ e_missile.prototype.update = function() {
 };
 
 
-function choose_player_target(enemy, target){
-	
-	//if enemy old target is dead assign new one.
-	
-	if(players.countLiving() == num_players){
-		console.log("all alive");
-		//player.forEachAlive();
-		//random select player an attack, mean option select weakest player
+function choose_player_target(enemy, target){	
+	if(players.getAt(target).alive){
+		x = players.getAt(target).x;
+		y = players.getAt(target).y;
 	}else if(player_combo.alive){
-		console.log("combo mode");
-		//target combo player
+		x = player_combo.x;
+		y = player_combo.y;
 	}else{
-		console.log("all dead");
-		//target center of the screen
+		if(players.countDead() == num_players){
+			rl = random_location();
+			x = rl[0];
+			y = rl[1];
+		}else{
+			//function  get random alive player
+			enemy.TARGET = 0;//set to new target
+		}		
 	}
+	x = Math.floor(x);
+	y = Math.floor(y);
+	var arr = new Array(x, y); 
+	return arr;
 }
 
+function random_location(){
+	x = game.rnd.integerInRange(0, game.stage.bounds.width);
+	y = game.rnd.integerInRange(0, game.stage.bounds.height);
+	var arr = new Array(x, y); 
+	return arr;
+}
 
 	function e_fire(e, targetAngle){
 		//console.log("fire"+e.z);
@@ -415,18 +430,15 @@ function choose_player_target(enemy, target){
 			return;
 		}
 		next_e_ShotAt[e.z] = game.time.now + e_shotDelay[e.z];
-
 		if (game.e_bulletPool.countDead() === 0) {
 			return;
 		}
-		
 		e_bullet = game.e_bulletPool.getFirstExists(false);
 		e_bullet.reset(e.x, e.y, 'bullet');
 		e_bullet.rotation = targetAngle;
 		e_bullet.SPEED = 400;
 		e_bullet.body.velocity.x = Math.cos(e_bullet.rotation) * e_bullet.SPEED;
-		e_bullet.body.velocity.y = Math.sin(e_bullet.rotation) * e_bullet.SPEED;
-				
+		e_bullet.body.velocity.y = Math.sin(e_bullet.rotation) * e_bullet.SPEED;	
 	}
 
 	function player_setup(num){
