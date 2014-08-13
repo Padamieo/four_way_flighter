@@ -299,13 +299,20 @@ var e_missile = function(game, x, y) {
     Phaser.Sprite.call(this, game, x, y, 'e_swift');
     // Set the pivot point for this sprite to the center
     this.anchor.setTo(0.5, 0.5);
-	//this.body.rotation = 90;
+	
+
 	
     // Enable physics on the missile
     game.physics.enable(this, Phaser.Physics.ARCADE);
 	
+//this.body.translate = 0, -obj.heigh;
+//this.body.polygon.rotate = Math.PI/180;
+//this.angle = 90;
+//this.body.polygon.translate 0, obj.height;
+this.RANDOM_Y = game.rnd.integerInRange(0, game.stage.bounds.width);
+this.RANDOM_X = game.rnd.integerInRange(0, game.stage.bounds.height);
     // Define constants that affect motion
-    this.SPEED = 290; // missile speed pixels/second
+    this.SPEED = 295; // missile speed pixels/second
     this.TURN_RATE = 2; // turn rate in degrees/frame
 	this.MIN_DISTANCE = 150;
 	this.MAX_DISTANCE = 300;	
@@ -319,7 +326,8 @@ e_missile.prototype.update = function() {
     // Calculate the angle from the e_missile to the mouse cursor game.input.x
     // and game.input.y are the mouse position; substitute with whatever
     // target coordinates you need.
-	if(this.alive){	
+	if(this.alive){
+		console.log(this.RANDOM);
 		if( game.stuck_on_path == 0){
 			var distance = this.game.math.distance(this.x, this.y, this.game.input.activePointer.x, this.game.input.activePointer.y);
 			var targetAngle = this.game.math.angleBetween(
