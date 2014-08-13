@@ -9,7 +9,7 @@ module.exports = function(game) {
 	var players; //not needed but was trying to resolve group issue
 	var player = [];
 	var pad = [];
-	var indicator = [];
+	//var indicator = [];
 	var nextShotAt = [];
 	var shotDelay = [];
 	
@@ -327,13 +327,17 @@ e_missile.prototype.update = function() {
     // and game.input.y are the mouse position; substitute with whatever
     // target coordinates you need.
 	if(this.alive){
-		console.log(this.RANDOM);
+		//console.log(this.RANDOM);
 		if( game.stuck_on_path == 0){
+		
+			choose_player_target();
+			
 			var distance = this.game.math.distance(this.x, this.y, this.game.input.activePointer.x, this.game.input.activePointer.y);
 			var targetAngle = this.game.math.angleBetween(
 				this.x, this.y,
 				this.game.input.activePointer.x, this.game.input.activePointer.y
 			);
+			
 		}
 	
 		if( game.stuck_on_path == 1){
@@ -386,25 +390,44 @@ e_missile.prototype.update = function() {
 	}
 };
 
-function e_fire(e, targetAngle){
-	console.log("fire"+e.z);
-	if (next_e_ShotAt[e.z] > game.time.now) {
-		return;
-	}
-	next_e_ShotAt[e.z] = game.time.now + e_shotDelay[e.z];
 
-	if (game.e_bulletPool.countDead() === 0) {
-		return;
-	}
+function choose_player_target(enemy, target){
 	
-	e_bullet = game.e_bulletPool.getFirstExists(false);
-	e_bullet.reset(e.x, e.y, 'bullet');
-	e_bullet.rotation = targetAngle;
-	e_bullet.SPEED = 400;
-	e_bullet.body.velocity.x = Math.cos(e_bullet.rotation) * e_bullet.SPEED;
-	e_bullet.body.velocity.y = Math.sin(e_bullet.rotation) * e_bullet.SPEED;
-			
+	//if enemy old target is dead assign new one.
+	
+	if(players.countLiving() == num_players){
+		console.log("all alive");
+		//player.forEachAlive();
+		//random select player an attack, mean option select weakest player
+	}else if(player_combo.alive){
+		console.log("combo mode");
+		//target combo player
+	}else{
+		console.log("all dead");
+		//target center of the screen
+	}
 }
+
+
+	function e_fire(e, targetAngle){
+		//console.log("fire"+e.z);
+		if (next_e_ShotAt[e.z] > game.time.now) {
+			return;
+		}
+		next_e_ShotAt[e.z] = game.time.now + e_shotDelay[e.z];
+
+		if (game.e_bulletPool.countDead() === 0) {
+			return;
+		}
+		
+		e_bullet = game.e_bulletPool.getFirstExists(false);
+		e_bullet.reset(e.x, e.y, 'bullet');
+		e_bullet.rotation = targetAngle;
+		e_bullet.SPEED = 400;
+		e_bullet.body.velocity.x = Math.cos(e_bullet.rotation) * e_bullet.SPEED;
+		e_bullet.body.velocity.y = Math.sin(e_bullet.rotation) * e_bullet.SPEED;
+				
+	}
 
 	function player_setup(num){
 		pos = (game.stage.bounds.height/3);
@@ -436,10 +459,11 @@ function e_fire(e, targetAngle){
 
 	function pad_setup(num){
 	
-		indicatorpos = (game.stage.bounds.width)-(22);
-		indicator[num] = game.add.sprite(indicatorpos,(num*10), 'controller-indicator');
-		indicator[num].scale.x = indicator[num].scale.y = 1;
-		indicator[num].animations.frame = 1;
+		//indicatorpos = (game.stage.bounds.width)-(22);
+		//indicator[num] = game.add.sprite(indicatorpos,(num*10), 'controller-indicator');
+		//indicator[num].scale.x = indicator[num].scale.y = 1;
+		//indicator[num].animations.frame = 1;
+		
 		game.input.gamepad.start();
 		// To listen to buttons from a specific pad listen directly on that pad game.input.gamepad.padX, where X = pad 1-4
 		if(num == 0){
@@ -517,7 +541,7 @@ game.launchMissile = function(x, y, type) {
 		if (missile === null) {
 			missile = new e_missile(game, 0, 0);
 			enemies.add(missile);
-			console.log("ww"+missile.z);
+			//console.log("ww"+missile.z);
 			next_e_ShotAt[missile.z] = 0;
 			e_shotDelay[missile.z] = 500;
 			game.stuck_on_path = 0;
