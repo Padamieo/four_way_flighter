@@ -26,7 +26,7 @@ module.exports = function(game) {
 	var now_invincible = [];
 	var special_active = 0;
 	
-	var development = 1;
+	var development = 0;
 	var development_alt_controls = 1;
 	
 	var gameState = {};
@@ -166,20 +166,75 @@ gameState.create = function () {
     game.flash.drawRect(0, 0, game.width, game.height);
     game.flash.endFill();
     game.flash.alpha = 0;
-	
+
+    // Make the world a bit bigger than the stage so we can shake the camera
+    this.game.world.setBounds(-10, -10, this.game.width + 20, this.game.height + 20);
+
     // Create a white rectangle that we'll use to represent the flash
     game.pause_background = game.add.graphics(0, 0);
     game.pause_background.beginFill(0x000000, 1);
     game.pause_background.drawRect(0, 0, game.width, game.height);
     game.pause_background.endFill();
     game.pause_background.alpha = 0;
-
-    // Make the world a bit bigger than the stage so we can shake the camera
-    this.game.world.setBounds(-10, -10, this.game.width + 20, this.game.height + 20);
 	
-};
+    // Add a input listener that can help us return from being paused
+    game.input.onDown.add(unpause, self);
 
-////
+    function unpause(event){
+        if(game.paused){
+            // Calculate the corners of the menu
+            //var x1 = w/2 - 270/2, x2 = w/2 + 270/2,
+             //   y1 = h/2 - 180/2, y2 = h/2 + 180/2;
+
+            // Check if the click was inside the menu
+			/*
+            if(event.x > x1 && event.x < x2 && event.y > y1 && event.y < y2 ){
+                // The choicemap is an array that will help us see which item was clicked
+                var choisemap = ['one', 'two', 'three', 'four', 'five', 'six'];
+
+                // Get menu local coordinates for the click
+                var x = event.x - x1,
+                    y = event.y - y1;
+
+                // Calculate the choice 
+                var choise = Math.floor(x / 90) + 3*Math.floor(y / 90);
+
+                // Display the choice
+                choiseLabel.text = 'You chose menu item: ' + choisemap[choise];
+            }
+            else{
+			*/
+			
+
+                // Remove the menu and the label
+                game.menu.destroy();
+                game.choiseLabel.destroy();
+				game.pause_background.alpha = 0;
+                game.paused = false;
+            //}
+        }
+    };
+};
+////////// end of create /////////
+	function pause() {
+        // When the paus button is pressed, we pause the game
+        game.paused = true;
+
+        // Then add the menu
+		w = game.width/2;
+		h = game.height/2;
+        game.menu = game.add.sprite(w, h, 'menu');
+		game.menu.anchor.setTo(0.5, 0.5);
+
+        // And a label to illustrate which menu item was chosen. (This is not necessary)
+        game.choiseLabel = game.add.text(w, h-150, 'Click outside menu to continue', { font: '30px Arial', fill: '#fff' });
+        game.choiseLabel.anchor.setTo(0.5, 0.5);
+		game.pause_background.alpha = 0.5;
+    };
+
+//////////////////////
+// ENEMIES
+//////////////////////
 // e_follower constructor
 var e_follower = function(game, x, y) {
     Phaser.Sprite.call(this, game, x, y, 'e_follow');
@@ -243,7 +298,7 @@ var e_basic = function(game, x, y) {
     this.anchor.setTo(0.5, 0.5);
 	this.health = 1;
 	
-	//this.enableBody = true;
+	//this.enableBody = false;
 	//this.physicsBodyType = Phaser.Physics.ARCADE;
 	
     // Enable physics on this object
@@ -261,40 +316,42 @@ e_basic.prototype.constructor = e_basic;
 
 
 e_basic.prototype.update = function() {
-    // Calculate distance to target
-    //var distance = this.game.math.distance(this.x, this.y, this.target.x, this.target.y);
-	
-    // If the distance > MIN_DISTANCE then move
-    //if (distance > this.MIN_DISTANCE) {
-        // Calculate the angle to the target
-        //var rotation = this.game.math.angleBetween(this.x, this.y, this.target.x, this.target.y);
-
-        // Calculate velocity vector based on rotation and this.MAX_SPEED
-        //this.body.velocity.x = Math.cos(rotation) * this.MAX_SPEED;
-        //this.body.velocity.y = Math.sin(rotation) * this.MAX_SPEED;
+	if(this.alive){
+		// Calculate distance to target
+		//var distance = this.game.math.distance(this.x, this.y, this.target.x, this.target.y);
 		
-    //} else {
-        //this.body.velocity.setTo(0, 0);
-    //}
-	
-	//the following is really not right
-	if(this.bypass == 0){
-		console.log("h"+game.height+"pos"+this.body.y);
-		if(this.body.y < game.height-100){
-			this.body.velocity.x = 0;
-			this.body.velocity.y = 50;
-			this.body.rotate += 10;
+		// If the distance > MIN_DISTANCE then move
+		//if (distance > this.MIN_DISTANCE) {
+			// Calculate the angle to the target
+			//var rotation = this.game.math.angleBetween(this.x, this.y, this.target.x, this.target.y);
+
+			// Calculate velocity vector based on rotation and this.MAX_SPEED
+			//this.body.velocity.x = Math.cos(rotation) * this.MAX_SPEED;
+			//this.body.velocity.y = Math.sin(rotation) * this.MAX_SPEED;
+			
+		//} else {
+			//this.body.velocity.setTo(0, 0);
+		//}
+		console.log(this.z+"in basic");
+		e_fire(this, 90);
+		//the following is really not right
+		if(this.bypass == 0){
+			//console.log("h"+game.height+"pos"+this.body.y);
+			if(this.body.y < game.height-100){
+				this.body.velocity.x = 0;
+				this.body.velocity.y = 50;
+				this.body.rotate += 10;
+			}else{
+				this.bypass = 1;
+			}
 		}else{
-			this.bypass = 1;
-		}
-	}else{
-		if(this.body.y < game.height-100){
-			this.body.velocity.y = -25;
-		}else{
-			this.bypass = 0;
+			if(this.body.y < game.height-100){
+				this.body.velocity.y = -25;
+			}else{
+				this.bypass = 0;
+			}
 		}
 	}
-	
 };
 
 // Missile constructor
@@ -303,15 +360,15 @@ var e_missile = function(game, x, y) {
     Phaser.Sprite.call(this, game, x, y, 'e_swift');
     // Set the pivot point for this sprite to the center
     this.anchor.setTo(0.5, 0.5);
-
+	this.health = 40;
     // Enable physics on the missile
     game.physics.enable(this, Phaser.Physics.ARCADE);
 
 	target = random_alive_player();
 	this.TARGET = target;//select random alive target
 	
-this.RANDOM_Y = game.rnd.integerInRange(0, game.stage.bounds.width);
-this.RANDOM_X = game.rnd.integerInRange(0, game.stage.bounds.height);
+	this.RANDOM_X = game.rnd.integerInRange(-100, game.stage.bounds.width+100);
+	this.RANDOM_Y = -30;//game.rnd.integerInRange(0, game.stage.bounds.height);
 
     // Define constants that affect motion
     this.SPEED = 295; // missile speed pixels/second
@@ -329,32 +386,21 @@ e_missile.prototype.update = function() {
     // and game.input.y are the mouse position; substitute with whatever
     // target coordinates you need.
 	if(this.alive){
-		//console.log(this.RANDOM);
-		if( game.stuck_on_path == 0){
 		
+		if( game.stuck_on_path == 0){
 			pos = choose_player_target(this, this.TARGET);
-			//console.log("x"+pos[0]+"y"+pos[1]);
-			
 			var distance = this.game.math.distance(this.x, this.y, pos[0], pos[1]);
-			
 			var targetAngle = this.game.math.angleBetween(
 				this.x, this.y,
 				pos[0], pos[1]
 			);
-			
 		}
 	
 		if( game.stuck_on_path == 1){
-			var distance = this.game.math.distance(this.x, this.y, 0, 0);
-			/*
-			var faketargetAngle = this.game.math.angleBetween(
-				this.x, this.y,
-				this.game.input.activePointer.x+(this.game.rnd.integerInRange(0, game.stage.bounds.width)), this.game.input.activePointer.y+(this.game.rnd.integerInRange(0, game.stage.bounds.width))
-			);
-			*/
+			var distance = this.game.math.distance(this.x, this.y, this.RANDOM_X, this.RANDOM_Y);
 			var targetAngle = this.game.math.angleBetween(
 				this.x, this.y,
-				0, 0
+				this.RANDOM_X, this.RANDOM_Y
 			);
 		}
 	
@@ -515,25 +561,26 @@ function random_alive_player(){
 		score = score + new_score;
 		scoreText.text = '' + score + '';
 	}
-	
+var count = 1;
 	function updateTick() {
 	
 		//maybe look into array to store what comes when
 	
-		if (enemies.countLiving() < 2) {
+		if (enemies.countLiving() < 1) {
 			
 			//add six enemies
-			for (i = 0; i < 10; i++) {
-				game.launchMissile(this.game.rnd.integerInRange(0, this.game.width), -30, 1);
-			}
-			
 			/*
-			for (i = 0; i < 2; i++) {
-				game.launchMissile(this.game.rnd.integerInRange(0, this.game.width), -30, 0);
+			for (i = 0; i < 1; i++) {
+				game.launchMissile(this.game.rnd.integerInRange(0, this.game.width), -30, 1);
 			}
 			*/
 			
-			for (i = 0; i < 10; i++) {
+			for (i = 0; i < 1; i++) {
+				game.launchMissile(this.game.rnd.integerInRange(0, this.game.width), -30, 0);
+			}
+			
+			
+			for (i = 0; i < 1; i++) {
 				game.launchMissile(this.game.rnd.integerInRange(0, this.game.width), -30, 2);
 			}
 			
@@ -542,6 +589,8 @@ function random_alive_player(){
 			
 			add_revive();
 			add_health(); //wip	
+			count++;
+			console.log(count+"really");
 	}
 
 game.launchMissile = function(x, y, type) {
@@ -575,6 +624,7 @@ game.launchMissile = function(x, y, type) {
 		// If there aren't any available, create a new one
 		if (missile === null) {
 			missile = new e_basic(game, 0, 0);
+			console.log(missile.z+"missle");
 			enemies.add(missile);
 		}
 	}
@@ -1112,9 +1162,9 @@ gameState.update = function (){
 	//console.log(players.getAt(0).health);
 	
 	if(development == 0){
-		background.tilePosition.y += 1.50;
+		background.tilePosition.y += 1.2;
 	}
-	
+	if(game.input.keyboard.isDown(Phaser.Keyboard.P)){ pause();}
 };
 
 
