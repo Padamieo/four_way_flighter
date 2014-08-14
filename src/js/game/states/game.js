@@ -17,7 +17,9 @@ module.exports = function(game) {
 	var KillDelay = [];
 	
 	var enemies;
-	
+	var next_e_ShotAt = [];
+	var e_shotDelay = [];
+
 	var lives;
 	var recently_created = 0;
 	
@@ -179,12 +181,13 @@ gameState.create = function () {
 
 ////
 // e_follower constructor
-var e_follower = function(game, x, y, target) {
+var e_follower = function(game, x, y) {
     Phaser.Sprite.call(this, game, x, y, 'e_follow');
 	
     // Save the target that this e_follower will follow
     // The target is any object with x and y properties
-    this.target = target;
+	target = random_alive_player();
+    this.TARGET = target;
 
     // Set the pivot point for this sprite to the center
     this.anchor.setTo(0.5, 0.5);
@@ -207,13 +210,15 @@ e_follower.prototype.constructor = e_follower;
 
 
 e_follower.prototype.update = function() {
+
     // Calculate distance to target
-    var distance = this.game.math.distance(this.x, this.y, this.target.x, this.target.y);
+	pos = choose_player_target(this, this.TARGET);
+	var distance = this.game.math.distance(this.x, this.y, pos[0], pos[1]);
 	
     // If the distance > MIN_DISTANCE then move
     if (distance > this.MIN_DISTANCE) {
         // Calculate the angle to the target
-        var rotation = this.game.math.angleBetween(this.x, this.y, this.target.x, this.target.y);
+        var rotation = this.game.math.angleBetween(this.x, this.y, pos[0], pos[1]);
 
         // Calculate velocity vector based on rotation and this.MAX_SPEED
         this.body.velocity.x = Math.cos(rotation) * this.MAX_SPEED;
@@ -291,27 +296,23 @@ e_basic.prototype.update = function() {
 	}
 	
 };
-var next_e_ShotAt = [];
-var e_shotDelay = [];
 
 // Missile constructor
 var e_missile = function(game, x, y) {
+
     Phaser.Sprite.call(this, game, x, y, 'e_swift');
     // Set the pivot point for this sprite to the center
     this.anchor.setTo(0.5, 0.5);
-	
 
-	
     // Enable physics on the missile
     game.physics.enable(this, Phaser.Physics.ARCADE);
+
+	target = random_alive_player();
+	this.TARGET = target;//select random alive target
 	
-//this.body.translate = 0, -obj.heigh;
-//this.body.polygon.rotate = Math.PI/180;
-//this.angle = 90;
-//this.body.polygon.translate 0, obj.height;
-this.TARGET = 0;//select random alive target
 this.RANDOM_Y = game.rnd.integerInRange(0, game.stage.bounds.width);
 this.RANDOM_X = game.rnd.integerInRange(0, game.stage.bounds.height);
+
     // Define constants that affect motion
     this.SPEED = 295; // missile speed pixels/second
     this.TURN_RATE = 2; // turn rate in degrees/frame
@@ -332,7 +333,7 @@ e_missile.prototype.update = function() {
 		if( game.stuck_on_path == 0){
 		
 			pos = choose_player_target(this, this.TARGET);
-			console.log("x"+pos[0]+"y"+pos[1]);
+			//console.log("x"+pos[0]+"y"+pos[1]);
 			
 			var distance = this.game.math.distance(this.x, this.y, pos[0], pos[1]);
 			
@@ -407,8 +408,10 @@ function choose_player_target(enemy, target){
 			x = rl[0];
 			y = rl[1];
 		}else{
-			//function  get random alive player
-			enemy.TARGET = 0;//set to new target
+			rdn_target = random_alive_player();
+			x = players.getAt(rdn_target).x;
+			y = players.getAt(rdn_target).y;
+			enemy.TARGET = rdn_target;
 		}		
 	}
 	x = Math.floor(x);
@@ -422,6 +425,12 @@ function random_location(){
 	y = game.rnd.integerInRange(0, game.stage.bounds.height);
 	var arr = new Array(x, y); 
 	return arr;
+}
+
+function random_alive_player(){
+	num_alive = players.countLiving();
+	rnd_target = game.rnd.integerInRange(0, num_alive);
+	return rnd_target;
 }
 
 	function e_fire(e, targetAngle){
@@ -514,7 +523,7 @@ function random_location(){
 		if (enemies.countLiving() < 2) {
 			
 			//add six enemies
-			for (i = 0; i < 2; i++) {
+			for (i = 0; i < 10; i++) {
 				game.launchMissile(this.game.rnd.integerInRange(0, this.game.width), -30, 1);
 			}
 			
@@ -524,7 +533,7 @@ function random_location(){
 			}
 			*/
 			
-			for (i = 0; i < 1; i++) {
+			for (i = 0; i < 10; i++) {
 				game.launchMissile(this.game.rnd.integerInRange(0, this.game.width), -30, 2);
 			}
 			
@@ -539,7 +548,7 @@ game.launchMissile = function(x, y, type) {
 	if(type == 1){
 		// Get the first dead missile from the missileGroup
 		var missile = enemies.getFirstDead();
-
+	
 		// If there aren't any available, create a new one
 		if (missile === null) {
 			missile = new e_follower(game, 0, 0, player[0]);
