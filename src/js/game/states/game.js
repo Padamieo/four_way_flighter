@@ -4,6 +4,7 @@ module.exports = function(game) {
 	
 	var score = 0;
 	var scoreText;
+	var count = 0; // this should probably be game.count
 	
 	var num_players;
 	var players; //not needed but was trying to resolve group issue
@@ -154,7 +155,7 @@ gameState.create = function () {
 	game.e_bulletPool = game.add.group();
 	game.e_bulletPool.enableBody = true;
 	game.e_bulletPool.physicsBodyType = Phaser.Physics.ARCADE
-	game.e_bulletPool.createMultiple(10*num_players, 'bullet'); //needs to be based on amount of players
+	game.e_bulletPool.createMultiple(100*num_players, 'bullet'); //needs to be based on amount of players
 	game.e_bulletPool.setAll('anchor.x', 0.5);
 	game.e_bulletPool.setAll('anchor.y', 0.5);
 	game.e_bulletPool.setAll('outOfBoundsKill', true);
@@ -204,8 +205,6 @@ gameState.create = function () {
             }
             else{
 			*/
-			
-
                 // Remove the menu and the label
                 game.menu.destroy();
                 game.choiseLabel.destroy();
@@ -237,16 +236,16 @@ gameState.create = function () {
 //////////////////////
 // e_follower constructor
 var e_follower = function(game, x, y) {
-    Phaser.Sprite.call(this, game, x, y, 'e_follow');
-	
-    // Save the target that this e_follower will follow
-    // The target is any object with x and y properties
+    
+	Phaser.Sprite.call(this, game, x, y, 'e_follow');
+	enemies.add(this);
+
 	target = random_alive_player();
     this.TARGET = target;
 
     // Set the pivot point for this sprite to the center
     this.anchor.setTo(0.5, 0.5);
-	this.health = 1;
+	this.health = 10;
 	
 	//this.enableBody = true;
 	//this.physicsBodyType = Phaser.Physics.ARCADE;
@@ -288,70 +287,36 @@ e_follower.prototype.update = function() {
 ////
 // e_basic constructor
 var e_basic = function(game, x, y) {
-    Phaser.Sprite.call(this, game, x, y, 'box');
 	
-    // Save the target that this e_basic will follow
-    // The target is any object with x and y properties
-    //this.target = target;
-
-    // Set the pivot point for this sprite to the center
+	Phaser.Sprite.call(this, game, x, y, 'box');
+	enemies.add(this);
+	
+	next_e_ShotAt[this.z] = 0;
+	e_shotDelay[this.z] = 1200;
+	
     this.anchor.setTo(0.5, 0.5);
-	//this.health = 1;
-	
-	//this.enableBody = false;
-	//this.physicsBodyType = Phaser.Physics.ARCADE;
-	
-    // Enable physics on this object
+
     game.physics.enable(this, Phaser.Physics.ARCADE);
-	this.health = 500;
-    // Define constants that affect motion
-    this.MAX_SPEED = 250; // pixels/second
-    this.MIN_DISTANCE = 90; // pixels
-	this.bypass = 0;
+	this.health = 20;
+	
+    this.MAX_SPEED = 250;
+    this.MIN_DISTANCE = 90;
 };
 
 // e_followers are a type of Phaser.Sprite
 e_basic.prototype = Object.create(Phaser.Sprite.prototype);
 e_basic.prototype.constructor = e_basic;
 
-
 e_basic.prototype.update = function() {
 	if(this.alive){
-		//this.health = 400;
-		console.log(this.health);
-		// Calculate distance to target
-		//var distance = this.game.math.distance(this.x, this.y, this.target.x, this.target.y);
-		
-		// If the distance > MIN_DISTANCE then move
-		//if (distance > this.MIN_DISTANCE) {
-			// Calculate the angle to the target
-			//var rotation = this.game.math.angleBetween(this.x, this.y, this.target.x, this.target.y);
-
-			// Calculate velocity vector based on rotation and this.MAX_SPEED
-			//this.body.velocity.x = Math.cos(rotation) * this.MAX_SPEED;
-			//this.body.velocity.y = Math.sin(rotation) * this.MAX_SPEED;
-			
-		//} else {
-			//this.body.velocity.setTo(0, 0);
-		//}
-		//console.log(this.z+"in basic");
-		e_fire(this, 90);
-		//the following is really not right
-		if(this.bypass == 0){
-			//console.log("h"+game.height+"pos"+this.body.y);
-			if(this.body.y < game.height-100){
-				this.body.velocity.x = 0;
-				this.body.velocity.y = 50;
-				this.body.rotate += 10;
-			}else{
-				this.bypass = 1;
-			}
+		e_fire(this, this.body.rotation);
+		if(this.body.y < game.height+50){
+			this.body.velocity.x = 0;
+			this.body.velocity.y = 50;
+			this.body.rotate += 1;
 		}else{
-			if(this.body.y < game.height-100){
-				this.body.velocity.y = -25;
-			}else{
-				this.bypass = 0;
-			}
+			this.x = game.rnd.integerInRange(0, game.stage.bounds.width);
+			this.y = -50;
 		}
 	}
 };
@@ -360,6 +325,13 @@ e_basic.prototype.update = function() {
 var e_missile = function(game, x, y) {
 
     Phaser.Sprite.call(this, game, x, y, 'e_swift');
+	
+	enemies.add(this);
+	console.log(this.z+"m");
+	next_e_ShotAt[this.z] = 0;
+	e_shotDelay[this.z] = 400;
+	game.stuck_on_path = 0;
+	
     // Set the pivot point for this sprite to the center
     this.anchor.setTo(0.5, 0.5);
 	this.health = 40;
@@ -563,90 +535,64 @@ function random_alive_player(){
 		score = score + new_score;
 		scoreText.text = '' + score + '';
 	}
-var count = 1;
-	function updateTick() {
 	
+	function updateTick() {
+		
+		//randomly generate change up on rounds and amount per round
 		//maybe look into array to store what comes when
 	
 		if (enemies.countLiving() < 1) {
 			
-			//add six enemies
-			/*
 			for (i = 0; i < 1; i++) {
-				game.launchMissile(this.game.rnd.integerInRange(0, this.game.width), -30, 1);
+				game.spawn_enemy(this.game.rnd.integerInRange(0, this.game.width), -30, 1);
 			}
-			*/
 			
-			for (i = 0; i < 5; i++) {
-				game.launchMissile(this.game.rnd.integerInRange(0, this.game.width), -30, 0);
+			for (i = 0; i < 50; i++) {
+				game.spawn_enemy(this.game.rnd.integerInRange(0, this.game.width), -30, 0);
 			}
-			/*
 			
 			for (i = 0; i < 1; i++) {
-				game.launchMissile(this.game.rnd.integerInRange(0, this.game.width), -30, 2);
+				game.spawn_enemy(this.game.rnd.integerInRange(0, this.game.width), -30, 2);
 			}
-			*/
 			
 		}
-			
-			add_revive();
-			add_health(); //wip	
-			count++;
-			//console.log(count+"really");
+			add_revive(); // issue with only once occurrence per death
+			add_health(); // still wip too many healths generated
+			count++; // notice count
 	}
 
-game.launchMissile = function(x, y, type) {
-	if(type == 1){
-		// Get the first dead missile from the missileGroup
-		var missile = enemies.getFirstDead();
-	
-		// If there aren't any available, create a new one
-		if (missile === null) {
-			missile = new e_follower(game, 0, 0, player[0]);
-			enemies.add(missile);
-		}
-	}else if(type == 2){
-		// Get the first dead missile from the missileGroup
-		var missile = enemies.getFirstDead();
+	game.spawn_enemy = function(x, y, type) {
+		if(type == 1){
+			
+			var nme = enemies.getFirstDead();
+			if (nme === null) {
+				nme = new e_follower(game, 0, 0, player[0]);
+			}
+			
+		}else if(type == 2){
 
-		// If there aren't any available, create a new one
-		if (missile === null) {
-			missile = new e_missile(game, 0, 0);
-			enemies.add(missile);
+			var nme = enemies.getFirstDead();
+			if (nme === null) {
+				nme = new e_missile(game, 0, 0);
+			}
 			
-			//console.log("ww"+missile.z);
-			next_e_ShotAt[missile.z] = 0;
-			e_shotDelay[missile.z] = 500;
-			game.stuck_on_path = 0;
-			
+		}else{
+
+			var nme = enemies.getFirstDead();
+			if (nme === null) {
+				nme = new e_basic(game, 0, 0);
+			}
+
 		}
-		console.log(enemies.z+"missleA");
 		
-	}else{
-		// Get the first dead missile from the missileGroup
-		var missile = enemies.getFirstDead();
+		console.log(nme.health+"h basic");
+		nme.revive(nme.health); //this is where the current issue of health is
 
-		// If there aren't any available, create a new one
-		if (missile === null) {
-			missile = new e_basic(game, 0, 0);
-			//missile = enemies.create.e_basic(game, 0, 0);
-			//enemies.add(missile);
-		}
-		//enemies.getAt(missile.z).health = 250;
-		//enemies.body.health = 200;
-		console.log(enemies.z+"missleB");
-	}
-    // Revive the missile (set it's alive property to true)
-    // You can also define a onRevived event handler in your explosion objects
-    // to do stuff when they are revived.
-    missile.revive();
+		nme.x = x;
+		nme.y = y;
 
-    // Move the missile to the given coordinates
-    missile.x = x;
-    missile.y = y;
-
-    return missile;
-};
+		return nme;
+	};
 
 	
 	function add_revive(){
