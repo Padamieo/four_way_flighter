@@ -296,14 +296,14 @@ var e_basic = function(game, x, y) {
 
     // Set the pivot point for this sprite to the center
     this.anchor.setTo(0.5, 0.5);
-	this.health = 1;
+	//this.health = 1;
 	
 	//this.enableBody = false;
 	//this.physicsBodyType = Phaser.Physics.ARCADE;
 	
     // Enable physics on this object
-    this.game.physics.enable(this, Phaser.Physics.ARCADE);
-
+    game.physics.enable(this, Phaser.Physics.ARCADE);
+	this.health = 500;
     // Define constants that affect motion
     this.MAX_SPEED = 250; // pixels/second
     this.MIN_DISTANCE = 90; // pixels
@@ -317,6 +317,8 @@ e_basic.prototype.constructor = e_basic;
 
 e_basic.prototype.update = function() {
 	if(this.alive){
+		//this.health = 400;
+		console.log(this.health);
 		// Calculate distance to target
 		//var distance = this.game.math.distance(this.x, this.y, this.target.x, this.target.y);
 		
@@ -332,7 +334,7 @@ e_basic.prototype.update = function() {
 		//} else {
 			//this.body.velocity.setTo(0, 0);
 		//}
-		console.log(this.z+"in basic");
+		//console.log(this.z+"in basic");
 		e_fire(this, 90);
 		//the following is really not right
 		if(this.bypass == 0){
@@ -575,22 +577,22 @@ var count = 1;
 			}
 			*/
 			
-			for (i = 0; i < 1; i++) {
+			for (i = 0; i < 5; i++) {
 				game.launchMissile(this.game.rnd.integerInRange(0, this.game.width), -30, 0);
 			}
-			
+			/*
 			
 			for (i = 0; i < 1; i++) {
 				game.launchMissile(this.game.rnd.integerInRange(0, this.game.width), -30, 2);
 			}
-			
+			*/
 			
 		}
 			
 			add_revive();
 			add_health(); //wip	
 			count++;
-			console.log(count+"really");
+			//console.log(count+"really");
 	}
 
 game.launchMissile = function(x, y, type) {
@@ -611,11 +613,14 @@ game.launchMissile = function(x, y, type) {
 		if (missile === null) {
 			missile = new e_missile(game, 0, 0);
 			enemies.add(missile);
+			
 			//console.log("ww"+missile.z);
 			next_e_ShotAt[missile.z] = 0;
 			e_shotDelay[missile.z] = 500;
 			game.stuck_on_path = 0;
+			
 		}
+		console.log(enemies.z+"missleA");
 		
 	}else{
 		// Get the first dead missile from the missileGroup
@@ -624,9 +629,12 @@ game.launchMissile = function(x, y, type) {
 		// If there aren't any available, create a new one
 		if (missile === null) {
 			missile = new e_basic(game, 0, 0);
-			console.log(missile.z+"missle");
-			enemies.add(missile);
+			//missile = enemies.create.e_basic(game, 0, 0);
+			//enemies.add(missile);
 		}
+		//enemies.getAt(missile.z).health = 250;
+		//enemies.body.health = 200;
+		console.log(enemies.z+"missleB");
 	}
     // Revive the missile (set it's alive property to true)
     // You can also define a onRevived event handler in your explosion objects
