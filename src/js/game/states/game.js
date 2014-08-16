@@ -27,7 +27,7 @@ module.exports = function(game) {
 	var now_invincible = [];
 	var special_active = 0;
 	
-	var development = 0;
+	var development = 1;
 	var development_alt_controls = 1;
 	
 	var gameState = {};
@@ -251,7 +251,9 @@ var e_follower = function(game, x, y) {
 
     // Set the pivot point for this sprite to the center
     this.anchor.setTo(0.5, 0.5);
-	this.health = 10;
+	
+	this.events.onRevived.add(function(){this.health = 2}, this);
+	this.health = 2;
 	
 	//this.enableBody = true;
 	//this.physicsBodyType = Phaser.Physics.ARCADE;
@@ -289,12 +291,18 @@ e_follower.prototype.update = function() {
     }
 };
 
-
+function doSomething(){
+	this.health = 20;
+}
 // e_basic constructor
 var e_basic = function(game, x, y) {
 	
 	Phaser.Sprite.call(this, game, x, y, 'box');
 	enemies.add(this);
+	
+	//sprite.events.onRevived( doo,this);
+	
+	this.events.onRevived.add(function(){this.health = 1}, this);
 	
 	next_e_ShotAt[this.z] = 0;
 	e_shotDelay[this.z] = 1200;
@@ -302,7 +310,7 @@ var e_basic = function(game, x, y) {
     this.anchor.setTo(0.5, 0.5);
 
     game.physics.enable(this, Phaser.Physics.ARCADE);
-	this.health = 20;
+	this.health = 1;
 	
     this.MAX_SPEED = 250;
     this.MIN_DISTANCE = 90;
@@ -339,7 +347,9 @@ var e_missile = function(game, x, y) {
 	
     // Set the pivot point for this sprite to the center
     this.anchor.setTo(0.5, 0.5);
-	this.health = 40;
+	
+	this.events.onRevived.add(function(){this.health = 4}, this);
+	this.health = 4;
     // Enable physics on the missile
     game.physics.enable(this, Phaser.Physics.ARCADE);
 
@@ -548,15 +558,15 @@ function random_alive_player(){
 	
 		if (enemies.countLiving() < 1) {
 			
-			for (i = 0; i < 1; i++) {
+			for (i = 0; i < 10; i++) {
 				game.spawn_enemy(this.game.rnd.integerInRange(0, this.game.width), -30, 1);
 			}
 			
-			for (i = 0; i < 50; i++) {
+			for (i = 0; i < 10; i++) {
 				game.spawn_enemy(this.game.rnd.integerInRange(0, this.game.width), -30, 0);
 			}
 			
-			for (i = 0; i < 1; i++) {
+			for (i = 0; i < 10; i++) {
 				game.spawn_enemy(this.game.rnd.integerInRange(0, this.game.width), -30, 2);
 			}
 			
