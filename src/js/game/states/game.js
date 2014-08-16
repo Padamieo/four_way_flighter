@@ -84,10 +84,16 @@ gameState.create = function () {
 		change = game.healthbars.getAt(i);
 		change.scale.y = player[i].health/5;
 	}
+	
+	//calculate groups health
+	game.cal_health = 0;
+	players.forEachAlive( check_health, this);
+	game.starting_group_health = game.cal_health;
+	
 		
     // Maintain aspect ratio
 	game.scale.fullScreenScaleMode = Phaser.ScaleManager.SHOW_ALL;
-	//game.input.onDown.add(gofull, this);
+	game.input.onDown.add(gofull, this);
 		
 	// setup health pickup 
 	healths = game.add.group();
@@ -282,9 +288,8 @@ e_follower.prototype.update = function() {
         this.body.velocity.setTo(0, 0);
     }
 };
-////
 
-////
+
 // e_basic constructor
 var e_basic = function(game, x, y) {
 	
@@ -605,24 +610,13 @@ function random_alive_player(){
 	
 	function add_health(){
 		
-		//needs to be defined on game start
-		starting_group_health = 300;
-		//starting_player_health
-		//feel there is a better way to check this
-		//forEachAlive(callback, callbackContext) http://docs.phaser.io/Phaser.Group.html
-		game.startt = 0;
-		players.forEachAlive( check_health, this);
-		group_health = game.startt;
-		/*
-		group_health = 0;
-		for (i = 0; i < num_players; i++){
-			individual_health = player[i].health;
-			group_health = group_health + individual_health;
-		}
-		*/
-		//console.log(group_health);
+		health_threshold = (game.starting_group_health/4);
 		
-		if(group_health < starting_group_health){
+		game.cal_health = 0;
+		players.forEachAlive( check_health, this);
+		current_group_health = game.cal_health;
+		
+		if(current_group_health < health_threshold){
 			health = healths.create(game.world.randomX, -30, 'health');
 			health.body.velocity.setTo(0, 100);
 			//recently_created = 1; //needs to work specifically for health?
@@ -632,9 +626,7 @@ function random_alive_player(){
 	
 	function check_health(player){
 		check_h = player.health;
-		game.startt = game.startt+check_h;
-		//console.log(check_h);
-		//return check_h;
+		game.cal_health = game.cal_health+check_h;
 	}
   
 	function gofull() {
