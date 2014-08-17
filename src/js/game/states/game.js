@@ -551,11 +551,22 @@ function random_alive_player(){
 		scoreText.text = '' + score + '';
 	}
 	
+	
+	var rounds = [];
+	function generate(){
+		for (i = 0; i < 3; i++) {
+			rounds.push(game.rnd.integerInRange(1, 10));
+		}
+		rounds.sort();
+		console.log(rounds)
+	}
+	
+	
 	function updateTick() {
 		
 		//randomly generate change up on rounds and amount per round
 		//maybe look into array to store what comes when
-	
+		
 		if (enemies.countLiving() < 1) {
 			
 			for (i = 0; i < 10; i++) {
@@ -569,11 +580,11 @@ function random_alive_player(){
 			for (i = 0; i < 10; i++) {
 				game.spawn_enemy(this.game.rnd.integerInRange(0, this.game.width), -30, 2);
 			}
-			
+			count++; // notice count
 		}
 			add_revive(); // issue with only once occurrence per death
 			add_health(); // still wip too many healths generated
-			count++; // notice count
+			console.log(count);
 	}
 
 	game.spawn_enemy = function(x, y, type) {
@@ -581,7 +592,7 @@ function random_alive_player(){
 			
 			var nme = enemies.getFirstDead();
 			if (nme === null) {
-				nme = new e_follower(game, 0, 0, player[0]);
+				nme = new e_follower(game, 0, 0);
 			}
 			
 		}else if(type == 2){
@@ -599,9 +610,8 @@ function random_alive_player(){
 			}
 
 		}
-		
-		console.log(nme.health+"h basic");
-		nme.revive(nme.health); //this is where the current issue of health is
+
+		nme.revive(nme.health);
 
 		nme.x = x;
 		nme.y = y;
