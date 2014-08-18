@@ -35,7 +35,9 @@ module.exports = function(game) {
 gameState.create = function () {
     //var logo = game.add.sprite(game.world.centerX, game.world.centerY, 'logo');
     //logo.anchor.setTo(0.5, 0.5);
-
+	
+	generate();
+	
 	// obtain number of players
 	num_players = game.num_players;
 	//obtain if keyboard is active
@@ -555,30 +557,40 @@ function random_alive_player(){
 	var rounds = [];
 	function generate(){
 		for (i = 0; i < 3; i++) {
-			rounds.push(game.rnd.integerInRange(1, 10));
+			element = game.rnd.integerInRange(1, 9);
+			if(rounds.indexOf(element) == -1){
+				rounds.push(element);
+			}else{
+				i--;
+			}
+			console.log(i);
 		}
 		rounds.sort();
-		console.log(rounds)
+		console.log(rounds);
 	}
 	
 	
 	function updateTick() {
-		
+			console.log(rounds);
 		//randomly generate change up on rounds and amount per round
 		//maybe look into array to store what comes when
 		
 		if (enemies.countLiving() < 1) {
 			
-			for (i = 0; i < 10; i++) {
-				game.spawn_enemy(this.game.rnd.integerInRange(0, this.game.width), -30, 1);
+			if(rounds[0] < count){
+				for (i = 0; i < 10; i++) {
+					game.spawn_enemy(this.game.rnd.integerInRange(0, this.game.width), -30, 1);
+				}
 			}
-			
-			for (i = 0; i < 10; i++) {
-				game.spawn_enemy(this.game.rnd.integerInRange(0, this.game.width), -30, 0);
+			if(rounds[1] < count){
+				for (i = 0; i < 10; i++) {
+					game.spawn_enemy(this.game.rnd.integerInRange(0, this.game.width), -30, 0);
+				}
 			}
-			
-			for (i = 0; i < 10; i++) {
-				game.spawn_enemy(this.game.rnd.integerInRange(0, this.game.width), -30, 2);
+			if(rounds[2] < count){
+				for (i = 0; i < 10; i++) {
+					game.spawn_enemy(this.game.rnd.integerInRange(0, this.game.width), -30, 2);
+				}
 			}
 			count++; // notice count
 		}
