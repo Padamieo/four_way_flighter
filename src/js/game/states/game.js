@@ -118,6 +118,8 @@ gameState.create = function () {
 	
 	//enemies group
 	enemies = game.add.group();
+	//enemies.events.onKilled(function(){console.log("dead"+this.x+this.y)}, this);
+	
 	// --- enemies.enableBody = true;
 	// --- enemies.physicsBodyType = Phaser.Physics.ARCADE;
 	//add single enemy	
@@ -305,6 +307,7 @@ var e_basic = function(game, x, y) {
 	//sprite.events.onRevived( doo,this);
 	
 	this.events.onRevived.add(function(){this.health = 1}, this);
+	this.events.onKilled.add(function(){console.log("dead"+this.x+this.y)}, this);
 	
 	next_e_ShotAt[this.z] = 0;
 	e_shotDelay[this.z] = 1200;
@@ -579,12 +582,12 @@ function random_alive_player(){
 			
 			if(rounds[0] < count){
 				for (i = 0; i < 10; i++) {
-					game.spawn_enemy(this.game.rnd.integerInRange(0, this.game.width), -30, 1);
+					game.spawn_enemy(this.game.rnd.integerInRange(0, this.game.width), -30, 0);
 				}
 			}
 			if(rounds[1] < count){
 				for (i = 0; i < 10; i++) {
-					game.spawn_enemy(this.game.rnd.integerInRange(0, this.game.width), -30, 0);
+					game.spawn_enemy(this.game.rnd.integerInRange(0, this.game.width), -30, 1);
 				}
 			}
 			if(rounds[2] < count){

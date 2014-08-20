@@ -16,6 +16,8 @@ module.exports = function(game) {
 	
 	game.load.spritesheet('controllers', 'images/controllers.png', 260, 107);
 	
+	game.load.spritesheet('explosion', 'images/explosion.svg', 256, 256);
+	
 	game.load.image('health_bar', 'images/healthbar.png');
 	
 	game.load.image('box', 'images/enemy.png');
