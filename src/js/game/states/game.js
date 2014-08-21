@@ -307,7 +307,7 @@ var e_basic = function(game, x, y) {
 	//sprite.events.onRevived( doo,this);
 	
 	this.events.onRevived.add(function(){this.health = 1}, this);
-	this.events.onKilled.add(function(){console.log("dead"+this.x+this.y)}, this);
+	this.events.onKilled.add(function(){game.add.sprite(this.Y, this.X, 'explosion')}, this);
 	
 	next_e_ShotAt[this.z] = 0;
 	e_shotDelay[this.z] = 1200;
@@ -582,7 +582,7 @@ function random_alive_player(){
 			
 			if(rounds[0] < count){
 				for (i = 0; i < 10; i++) {
-					game.spawn_enemy(this.game.rnd.integerInRange(0, this.game.width), -30, 0);
+					game.spawn_enemy(this.game.rnd.integerInRange(0, this.game.width), this.game.rnd.integerInRange(0, -(this.game.height/2)), 0);
 				}
 			}
 			if(rounds[1] < count){
