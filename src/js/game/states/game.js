@@ -171,6 +171,15 @@ gameState.create = function () {
 	game.e_bulletPool.setAll('outOfBoundsKill', true);
 	game.e_bulletPool.setAll('checkWorldBounds', true);
 	
+	game.explosion = game.add.group();
+	game.explosion.createMultiple(100, 'explosion');
+	game.explosion.setAll('anchor.x', 0.5);
+	game.explosion.setAll('anchor.y', 0.5);
+	game.explosion.setAll('killOnComplete',true);
+    game.explosion.callAll('animations.add', 'animations', 'boom', [0, 1, 2], 60, true);
+    game.explosion.callAll('animations.play', 'animations', 'boom');
+	
+	
     // Create a white rectangle that we'll use to represent the flash
     game.flash = game.add.graphics(0, 0);
     game.flash.beginFill(0xffffff, 1);
@@ -307,7 +316,7 @@ var e_basic = function(game, x, y) {
 	//sprite.events.onRevived( doo,this);
 	
 	this.events.onRevived.add(function(){this.health = 1}, this);
-	this.events.onKilled.add(function(){game.add.sprite(this.Y, this.X, 'explosion')}, this);
+	this.events.onKilled.add(function(){explosion(this)}, this);
 	
 	next_e_ShotAt[this.z] = 0;
 	e_shotDelay[this.z] = 1200;
@@ -489,6 +498,16 @@ function random_alive_player(){
 		e_bullet.body.velocity.x = Math.cos(e_bullet.rotation) * e_bullet.SPEED;
 		e_bullet.body.velocity.y = Math.sin(e_bullet.rotation) * e_bullet.SPEED;	
 	}
+	
+	function explosion(loc){
+		if (game.explosion.countDead() === 0) {
+			return;
+		}
+		bang = game.explosion.getFirstExists(false);
+		//bang.rotation = 180;
+		bang.reset(loc.x, loc.y);
+		
+	}
 
 	function player_setup(num){
 		pos = (game.stage.bounds.height/3);
@@ -498,6 +517,7 @@ function random_alive_player(){
 		player[num] = players.create(pos2, pos*2, 'dude');
 		player[num].body.collideWorldBounds=true;
 		player[num].name=num;
+		player[num].energy = 0;
 		//player[num].health(2);
 		//player[num].body.bounce.y=0.2;
 		/*
@@ -1170,7 +1190,12 @@ function add_point (bullet, enemies){
 	
 	bullet.kill();
 	enemies.damage(1);
-	
+	/*
+		//untill i sort out energy bars do not use this.
+		console.log(bullet.name);
+		player[bullet.name].energy = player[bullet.name].energy+1;
+		console.log("test"+player[bullet.name].energy);
+	*/
 	update_score(1);
 }
 
