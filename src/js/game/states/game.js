@@ -178,10 +178,9 @@ gameState.create = function () {
 	game.explosion.setAll('anchor.x', 0.5);
 	game.explosion.setAll('anchor.y', 0.5);
 	game.explosion.setAll('killOnComplete',true);
-    game.explosion.callAll('animations.add', 'animations', 'boom', [0, 1, 2], 60, true);
-    game.explosion.callAll('animations.play', 'animations', 'boom');
-	
-	
+    game.explosion.callAll('animations.add', 'animations', 'boom', [0, 1, 3], 30, false);
+    //game.explosion.callAll('animations.play', 'animations', 'boom'); //http://www.html5gamedevs.com/topic/4384-callback-when-animation-complete/
+		
     // Create a white rectangle that we'll use to represent the flash
     game.flash = game.add.graphics(0, 0);
     game.flash.beginFill(0xffffff, 1);
@@ -508,6 +507,8 @@ function random_alive_player(){
 		bang = game.explosion.getFirstExists(false);
 		//bang.rotation = 180;
 		bang.reset(loc.x, loc.y);
+		bang.play('boom', 30, 1, true);
+		
 		
 	}
 

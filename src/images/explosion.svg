@@ -1,19 +1,36 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Generator: Adobe Illustrator 16.0.0, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
+<!-- Generator: Adobe Illustrator 15.0.0, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
 <!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
-<svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="768px"
-	 height="256px" viewBox="0 0 768 256" enable-background="new 0 0 768 256" xml:space="preserve">
+<svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="1536px"
+	 height="256px" viewBox="0 0 1536 256" enable-background="new 0 0 1536 256" xml:space="preserve">
 <g id="Layer_1" display="none">
 	<rect display="inline" fill="#00FFFF" width="256" height="256"/>
 	<rect x="256" display="inline" fill="#29ABE2" width="256" height="256"/>
 	<rect x="512" display="inline" fill="#0071BC" width="256" height="256"/>
+	<rect x="768" display="inline" fill="#00FFFF" width="256" height="256"/>
+	<rect x="1024" display="inline" fill="#29ABE2" width="256" height="256"/>
+	<rect x="1280" display="inline" fill="#0071BC" width="256" height="256"/>
 </g>
-<g id="Layer_2">
-	<circle opacity="0.9" fill="#FFFFFF" cx="128" cy="128" r="37.783"/>
-	<circle opacity="0.75" fill="#FFFFFF" cx="380" cy="128" r="80.543"/>
-	<path opacity="0.5" fill="#FFFFFF" d="M640.001,3C570.965,3,515,58.965,515,128c0,34.313,13.829,65.393,36.214,87.98
-		c-13.347-16.275-21.358-37.092-21.358-59.781c0-52.105,42.239-94.344,94.345-94.344c52.104,0,94.343,42.239,94.343,94.344
-		c0,52.104-42.238,94.344-94.343,94.344c-4.453,0-8.831-0.315-13.12-0.912c9.283,2.199,18.965,3.369,28.921,3.369
-		C709.036,253,765,197.035,765,128S709.036,3,640.001,3z"/>
+<g id="Layer_3">
+	<path opacity="0.9" fill="#FFFFFF" d="M128,49.511L49.511,128L128,206.489L206.489,128L128,49.511z M69.607,128l58.612-58.612
+		L186.832,128l-58.612,58.612L69.607,128z"/>
+	<path opacity="0.75" fill="#FFFFFF" d="M285,34v189h189V34H285z M455,203H305V54h150V203z"/>
+	<path opacity="0.9" fill="#FFFFFF" d="M763.553,127.999L710,74.447l-53.553,53.552L710,181.553L763.553,127.999z M710,88.158
+		l39.99,39.992L710,168.141l-39.992-39.99L710,88.158z"/>
+	<path opacity="0.9" fill="#FFFFFF" d="M623.553,128.001L570,74.448l-53.553,53.553L570,181.552L623.553,128.001z M570,88.16
+		l39.992,39.992L570,168.142l-39.992-39.99L570,88.16z"/>
+	<path opacity="0.9" fill="#FFFFFF" d="M639.967,253.554l53.552-53.555l-53.552-53.553l-53.553,53.553L639.967,253.554z
+		 M679.809,199.999l-39.992,39.992l-39.991-39.992l39.991-39.99L679.809,199.999z"/>
+	<path opacity="0.9" fill="#FFFFFF" d="M639.967,111.553l53.552-53.552L639.967,4.447l-53.552,53.554L639.967,111.553z
+		 M679.809,58.001l-39.992,39.99l-39.99-39.99l39.99-39.992L679.809,58.001z"/>
+	<path opacity="0.75" fill="#FFFFFF" d="M775,3v250h250V3H775z M999,226H801V29h198V226z"/>
+</g>
+<g id="Layer_2" display="none">
+	<circle display="inline" opacity="0.9" fill="#FFFFFF" cx="128" cy="128" r="37.783"/>
+	<circle display="inline" opacity="0.75" fill="#FFFFFF" cx="380" cy="128" r="80.543"/>
+	<path display="inline" opacity="0.5" fill="#FFFFFF" d="M640.001,3C570.965,3,515,58.965,515,128
+		c0,34.313,13.829,65.393,36.214,87.98c-13.347-16.275-21.358-37.092-21.358-59.781c0-52.105,42.239-94.344,94.345-94.344
+		c52.104,0,94.343,42.239,94.343,94.344c0,52.104-42.238,94.344-94.343,94.344c-4.453,0-8.831-0.315-13.12-0.912
+		c9.283,2.199,18.965,3.369,28.921,3.369C709.036,253,765,197.035,765,128S709.036,3,640.001,3z"/>
 </g>
 </svg>
