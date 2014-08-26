@@ -317,7 +317,7 @@ var e_basic = function(game, x, y) {
 	//sprite.events.onRevived( doo,this);
 	
 	this.events.onRevived.add(function(){this.health = 1}, this);
-	//this.events.onKilled.add(function(){explosion(this)}, this);
+	this.events.onKilled.add(function(){explosion(this)}, this);
 	
 	next_e_ShotAt[this.z] = 0;
 	e_shotDelay[this.z] = 1200;
@@ -534,7 +534,7 @@ function random_alive_player(){
 		}
 		*/
 		
-		player[num].animations.frame = 2;
+		player[num].animations.frame = 0+num;
 		// animations still usefull but not being used / set
 		//player[num].animations.add('default', [0, 1, 2, 3, 4, 5, 6, 7], 8, true);
 		//player[num].animations.add('left', [0, 1, 2, 3, 4, 5, 6, 7], 8, true);
@@ -850,7 +850,7 @@ function controls_pad(play_num, pad_num){
 				
 				//player.animations.play('forward');
 				if(now_invincible[play_num] == 0){
-					player[play_num].animations.frame = 2;
+					player[play_num].animations.frame = 8+play_num;
 				}
 			}
 		}
@@ -873,7 +873,7 @@ function controls_pad(play_num, pad_num){
 				}			
 				//player.animations.play('back');
 				if(now_invincible[play_num] == 0){
-					player[play_num].animations.frame = 3;
+					player[play_num].animations.frame = 12+play_num;
 				}
 			}
 		}
@@ -892,8 +892,8 @@ function controls_pad(play_num, pad_num){
 		}
 
 		if(now_invincible[play_num] == 0){
-			if(player[play_num].animations.frame != 0){
-				player[play_num].animations.frame = 0;
+			if(player[play_num].animations.frame != 0+play_num){
+				player[play_num].animations.frame = 0+play_num;
 			}
 		}
 		
@@ -1021,7 +1021,7 @@ function controls_key(num){
 				
 				//player.animations.play('forward');
 				if(now_invincible[num] == 0){
-					player[num].animations.frame = 2;
+					player[num].animations.frame = 8+num;
 				}
 			}
 		}
@@ -1044,7 +1044,7 @@ function controls_key(num){
 				}			
 				//player.animations.play('back');
 				if(now_invincible[num] == 0){
-					player[num].animations.frame = 3;
+					player[num].animations.frame = 12+num;
 				}
 			}
 		}
@@ -1063,8 +1063,8 @@ function controls_key(num){
 		}
 
 		if(now_invincible[num] == 0){
-			if(player[num].animations.frame != 0){
-				player[num].animations.frame = 0;
+			if(player[num].animations.frame != 0+num){
+				player[num].animations.frame = 0+num;
 			}
 		}
 		
@@ -1137,7 +1137,7 @@ gameState.update = function (){
 		}
 
 		if(now_invincible[i] == 1){
-			player[i].animations.frame = 1;
+			player[i].animations.frame = 4+i;
 		}
 		
 		if (nextKillAt[i] < game.time.now) {

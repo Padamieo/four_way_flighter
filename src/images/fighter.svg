@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Generator: Adobe Illustrator 15.0.0, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
+<!-- Generator: Adobe Illustrator 16.0.0, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
 <!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
 <svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="512px"
 	 height="48px" viewBox="0 0 512 48" enable-background="new 0 0 512 48" xml:space="preserve">
@@ -22,37 +22,37 @@
 	<rect x="448" y="0.001" display="inline" fill="#7F3F98" width="32" height="47.999"/>
 </g>
 <g id="standard">
-	<polygon fill="#7367FF" points="16,40.949 0,47.056 16,0.944 32,47.056 	"/>
+	<polygon fill="#FF3C00" points="16,40.949 0,47.056 16,0.944 32,47.056 	"/>
 	<polygon opacity="0.2" fill="#231F20" points="16,0.944 16,40.949 0,47.056 	"/>
-	<polygon fill="#7367FF" points="48,40.949 32,47.056 48,0.944 64,47.056 	"/>
+	<polygon fill="#FF90D1" points="48,40.949 32,47.056 48,0.944 64,47.056 	"/>
 	<polygon opacity="0.2" fill="#231F20" points="48,0.944 48,40.949 32,47.056 	"/>
-	<polygon fill="#7367FF" points="80,40.949 64,47.056 80,0.944 96,47.056 	"/>
+	<polygon fill="#FFE900" points="80,40.949 64,47.056 80,0.944 96,47.056 	"/>
 	<polygon opacity="0.2" fill="#231F20" points="80,0.944 80,40.949 64,47.056 	"/>
 	<polygon fill="#7367FF" points="112,40.949 96,47.056 112,0.944 128,47.056 	"/>
 	<polygon opacity="0.2" fill="#231F20" points="112,0.944 112,40.949 96,47.056 	"/>
 </g>
 <g id="Layer_5">
-	<polygon opacity="0.5" fill="#7367FF" points="176,40.95 160,47.058 176,0.946 192,47.058 	"/>
+	<polygon opacity="0.5" fill="#FF90D1" points="176,40.95 160,47.058 176,0.946 192,47.058 	"/>
 	<polygon opacity="0.2" fill="#231F20" points="176,0.945 176,40.949 160,47.057 	"/>
-	<polygon fill="#7367FF" points="336,40.949 321.6,47.057 336,0.945 350.4,47.057 	"/>
+	<polygon fill="#FFE900" points="336,40.949 321.6,47.057 336,0.945 350.4,47.057 	"/>
 	<polygon opacity="0.2" fill="#231F20" points="336,0.945 336,40.949 321.6,47.057 	"/>
 	<path opacity="0.5" fill="#FFFFFF" d="M337.502,44.123c0,1.383-1.502,2.502-1.502,2.502s-1.502-1.119-1.502-2.502
 		c0-1.381,0.12-2.502,1.502-2.502S337.502,42.742,337.502,44.123z"/>
 	<path opacity="0.5" fill="#FFFFFF" d="M337.108,43.467c0,1.02-1.107,1.846-1.107,1.846s-1.108-0.826-1.108-1.846
 		s0.089-1.846,1.108-1.846C337.02,41.621,337.108,42.447,337.108,43.467z"/>
-	<polygon opacity="0.5" fill="#7367FF" points="144,40.949 128,47.057 144,0.945 160,47.057 	"/>
+	<polygon opacity="0.5" fill="#FF3C00" points="144,40.949 128,47.057 144,0.945 160,47.057 	"/>
 	<polygon opacity="0.2" fill="#231F20" points="144,0.945 144,40.949 128,47.057 	"/>
 	<polygon opacity="0.5" fill="#7367FF" points="240,40.95 224,47.058 240,0.946 256,47.058 	"/>
 	<polygon opacity="0.2" fill="#231F20" points="240,0.946 240,40.95 224,47.058 	"/>
-	<polygon opacity="0.5" fill="#7367FF" points="208,40.949 192,47.057 208,0.945 224,47.057 	"/>
+	<polygon opacity="0.5" fill="#FFE900" points="208,40.949 192,47.057 208,0.945 224,47.057 	"/>
 	<polygon opacity="0.2" fill="#231F20" points="208,0.946 208,40.95 192,47.058 	"/>
-	<polygon fill="#7367FF" points="272,40.948 257.6,47.056 272,0.944 286.4,47.056 	"/>
+	<polygon fill="#FF3C00" points="272,40.948 257.6,47.056 272,0.944 286.4,47.056 	"/>
 	<polygon opacity="0.2" fill="#231F20" points="272,0.944 272,40.948 257.6,47.056 	"/>
 	<path opacity="0.5" fill="#FFFFFF" d="M273.502,44.122c0,1.383-1.502,2.502-1.502,2.502s-1.502-1.119-1.502-2.502
 		c0-1.381,0.12-2.502,1.502-2.502S273.502,42.741,273.502,44.122z"/>
 	<path opacity="0.5" fill="#FFFFFF" d="M273.108,43.466c0,1.02-1.107,1.846-1.107,1.846s-1.108-0.826-1.108-1.846
 		s0.089-1.846,1.108-1.846C273.02,41.62,273.108,42.446,273.108,43.466z"/>
-	<polygon fill="#7367FF" points="304,40.948 289.6,47.056 304,0.944 318.4,47.056 	"/>
+	<polygon fill="#FF90D1" points="304,40.948 289.6,47.056 304,0.944 318.4,47.056 	"/>
 	<polygon opacity="0.2" fill="#231F20" points="304,0.944 304,40.948 289.6,47.056 	"/>
 	<path opacity="0.5" fill="#FFFFFF" d="M305.502,44.122c0,1.383-1.502,2.502-1.502,2.502s-1.502-1.119-1.502-2.502
 		c0-1.381,0.12-2.502,1.502-2.502S305.502,42.741,305.502,44.122z"/>
@@ -69,15 +69,15 @@
 	<path opacity="0.5" fill="#FFFFFF" d="M369.108,43.466c0,1.02-1.107,1.846-1.107,1.846s-1.108-0.826-1.108-1.846
 		s0.089-1.846,1.108-1.846C369.02,41.62,369.108,42.446,369.108,43.466z"/>
 	<g>
-		<polygon fill="#7367FF" points="464,44.01 448,47.816 464,3.972 480,47.816 		"/>
+		<polygon fill="#FFE900" points="464,44.01 448,47.816 464,3.972 480,47.816 		"/>
 		<polygon opacity="0.2" fill="#231F20" points="464,3.972 464,44.01 448,47.816 		"/>
 	</g>
 	<g>
-		<polygon fill="#7367FF" points="432,44.01 416,47.816 432,3.972 448,47.816 		"/>
+		<polygon fill="#FF90D1" points="432,44.01 416,47.816 432,3.972 448,47.816 		"/>
 		<polygon opacity="0.2" fill="#231F20" points="432,3.972 432,44.01 416,47.816 		"/>
 	</g>
 	<g>
-		<polygon fill="#7367FF" points="400,44.01 384,47.816 400,3.972 416,47.816 		"/>
+		<polygon fill="#FF3C00" points="400,44.01 384,47.816 400,3.972 416,47.816 		"/>
 		<polygon opacity="0.2" fill="#231F20" points="400,3.972 400,44.01 384,47.816 		"/>
 	</g>
 </g>
