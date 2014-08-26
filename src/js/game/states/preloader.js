@@ -26,6 +26,8 @@ module.exports = function(game) {
 	
 	game.load.spritesheet('controller-indicator', 'images/controller-indicator.png', 16,16);
 	this.load.image('bullet', 'images/bullet.png');
+	
+	//this.load.script('filter', 'js/lib/filters/Fire.js');
   }; 
 
   preloader.create = function () {

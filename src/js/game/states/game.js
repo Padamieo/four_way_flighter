@@ -38,6 +38,8 @@ gameState.create = function () {
 	
 	generate();
 	
+	//game.filter = game.add.filter('Fire', game.width, game.height);
+
 	// obtain number of players
 	num_players = game.num_players;
 	//obtain if keyboard is active
@@ -316,7 +318,7 @@ var e_basic = function(game, x, y) {
 	//sprite.events.onRevived( doo,this);
 	
 	this.events.onRevived.add(function(){this.health = 1}, this);
-	this.events.onKilled.add(function(){explosion(this)}, this);
+	//this.events.onKilled.add(function(){explosion(this)}, this);
 	
 	next_e_ShotAt[this.z] = 0;
 	e_shotDelay[this.z] = 1200;
@@ -1097,6 +1099,8 @@ function combo_notice(num){
 }
 
 gameState.update = function (){
+	
+	//game.filter.update();
 	
 	//notice a player collects health
 	game.physics.arcade.overlap(players, healths, pickup_health, null, this);
