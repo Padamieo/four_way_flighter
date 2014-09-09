@@ -45,7 +45,7 @@ gameState.create = function () {
 	//obtain if keyboard is active
 	keyboard_offset = game.keyboard_offset;
 	
-	console.log("keybaord_offest"+keyboard_offset);
+	//console.log("keybaord_offest"+keyboard_offset);
 
 	//this is the standard physics with phaser
 	game.physics.startSystem(Phaser.Physics.ARCADE);
@@ -355,7 +355,7 @@ var e_missile = function(game, x, y) {
     Phaser.Sprite.call(this, game, x, y, 'e_swift');
 	
 	enemies.add(this);
-	console.log(this.z+"m");
+	//console.log(this.z+"m");
 	next_e_ShotAt[this.z] = 0;
 	e_shotDelay[this.z] = 400;
 	game.stuck_on_path = 0;
@@ -578,8 +578,7 @@ function random_alive_player(){
 		score = score + new_score;
 		scoreText.text = '' + score + '';
 	}
-	
-	
+
 	var rounds = [];
 	function generate(){
 		for (i = 0; i < 3; i++) {
@@ -589,18 +588,17 @@ function random_alive_player(){
 			}else{
 				i--;
 			}
-			console.log(i);
+			//console.log(i);
 		}
 		rounds.sort();
-		console.log(rounds);
+		//console.log(rounds);
 	}
-	
-	
+
 	function updateTick() {
-			console.log(rounds);
+		//console.log(rounds);
 		//randomly generate change up on rounds and amount per round
 		//maybe look into array to store what comes when
-		
+
 		if (enemies.countLiving() < 1) {
 			
 			if(rounds[0] < count){
@@ -622,7 +620,7 @@ function random_alive_player(){
 		}
 			add_revive(); // issue with only once occurrence per death
 			add_health(); // still wip too many healths generated
-			console.log(count);
+			//console.log(count);
 	}
 
 	game.spawn_enemy = function(x, y, type) {
@@ -1114,6 +1112,7 @@ gameState.update = function (){
 	//this is not working
 	game.physics.arcade.collide(players, enemies, collision_notice, null, this);
 	
+	game.physics.arcade.collide(game.bulletPool, players, ricochet, null, this);
 	//game.physics.arcade.collide(enemies, enemies); //do we want overlap!
 	
 	//this is just for registering who shot what
@@ -1130,7 +1129,7 @@ gameState.update = function (){
 			}
 		}else{
 			controls_pad(i , i);
-		}		
+		}
 		
 		if(special_active == 0){
 			all = all+combo_notice(i);
@@ -1146,9 +1145,9 @@ gameState.update = function (){
 	}
 	
 	if(all == num_players){
-		console.log("merge"+all);
+		//console.log("merge"+all);
 		value = players.countLiving();
-		console.log(value);
+		//console.log(value);
 		
 		//we need this visually
 		//var logo = game.add.sprite(game.world.centerX, game.world.centerY, 'logo');
@@ -1173,6 +1172,13 @@ gameState.update = function (){
 	if(game.input.keyboard.isDown(Phaser.Keyboard.P)){ pause();}
 };
 
+function ricochet(bullet, player){
+	console.log(bullet.body.velocity.x);
+	//console.log(this.body.angle);
+	
+	bullet.body.velocity.x = -90;
+	bullet.body.velocity.y = -90;
+}
 
 function flash(){
 	game.flash.alpha = 1;
