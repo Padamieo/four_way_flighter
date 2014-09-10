@@ -1176,7 +1176,7 @@ function ricochet(bullet, player){
 	console.log(bullet.body.velocity.x);
 	//console.log(this.body.angle);
 	
-	bullet.body.velocity.x = -90;
+	bullet.body.velocity.x = 90;
 	bullet.body.velocity.y = -90;
 }
 
