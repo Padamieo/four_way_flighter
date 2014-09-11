@@ -93,7 +93,6 @@ gameState.create = function () {
 	game.cal_health = 0;
 	players.forEachAlive( check_health, this);
 	game.starting_group_health = game.cal_health;
-	
 		
     // Maintain aspect ratio
 	game.scale.fullScreenScaleMode = Phaser.ScaleManager.SHOW_ALL;
@@ -1112,11 +1111,14 @@ gameState.update = function (){
 	//this is not working
 	game.physics.arcade.collide(players, enemies, collision_notice, null, this);
 	
-	game.physics.arcade.collide(game.bulletPool, players, ricochet, null, this);
 	//game.physics.arcade.collide(enemies, enemies); //do we want overlap!
 	
 	//this is just for registering who shot what
-	game.physics.arcade.overlap(game.bulletPool, enemies, add_point, null, this);	
+	game.physics.arcade.overlap(game.bulletPool, enemies, add_point, null, this);
+	
+	//this is for a bit of fun players shoot move other players, may want to drop if resources are concern
+	game.physics.arcade.collide(game.bulletPool, players, ricochet, null, this);
+	
 	
 	all = 0;
 	controls_key(0);
@@ -1165,6 +1167,12 @@ gameState.update = function (){
 	}
 	
 	//console.log(players.getAt(0).health);
+	
+	//if player bullets remove them please.
+	game.bulletPool.forEachAlive(function(bullet){
+		bulletspeed = Math.abs(bullet.body.velocity.y) + Math.abs(bullet.body.velocity.x);
+		if( bulletspeed < 200){ bullet.kill(); }
+	});
 	
 	if(development == 0){
 		background.tilePosition.y += 1.2;
