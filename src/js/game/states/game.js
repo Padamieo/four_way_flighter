@@ -1121,13 +1121,14 @@ gameState.update = function (){
 	
 	
 	all = 0;
-	controls_key(0);
 	for (i = 0; i < num_players; i++) {
 		//pad_connect_indicator(i);
 		
 		if(game.keyboard_offset == 1){
 			if(!i == 0){
 				controls_pad(i , (i-1));
+			}else{
+				controls_key(0);
 			}
 		}else{
 			controls_pad(i , i);
