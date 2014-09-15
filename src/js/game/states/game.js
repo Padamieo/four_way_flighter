@@ -28,7 +28,6 @@ module.exports = function(game) {
 	var special_active = 0;
 	
 	var development = 1;
-	var development_alt_controls = 1;
 	
 	var gameState = {};
 
@@ -324,6 +323,7 @@ var e_basic = function(game, x, y) {
     this.anchor.setTo(0.5, 0.5);
 
     game.physics.enable(this, Phaser.Physics.ARCADE);
+	
 	this.health = 1;
 	
     this.MAX_SPEED = 250;
@@ -522,16 +522,9 @@ function random_alive_player(){
 		player[num].energy = 0;
 		//player[num].health(2);
 		//player[num].body.bounce.y=0.2;
-		/*
-		if(development_alt_controls){
-		*/
-			player[num].body.immovable = false;
-		/*
-		}else{
 		
-			player[num].body.immovable = true;
-		}
-		*/
+			player[num].body.immovable = false;
+			//player[num].body.immovable = true;
 		
 		player[num].animations.frame = 0+num;
 		// animations still usefull but not being used / set
@@ -748,20 +741,11 @@ function controls_pad(play_num, pad_num){
 		}else{
 			if(players.getAt(play_num).alive == 1){
 				fire(play_num, pad_num);
-				if(development_alt_controls){
-					speed = 220;
-				}else{
-					speed = 3;
-				}
-				
+				speed = 220;
 			}
 		}
 	}else{
-		if(development_alt_controls){
-			speed = 300;
-		}else{
-			speed = 7;
-		}
+		speed = 300;
 	}
 
 	if ( pad[pad_num].isDown(Phaser.Gamepad.XBOX360_DPAD_LEFT) || pad[pad_num].axis(Phaser.Gamepad.XBOX360_STICK_LEFT_X) < -0.01) {
@@ -782,13 +766,7 @@ function controls_pad(play_num, pad_num){
 			
 		}else{
 			if(players.getAt(play_num).alive == 1){
-				//yet to be decided
-				if(development_alt_controls){
-					player[play_num].body.velocity.x = -speed;
-				}else{
-					player[play_num].x -= speed;
-				}
-				
+				player[play_num].body.velocity.x = -speed;
 				if( player[play_num].angle > -20 ){
 					player[play_num].angle -= 1;
 				}
@@ -811,13 +789,7 @@ function controls_pad(play_num, pad_num){
 			}
 		}else{
 			if(players.getAt(play_num).alive == 1){
-				//yet to be decided
-				if(development_alt_controls){
-					player[play_num].body.velocity.x = speed;
-				}else{
-					player[play_num].x += speed;
-				}
-				
+				player[play_num].body.velocity.x = speed;
 				if( player[play_num].angle < 20 ){
 					player[play_num].angle += 1;
 				}
@@ -838,13 +810,7 @@ function controls_pad(play_num, pad_num){
 			}
 		}else{
 			if(players.getAt(play_num).alive == 1){
-				//yet to be decided
-				if(development_alt_controls){
-					player[play_num].body.velocity.y = -speed;
-				}else{
-					player[play_num].y -= speed;
-				}
-				
+				player[play_num].body.velocity.y = -speed;
 				//player.animations.play('forward');
 				if(now_invincible[play_num] == 0){
 					player[play_num].animations.frame = 8+play_num;
@@ -862,12 +828,7 @@ function controls_pad(play_num, pad_num){
 			}
 		}else{
 			if(players.getAt(play_num).alive == 1){
-				//yet to be decided
-				if(development_alt_controls){
-					player[play_num].body.velocity.y = speed;
-				}else{
-					player[play_num].y += speed;
-				}			
+				player[play_num].body.velocity.y = speed;		
 				//player.animations.play('back');
 				if(now_invincible[play_num] == 0){
 					player[play_num].animations.frame = 12+play_num;
@@ -919,20 +880,11 @@ function controls_key(num){
 		}else{
 			if(players.getAt(num).alive == 1){
 				fire(num, num);
-				if(development_alt_controls){
-					speed = 220;
-				}else{
-					speed = 3;
-				}
-				
+				speed = 220;
 			}
 		}
 	}else{
-		if(development_alt_controls){
-			speed = 300;
-		}else{
-			speed = 7;
-		}
+		speed = 300;
 	}
 
 	if ( game.input.keyboard.isDown(Phaser.Keyboard.A) ) {
@@ -953,12 +905,7 @@ function controls_key(num){
 			
 		}else{
 			if(players.getAt(num).alive == 1){
-				//yet to be decided
-				if(development_alt_controls){
-					player[num].body.velocity.x = -speed;
-				}else{
-					player[num].x -= speed;
-				}
+				player[num].body.velocity.x = -speed;
 				
 				if( player[num].angle > -20 ){
 					player[num].angle -= 1;
@@ -982,13 +929,7 @@ function controls_key(num){
 			}
 		}else{
 			if(players.getAt(num).alive == 1){
-				//yet to be decided
-				if(development_alt_controls){
-					player[num].body.velocity.x = speed;
-				}else{
-					player[num].x += speed;
-				}
-				
+				player[num].body.velocity.x = speed;
 				if( player[num].angle < 20 ){
 					player[num].angle += 1;
 				}
@@ -1009,13 +950,7 @@ function controls_key(num){
 			}
 		}else{
 			if(players.getAt(num).alive == 1){
-				//yet to be decided
-				if(development_alt_controls){
-					player[num].body.velocity.y = -speed;
-				}else{
-					player[num].y -= speed;
-				}
-				
+				player[num].body.velocity.y = -speed;
 				//player.animations.play('forward');
 				if(now_invincible[num] == 0){
 					player[num].animations.frame = 8+num;
@@ -1033,12 +968,7 @@ function controls_key(num){
 			}
 		}else{
 			if(players.getAt(num).alive == 1){
-				//yet to be decided
-				if(development_alt_controls){
-					player[num].body.velocity.y = speed;
-				}else{
-					player[num].y += speed;
-				}			
+				player[num].body.velocity.y = speed;		
 				//player.animations.play('back');
 				if(now_invincible[num] == 0){
 					player[num].animations.frame = 12+num;
@@ -1106,9 +1036,7 @@ gameState.update = function (){
 	//notice a player collects revive
 	game.physics.arcade.overlap(players, lives, pickup_revive, null, this);
 	
-	//this catches on development_alt_controls=0 state but 1 allows collide below to work
 	game.physics.arcade.overlap(players, enemies, collision_notice, null, this);
-	//this is not working
 	game.physics.arcade.collide(players, enemies, collision_notice, null, this);
 	
 	//game.physics.arcade.collide(enemies, enemies); //do we want overlap!
@@ -1126,7 +1054,7 @@ gameState.update = function (){
 		
 		if(game.keyboard_offset == 1){
 			if(!i == 0){
-				controls_pad(i , (i-1));
+				controls_pad(i, (i-1));
 			}else{
 				controls_key(0);
 			}
