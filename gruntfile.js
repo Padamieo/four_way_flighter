@@ -96,15 +96,16 @@ module.exports = function (grunt) {
             }
           }
         }
-      }
-
-    , open:
-      { server:
-        { path: 'http://localhost:<%= project.port %>'
+      },
+	  
+	open:{
+		server:{
+			path: 'http://localhost:<%= project.port %>',
+			app: 'Chrome'
         }
-      }
-
-    , cacheBust:
+	},
+	
+	cacheBust:
       { options:
         { encoding: 'utf8'
         , algorithm: 'md5'
