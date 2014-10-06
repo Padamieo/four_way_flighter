@@ -160,19 +160,32 @@ module.exports = function (grunt) {
               }
             ]
           }
-        }
-
-    , copy:
-      { images:
-        { files:
-          [ { expand: true, cwd: 'src/images/', src: ['**'], dest: 'build/images/' }
-          ]
-        }
-      , audio:
-        { files:
-          [ { expand: true, cwd: 'src/audio/', src: ['**'], dest: 'build/audio/' }
-          ]
-        }
+        },
+	copy:{
+		images:{
+			files:[{
+				expand: true,
+				cwd: 'src/images/',
+				src: ['**'],
+				dest: 'build/images/'
+			}]
+		},
+		audio:{
+			files:[{
+				expand: true,
+				cwd: 'src/audio/',
+				src: ['**'],
+				dest: 'build/audio/'
+			}]
+		},
+		gen:{
+			files:[{
+				expand: true,
+				cwd: 'src/package/',
+				src: ['**'],
+				dest: 'build/'
+			}]
+		}
       }
 
     , uglify:

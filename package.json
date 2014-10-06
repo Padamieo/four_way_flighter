@@ -4,14 +4,15 @@
   "description": "A grunty Phaser.js SDK",
   "main": "build/js/app.min.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+	"start": "nodewebkit build"
   },
   "repository": {
     "type": "git",
     "url": "git@github.com:lukewilde/phaser-blank.git"
   },
-  "author": "Luke Wilde",
-  "license": "MIT",
+  "author": "Adam Lockwood",
+  "license": "NON",
   "browser": {
     "lodash": "./node_modules/lodash/dist/lodash.compat.js",
     "Phaser": "./src/js/lib/phaser-arcade-physics.js",
@@ -43,7 +44,8 @@
     "grunt-contrib-uglify": "^0.4.0",
     "grunt-contrib-watch": "^0.6.1",
     "grunt-open": "^0.2.3",
-    "grunt-pngmin": "^0.6.1"
+    "grunt-pngmin": "^0.6.1",
+	"nodewebkit": "*"
   },
   "dependencies": {
     "grunt-contrib-compress": "^0.9.1",
