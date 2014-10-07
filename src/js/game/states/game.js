@@ -53,7 +53,7 @@ gameState.create = function () {
 		game.stage.backgroundColor = '#28A3CA';
 	}else{
 		//this is the background
-		background = game.add.tileSprite(0, 0, game.stage.bounds.width, game.stage.bounds.height, 'sky');
+		background = game.add.tileSprite(0, 0, game.stage.width, game.stage.height, 'sky');
 	}
 
 	// player setup move this out to function
@@ -72,10 +72,10 @@ gameState.create = function () {
 	game.healthbars = game.add.group();
 	for (i = 0; i < num_players; i++) {
 		if(i == 0){ x = 5;}
-		if(i == 1){ x = (game.stage.bounds.width-5); }
-		if(i == 2) { x = (game.stage.bounds.width/4);}
-		if(i == 3){ x = (game.stage.bounds.width-(game.stage.bounds.width/4)); }
-		game.healthbar = game.healthbars.create(x,  game.stage.bounds.height-5, 'health_bar');
+		if(i == 1){ x = (game.stage.width-5); }
+		if(i == 2) { x = (game.stage.width/4);}
+		if(i == 3){ x = (game.stage.width-(game.stage.width/4)); }
+		game.healthbar = game.healthbars.create(x,  game.stage.height-5, 'health_bar');
 		if(i == 0 || i == 2){
 			game.healthbar.anchor.x=0;
 			game.healthbar.anchor.y=1;
@@ -135,8 +135,8 @@ gameState.create = function () {
 	tick.start();
 	
 	//setup energy score info
-	textpos = (game.stage.bounds.width)-(game.stage.bounds.width/2);
-	scoreText = game.add.text(textpos, game.stage.bounds.height-14, '0', { fontSize: '12px', fill: '#000' });
+	textpos = (game.stage.width)-(game.stage.width/2);
+	scoreText = game.add.text(textpos, game.stage.height-14, '0', { fontSize: '12px', fill: '#000' });
 	scoreText.anchor.x=0.5;
 	scoreText.anchor.y=0.5;
 	update_score(0);
@@ -342,7 +342,7 @@ e_basic.prototype.update = function() {
 			this.body.velocity.y = 50;
 			this.body.rotate += 1;
 		}else{
-			this.x = game.rnd.integerInRange(0, game.stage.bounds.width);
+			this.x = game.rnd.integerInRange(0, game.stage.width);
 			this.y = -50;
 		}
 	}
@@ -370,8 +370,8 @@ var e_missile = function(game, x, y) {
 	target = random_alive_player();
 	this.TARGET = target;//select random alive target
 	
-	this.RANDOM_X = game.rnd.integerInRange(-100, game.stage.bounds.width+100);
-	this.RANDOM_Y = -30;//game.rnd.integerInRange(0, game.stage.bounds.height);
+	this.RANDOM_X = game.rnd.integerInRange(-100, game.stage.width+100);
+	this.RANDOM_Y = -30;//game.rnd.integerInRange(0, game.stage.height);
 
     // Define constants that affect motion
     this.SPEED = 295; // missile speed pixels/second
@@ -470,8 +470,8 @@ function choose_player_target(enemy, target){
 }
 
 function random_location(){
-	x = game.rnd.integerInRange(0, game.stage.bounds.width);
-	y = game.rnd.integerInRange(0, game.stage.bounds.height);
+	x = game.rnd.integerInRange(0, game.stage.width);
+	y = game.rnd.integerInRange(0, game.stage.height);
 	var arr = new Array(x, y); 
 	return arr;
 }
@@ -512,8 +512,8 @@ function random_alive_player(){
 	}
 
 	function player_setup(num){
-		pos = (game.stage.bounds.height/3);
-		pos2 = (game.stage.bounds.width/num_players+2);
+		pos = (game.stage.height/3);
+		pos2 = (game.stage.width/num_players+2);
 		if(num == 0){ pos2 = (pos2/2)-5; }else{ pos2 = pos2*num+(pos2/2)-5; }
 		
 		player[num] = players.create(pos2, pos*2, 'dude');
@@ -535,7 +535,7 @@ function random_alive_player(){
 
 	function pad_setup(num){
 	
-		//indicatorpos = (game.stage.bounds.width)-(22);
+		//indicatorpos = (game.stage.width)-(22);
 		//indicator[num] = game.add.sprite(indicatorpos,(num*10), 'controller-indicator');
 		//indicator[num].scale.x = indicator[num].scale.y = 1;
 		//indicator[num].animations.frame = 1;
