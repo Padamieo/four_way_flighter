@@ -19,13 +19,16 @@ module.exports = function(game) {
 	game.load.spritesheet('explosion', 'images/explosion.svg', 256, 256);
 	
 	game.load.image('health_bar', 'images/healthbar.png');
+	game.load.image('score_bar', 'images/scorebars.png');
 	
 	game.load.image('box', 'images/enemy.png');
 	game.load.image('e_follow', 'images/e_follow.png');
 	game.load.image('e_swift', 'images/e_swift.png');
 	
 	game.load.spritesheet('controller-indicator', 'images/controller-indicator.png', 16,16);
-	this.load.image('bullet', 'images/bullet.png');
+	
+	//this.load.image('bullet', 'images/bullet.png');
+	game.load.spritesheet('bullet', 'images/bullet.png', 8,8);
 	
 	//this.load.script('filter', 'js/lib/filters/Fire.js');
   }; 

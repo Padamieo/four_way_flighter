@@ -92,10 +92,40 @@ gameState.create = function () {
 	game.cal_health = 0;
 	players.forEachAlive( check_health, this);
 	game.starting_group_health = game.cal_health;
+	
+	//scorebars
+	game.scorebars = game.add.group();
+	for (i = 0; i < num_players; i++) {
+		if(i == 0){ x = 5;}
+		if(i == 1){ x = (game.stage.width-5); }
+		if(i == 2) { x = (game.stage.width/4);}
+		if(i == 3){ x = (game.stage.width-(game.stage.width/4)); }
+		console.log("this"+x);
 		
+		if(i == 0 || i == 2){
+			x = x + 12;
+		}else{
+			x = x - 12;
+		}
+		
+		game.scorebar = game.scorebars.create(x,  game.stage.height-5, 'score_bar');
+		
+		if(i == 0 || i == 2){
+			game.scorebar.anchor.x=0;
+			game.scorebar.anchor.y=1;
+		}else{
+			game.scorebar.anchor.x=1;
+			game.scorebar.anchor.y=1;
+		}
+		
+		//set initial height
+		change = game.scorebars.getAt(i);
+		change.scale.y = 1;
+	}
+	
     // Maintain aspect ratio
 	game.scale.fullScreenScaleMode = Phaser.ScaleManager.SHOW_ALL;
-	game.input.onDown.add(gofull, this);
+	//game.input.onDown.add(gofull, this);
 		
 	// setup health pickup 
 	healths = game.add.group();
@@ -491,8 +521,12 @@ function random_alive_player(){
 		if (game.e_bulletPool.countDead() === 0) {
 			return;
 		}
+		
 		e_bullet = game.e_bulletPool.getFirstExists(false);
 		e_bullet.reset(e.x, e.y, 'bullet');
+		
+		//e_bullet.body.animations.frame = 2; //needs to set bullet colour on who fired
+		
 		e_bullet.rotation = targetAngle;
 		e_bullet.SPEED = 400;
 		e_bullet.body.velocity.x = Math.cos(e_bullet.rotation) * e_bullet.SPEED;
@@ -676,11 +710,12 @@ function random_alive_player(){
 		check_h = player.health;
 		game.cal_health = game.cal_health+check_h;
 	}
-  
+	
+	/*
 	function gofull() {
 		game.scale.startFullScreen();
 	}
-
+	*/
 	
 	function fire_setup(num){
 		nextShotAt[num] = 0;
@@ -1145,6 +1180,12 @@ function add_point (bullet, enemies){
 		player[bullet.name].energy = player[bullet.name].energy+1;
 		console.log("test"+player[bullet.name].energy);
 	*/
+
+	//this need to check emeny dies and ensure its not adding more than 100!
+	change = game.scorebars.getAt(bullet.name);
+	//console.log(change.scale.y);
+	change.scale.y = change.scale.y + 1;
+	
 	update_score(1);
 }
 
