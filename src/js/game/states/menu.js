@@ -81,8 +81,8 @@ module.exports = function(game) {
 	
 	//set-up default indicators
 	function controller_indicator(num){
-		posy = (game.stage.height/2.8);
-		posx = (game.stage.width/4);
+		posy = (game.height/2.8);
+		posx = (game.width/4);
 		if(num == 0){ posx = (posx/2)-5; }else{ posx = posx*num+(posx/2)-5; }
 		indicator[num] = game.add.sprite(posx, posy*2, 'controllers');
 		if(num == 0){
@@ -96,8 +96,8 @@ module.exports = function(game) {
 	
 	//define button switches
 	function switch_button(num){
-		posy = (game.stage.height/4);
-		posx = (game.stage.width/4);
+		posy = (game.height/4);
+		posx = (game.width/4);
 		if(num == 0){ posx = (posx/2)-5; }else{ posx = posx*num+(posx/2)-5; }
 		button[num] = game.add.sprite(posx, posy*2, 'switch');
 		if(num == 0){
@@ -162,6 +162,10 @@ module.exports = function(game) {
 	
 	//update loop
 	menu.update = function (){
+	/*
+	console.log( "game" + game.width);
+	console.log( "stage" + game.stage.width);
+	*/
 		count = 0;
 		for (i = 0; i < 4; i++) {
 			button[i].events.onInputDown.add(actionOnClick, button[i]);
