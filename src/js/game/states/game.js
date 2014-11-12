@@ -36,15 +36,14 @@ module.exports = function(game) {
 	var gameState = {};
 
 gameState.create = function () {
-    //var logo = game.add.sprite(game.world.centerX, game.world.centerY, 'logo');
-    //logo.anchor.setTo(0.5, 0.5);
+    var logo = game.add.sprite(game.world.centerX, game.world.centerY, 'Gray');
+    logo.anchor.setTo(0.5, 0.5);
 	
 	generate();
-	
-	//game.filter = game.add.filter('Fire', game.width, game.height);
 
 	// obtain number of players
 	num_players = game.num_players;
+	
 	//obtain if keyboard is active
 	keyboard_offset = game.keyboard_offset;
 	
@@ -266,14 +265,14 @@ gameState.create = function () {
         }
     };
 	
-	gray = game.add.filter('Gray');
+	//gray = game.add.filter('Gray');
     
 	/*
 	gray_filter = game.add.sprite(0.5, 0);
 	gray_filter.width = game.width;
 	gray_filter.height = game.height;
 	*/
-	
+	/*
     gray_filter = game.add.graphics(0, 0);
     gray_filter.beginFill(0x000000, 1);
     gray_filter.drawRect(0, 0, game.width, game.height);
@@ -282,7 +281,9 @@ gameState.create = function () {
 	
 	gray_filter.gray = [gray];
 	gray.alpha = 1;
-	
+	*/
+	var gray = game.add.filter('Gray');
+	logo.filters = [gray];
 };
 ////////// end of create /////////
 	function pause() {
@@ -1056,6 +1057,7 @@ function controls_key(num){
 	}
 }
 
+
 function combo_notice(num){
 	value = 0;
 
@@ -1163,7 +1165,6 @@ gameState.update = function (){
 	}
 	if(game.input.keyboard.isDown(Phaser.Keyboard.P)){ pause();}
 	
-	gray.update();
 };
 
 function ricochet(bullet, player){

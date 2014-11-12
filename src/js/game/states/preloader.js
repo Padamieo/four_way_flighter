@@ -3,7 +3,7 @@ module.exports = function(game) {
   var preloader = {};
 
   preloader.preload = function () {
-    //game.load.image('logo', 'images/test.svg#grunt-cache-bust', '500', '240');
+    game.load.image('logo', 'images/phaser.png', '500', '240');
 	
 	game.load.spritesheet('switch', 'images/switch.jpeg', 32, 32);
 	game.load.image('sky', 'images/sky.png');
