@@ -45,7 +45,7 @@ var e = {
 			y = player_combo.y;
 		}else{
 			if(game.players.countDead() == game.num_players){
-				rl = random_location();
+				rl = e.random_location(game);
 				x = rl[0];
 				y = rl[1];
 			}else{
@@ -57,6 +57,13 @@ var e = {
 		}
 		x = Math.floor(x);
 		y = Math.floor(y);
+		var arr = new Array(x, y);
+		return arr;
+	},
+
+	random_location: function(game){
+		x = game.rnd.integerInRange(0, game.width);
+		y = game.rnd.integerInRange(0, game.height);
 		var arr = new Array(x, y);
 		return arr;
 	}

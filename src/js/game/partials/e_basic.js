@@ -7,7 +7,7 @@ var e_basic = function(game, x, y) {
 	game.enemies.add(this);
 
 	//sprite.events.onRevived( doo,this);
-
+	
 	this.events.onRevived.add(function(){this.health = 1}, this);
 	this.events.onKilled.add(function(){e.explosion(game, this)}, this);
 

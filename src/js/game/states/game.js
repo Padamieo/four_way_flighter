@@ -2,6 +2,8 @@
 var e_basic = require('e_basic');
 var e_follower = require('e_follower');
 
+var p = require('p');
+
 module.exports = function(game) {
 	var background;
 
@@ -9,18 +11,13 @@ module.exports = function(game) {
 	var scoreText;
 	var count = 0; // this should probably be game.count
 
-	var num_players;
+//	var num_players;
 
 	//var players; //not needed but was trying to resolve group issue
 
 	var player = [];
 	var pad = [];
 	//var indicator = [];
-	var nextShotAt = [];
-	var shotDelay = [];
-
-	var nextKillAt = [];
-	var KillDelay = [];
 
 	var lives;
 	var recently_created = 0;
@@ -39,13 +36,23 @@ module.exports = function(game) {
 	var gameState = {};
 
 gameState.create = function () {
-    var logo = game.add.sprite(game.world.centerX, game.world.centerY, 'Gray');
-    logo.anchor.setTo(0.5, 0.5);
+	/*
+		var logo = game.add.sprite(game.world.centerX, game.world.centerY, 'Gray');
+		logo.anchor.setTo(0.5, 0.5);
+	*/
 
 	generate();
 
+	//enemies
 	game.next_e_ShotAt = [];
 	game.e_shotDelay = [];
+
+	//player
+	game.nextShotAt = [];
+	game.shotDelay = [];
+
+	game.nextKillAt = [];
+	game.KillDelay = [];
 
 	// obtain number of players
 	num_players = game.num_players;
@@ -70,7 +77,7 @@ gameState.create = function () {
 	game.players = game.add.group();
   game.players.enableBody = true;
   game.players.physicsBodyType = Phaser.Physics.ARCADE;
-	for (i = 0; i < num_players; i++) {
+	for (i = 0; i < game.num_players; i++) {
 		player_setup(i);
 	}
 	game.players.setAll('anchor.x', 0.5);
@@ -79,7 +86,7 @@ gameState.create = function () {
 
 	//health bars position currently 1342
 	game.healthbars = game.add.group();
-	for (i = 0; i < num_players; i++) {
+	for (i = 0; i < game.num_players; i++) {
 		if(i == 0){ x = 5;}
 		if(i == 1){ x = (game.width-5); }
 		if(i == 2) { x = (game.width/4);}
@@ -99,12 +106,12 @@ gameState.create = function () {
 
 	//calculate groups health
 	game.cal_health = 0;
-	game.players.forEachAlive( check_health, this);
+	game.players.forEachAlive( p.check_health, this);
 	game.starting_group_health = game.cal_health;
-
+	console.log(game.cal_health);
 	//scorebars
 	game.scorebars = game.add.group();
-	for (i = 0; i < num_players; i++) {
+	for (i = 0; i < game.num_players; i++) {
 		if(i == 0){ x = 5;}
 		if(i == 1){ x = (game.width-5); }
 		if(i == 2) { x = (game.width/4);}
@@ -179,7 +186,7 @@ gameState.create = function () {
 	scoreText.anchor.y=0.5;
 	update_score(0);
 
-	for (i = 0; i < num_players; i++) {
+	for (i = 0; i < game.num_players; i++) {
 		pad_setup(i);
 	}
 
@@ -187,15 +194,15 @@ gameState.create = function () {
 	game.bulletPool = game.add.group();
 	game.bulletPool.enableBody = true;
 	game.bulletPool.physicsBodyType = Phaser.Physics.ARCADE
-	game.bulletPool.createMultiple(10*num_players, 'bullet'); //needs to be based on amount of players
+	game.bulletPool.createMultiple(10*game.num_players, 'bullet'); //needs to be based on amount of players
 	game.bulletPool.setAll('anchor.x', 0.5);
 	game.bulletPool.setAll('anchor.y', 0.5);
 	game.bulletPool.setAll('outOfBoundsKill', true);
 	game.bulletPool.setAll('checkWorldBounds', true);
 
-	for (i = 0; i < num_players; i++) {
-		fire_setup(i);
-		invincible_setup(i);
+	for (i = 0; i < game.num_players; i++) {
+		p.fire_setup(game, i);
+		p.invincible_setup(game, i);
 		now_invincible[i] = 0;
 	}
 
@@ -203,7 +210,7 @@ gameState.create = function () {
 	game.e_bulletPool = game.add.group();
 	game.e_bulletPool.enableBody = true;
 	game.e_bulletPool.physicsBodyType = Phaser.Physics.ARCADE
-	game.e_bulletPool.createMultiple(100*num_players, 'bullet'); //needs to be based on amount of players
+	game.e_bulletPool.createMultiple(100*game.num_players, 'bullet'); //needs to be based on amount of players
 	game.e_bulletPool.setAll('anchor.x', 0.5);
 	game.e_bulletPool.setAll('anchor.y', 0.5);
 	game.e_bulletPool.setAll('outOfBoundsKill', true);
@@ -311,16 +318,9 @@ gameState.create = function () {
 		game.pause_background.alpha = 0.5;
     };
 
-function random_location(){
-	x = game.rnd.integerInRange(0, game.width);
-	y = game.rnd.integerInRange(0, game.height);
-	var arr = new Array(x, y);
-	return arr;
-}
-
 	function player_setup(num){
 		pos = (game.height/3);
-		pos2 = (game.width/num_players+2);
+		pos2 = (game.width/game.num_players+2);
 		if(num == 0){ pos2 = (pos2/2)-5; }else{ pos2 = pos2*num+(pos2/2)-5; }
 
 		player[num] = game.players.create(pos2, pos*2, 'dude');
@@ -423,19 +423,22 @@ function random_location(){
 	}
 
 	game.spawn_enemy = function(x, y, type) {
+
+		type = 0; // temporary
+
 		if(type == 1){
 
-			// var nme = game.enemies.getFirstDead();
-			// if (nme === null) {
-			// 	nme = new e_follower(game, 0, 0);
-			// }
+			var nme = game.enemies.getFirstDead();
+			if (nme === null) {
+				nme = new e_follower(game, 0, 0);
+			}
 
 		}else if(type == 2){
 
-			// var nme = game.enemies.getFirstDead();
-			// if (nme === null) {
-			// 	nme = new e_missile(game, 0, 0);
-			// }
+			var nme = game.enemies.getFirstDead();
+			if (nme === null) {
+				nme = new e_missile(game, 0, 0);
+			}
 
 		}else{
 
@@ -446,8 +449,7 @@ function random_location(){
 
 		}
 
-		console.log('type'+type);
-		//nme.revive(nme.health);
+		nme.revive(nme.health);
 
 		nme.x = x;
 		nme.y = y;
@@ -455,9 +457,8 @@ function random_location(){
 		return nme;
 	};
 
-
 	function add_revive(){
-		if(game.players.countLiving() != num_players && recently_created != 1){
+		if(game.players.countLiving() != game.num_players && recently_created != 1){
 			live = lives.create(game.world.randomX, -30, 'live');
 			live.body.velocity.setTo(0, 100);
 			recently_created = 1;
@@ -469,7 +470,7 @@ function random_location(){
 		health_threshold = (game.starting_group_health/4);
 
 		game.cal_health = 0;
-		game.players.forEachAlive( check_health, this);
+		game.players.forEachAlive( p.check_health, this);
 		current_group_health = game.cal_health;
 
 		if(current_group_health < health_threshold){
@@ -480,32 +481,17 @@ function random_location(){
 
 	}
 
-	function check_health(player){
-		check_h = player.health;
-		game.cal_health = game.cal_health+check_h;
-	}
-
 	/*
 	function gofull() {
 		game.scale.startFullScreen();
 	}
 	*/
 
-	function fire_setup(num){
-		nextShotAt[num] = 0;
-		shotDelay[num] = 50;
-	}
-
-	function invincible_setup(num){
-		nextKillAt[num] = 0;
-		KillDelay[num] = 600;
-	}
-
 	function fire(play_num, pad_num) {
-		if (nextShotAt[play_num] > game.time.now) {
+		if (game.nextShotAt[play_num] > game.time.now) {
 			return;
 		}
-		nextShotAt[play_num] = game.time.now + shotDelay[play_num];
+		game.nextShotAt[play_num] = game.time.now + game.shotDelay[play_num];
 
 		if (game.bulletPool.countDead() === 0) {
 			return;
@@ -540,7 +526,7 @@ function controls_pad(play_num, pad_num){
 
 	if ( pad[pad_num].axis(Phaser.Gamepad.XBOX360_STICK_RIGHT_Y) > 0.01 || pad[pad_num].axis(Phaser.Gamepad.XBOX360_STICK_RIGHT_Y) < -0.01 || pad[pad_num].axis(Phaser.Gamepad.XBOX360_STICK_RIGHT_X) < -0.01 ||  pad[pad_num].axis(Phaser.Gamepad.XBOX360_STICK_RIGHT_X) > 0.01){
 		if(special_active == 1){
-			if(num_players == 0){
+			if(game.num_players == 0){
 				fire(play_num, pad_num);
 			}else{
 				if(play_num == 1){
@@ -559,7 +545,7 @@ function controls_pad(play_num, pad_num){
 
 	if ( pad[pad_num].isDown(Phaser.Gamepad.XBOX360_DPAD_LEFT) || pad[pad_num].axis(Phaser.Gamepad.XBOX360_STICK_LEFT_X) < -0.01) {
 		if(special_active == 1){
-			if(num_players == 0){
+			if(game.num_players == 0){
 				player_combo.body.velocity.x = -speed;
 				if( player_combo.angle > -20 ){
 					player_combo.angle -= 1;
@@ -583,7 +569,7 @@ function controls_pad(play_num, pad_num){
 		}
 	}else if( pad[pad_num].isDown(Phaser.Gamepad.XBOX360_DPAD_RIGHT) || pad[pad_num].axis(Phaser.Gamepad.XBOX360_STICK_LEFT_X) > 0.01){
 		if(special_active == 1){
-			if(num_players == 0){
+			if(game.num_players == 0){
 				player_combo.body.velocity.x = speed;
 				if( player_combo.angle < 20 ){
 					player_combo.angle += 1;
@@ -610,7 +596,7 @@ function controls_pad(play_num, pad_num){
 
 	if ( pad[pad_num].isDown(Phaser.Gamepad.XBOX360_DPAD_UP) || pad[pad_num].axis(Phaser.Gamepad.XBOX360_STICK_LEFT_Y) < -0.01) {
 		if(special_active == 1){
-			if(num_players == 0){
+			if(game.num_players == 0){
 				//player_combo.body.velocity.y = -speed;
 			}else{
 				if(play_num == 0){
@@ -628,7 +614,7 @@ function controls_pad(play_num, pad_num){
 		}
 	}else if( pad[pad_num].isDown(Phaser.Gamepad.XBOX360_DPAD_DOWN) || pad[pad_num].axis(Phaser.Gamepad.XBOX360_STICK_LEFT_Y) > 0.01){
 		if(special_active == 1){
-			if(num_players == 0){
+			if(game.num_players == 0){
 				player_combo.body.velocity.y = speed;
 			}else{
 				if(play_num == 0){
@@ -679,7 +665,7 @@ function controls_key(num){
 
 	if ( cursors.left.isDown || cursors.right.isDown || cursors.up.isDown || cursors.down.isDown ){
 		if(special_active == 1){
-			if(num_players == 0){
+			if(game.num_players == 0){
 				fire(num,num);
 			}else{
 				if(num == 1){
@@ -698,7 +684,7 @@ function controls_key(num){
 
 	if ( game.input.keyboard.isDown(Phaser.Keyboard.A) ) {
 		if(special_active == 1){
-			if(num_players == 0){
+			if(game.num_players == 0){
 				player_combo.body.velocity.x = -speed;
 				if( player_combo.angle > -20 ){
 					player_combo.angle -= 1;
@@ -723,7 +709,7 @@ function controls_key(num){
 		}
 	}else if( game.input.keyboard.isDown(Phaser.Keyboard.D) ){
 		if(special_active == 1){
-			if(num_players == 0){
+			if(game.num_players == 0){
 				player_combo.body.velocity.x = speed;
 				if( player_combo.angle < 20 ){
 					player_combo.angle += 1;
@@ -750,7 +736,7 @@ function controls_key(num){
 
 	if ( game.input.keyboard.isDown(Phaser.Keyboard.W) ) {
 		if(special_active == 1){
-			if(num_players == 0){
+			if(game.num_players == 0){
 				player_combo.body.velocity.y = -speed;
 			}else{
 				if(num == 0){
@@ -768,7 +754,7 @@ function controls_key(num){
 		}
 	}else if(game.input.keyboard.isDown(Phaser.Keyboard.S) ){
 		if(special_active == 1){
-			if(num_players == 0){
+			if(game.num_players == 0){
 				player_combo.body.velocity.y = speed;
 			}else{
 				if(num == 0){
@@ -817,7 +803,7 @@ function combo_notice(num){
 	if(game.keyboard_offset == 1 && num == 0){
 		if( game.input.keyboard.isDown(Phaser.Keyboard.E) ){
 			//shine and noise
-			if(game.players.countLiving() == num_players){
+			if(game.players.countLiving() == game.num_players){
 				//also check they have engouth juice and more than 50 health
 					value = 1;
 			}
@@ -826,7 +812,7 @@ function combo_notice(num){
 		if(game.keyboard_offset == 1){ num = num-1;}
 		if( pad[num].isDown(Phaser.Gamepad.XBOX360_A) ){
 			//shine and noise
-			if(game.players.countLiving() == num_players){
+			if(game.players.countLiving() == game.num_players){
 				//also check they have engouth juice and more than 50 health
 					value = 1;
 			}
@@ -859,7 +845,7 @@ gameState.update = function (){
 
 
 	all = 0;
-	for (i = 0; i < num_players; i++) {
+	for (i = 0; i < game.num_players; i++) {
 		//pad_connect_indicator(i);
 
 		if(game.keyboard_offset == 1){
@@ -880,12 +866,12 @@ gameState.update = function (){
 			player[i].animations.frame = 4+i;
 		}
 
-		if (nextKillAt[i] < game.time.now) {
+		if (game.nextKillAt[i] < game.time.now) {
 			now_invincible[i] = 0;
 		}
 	}
 
-	if(all == num_players){
+	if(all == game.num_players){
 		//console.log("merge"+all);
 		value = game.players.countLiving();
 		//console.log(value);
@@ -972,7 +958,7 @@ function pickup_revive(player, lives){
 }
 
 function revive_player(lives){
-	if(game.players.countLiving() == num_players){
+	if(game.players.countLiving() == game.num_players){
 		return;
 		recently_created = 0;
 	}else{
@@ -987,13 +973,10 @@ function revive_player(lives){
 }
 
 function pickup_health(player, health) {
-    // Removes the health from the screen
-    health.kill();
+	// Removes the health from the screen
+	health.kill();
 	player.damage(-1);
-	//console.log(players.health);
-	//console.log(players.name);
-	//console.log(players.z);
-
+	
 	change = game.healthbars.getAt(player.z-1);
 	change.scale.y = player.health/5;
 
@@ -1003,30 +986,29 @@ function pickup_health(player, health) {
 //this is not used yet
 function lose_condition(){
 	if(special_active == 0){
-		if(game.players.countDead() == num_players){
+		if(game.players.countDead() == game.num_players){
 			//lose game
 		}
 	}
 }
 
-function collision_notice(player, enemy) {
-    // Removes the star from the screen
+function collision_notice(ply, enemy) {
+  // Removes the star from the screen
 	//players.kill();
-	num = game.players.z-1;
-	if (nextKillAt[num] > game.time.now) {
+	num = ply.z-1;
+	if (game.nextKillAt[num] > game.time.now) {
 		now_invincible[num] = 1;
 	}else{
 		now_invincible[num] = 0;
-		nextKillAt[num] = game.time.now + KillDelay[num];
+		game.nextKillAt[num] = game.time.now + game.KillDelay[num];
 
-		player.damage(1);
+		ply.damage(1);
 		enemy.damage(1);
-
-        shake();
+		shake();
 
 		//this need functioning out
-		change = game.healthbars.getAt(num);
-		change.scale.y = player.health/5;
+		//change = game.healthbars.getAt(num);
+		game.healthbars.getAt(num).scale.y = ply.health/5;
 	}
 }
 

@@ -17,12 +17,13 @@
     "lodash": "./node_modules/lodash/dist/lodash.compat.js",
     "Phaser": "./src/js/lib/phaser-arcade-physics.js",
     "Stats": "./src/js/lib/stats.min.js",
-	"controls": "./src/js/game/partials/controls.js",
-  "e": "./src/js/game/partials/e.js",
-  "e_basic": "./src/js/game/partials/e_basic.js",
-  "e_follower": "./src/js/game/partials/e_follower.js",
-  "e_fighter": "./src/js/game/partials/e_fighter.js",
-	"gray": "./src/js/lib/filters/Gray.js"
+    "p": "./src/js/game/partials/p.js",
+    "controls": "./src/js/game/partials/controls.js",
+    "e": "./src/js/game/partials/e.js",
+    "e_basic": "./src/js/game/partials/e_basic.js",
+    "e_follower": "./src/js/game/partials/e_follower.js",
+    "e_fighter": "./src/js/game/partials/e_fighter.js",
+    "gray": "./src/js/lib/filters/Gray.js"
   },
   "browserify-shim": {
     "Phaser": {
