@@ -5,9 +5,9 @@ module.exports = function(game) {
 	var indicator = [];
 	var pad = [];
 	var count = 0;
-	
+
 	menu.preload = function () {
-	
+
 		for (i = 0; i < 4; i++) {
 			switch_button(i);
 			pad_setup(i);
@@ -15,18 +15,18 @@ module.exports = function(game) {
 			test(i);
 		}
 		game.input.gamepad.start();
-		
-		
+
+
 		game.start = game.add.sprite(game.world.width/2, game.world.height/4, 'switch');
 		game.start.animations.frame = 0;
 		game.start.anchor.setTo(0.5, 0.5);
 		game.start.inputEnabled = true;
 		game.start.scale.y = 3;
 		game.start.scale.x = 3;
-		
+
 		game.stage.backgroundColor = '#565756';
 	};
-	
+
 	//add currently active pads up
 	function pad_connect_indicator(num){
 		if(game.input.gamepad.supported && game.input.gamepad.active && pad[num].connected) {
@@ -35,7 +35,7 @@ module.exports = function(game) {
 			count = count+0;
 		}
 	}
-	
+
 	//set-up initial indicator to not connected
 	function test(num){
 		if(num == 0){
@@ -44,7 +44,7 @@ module.exports = function(game) {
 			indicator[num].animations.frame = 0;
 		}
 	}
-	
+
 	function count_change(count_input, num){
 		if(button[0].animations.frame == 2){
 			if(num+1 < 4){
@@ -62,7 +62,7 @@ module.exports = function(game) {
 			}
 		}
 	}
-	
+
 	//arborteroraly assign pads
 	function pad_setup(num){
 		if(num == 0){
@@ -78,7 +78,7 @@ module.exports = function(game) {
 			pad[num] = game.input.gamepad.pad4;
 		}
 	}
-	
+
 	//set-up default indicators
 	function controller_indicator(num){
 		posy = (game.height/2.8);
@@ -93,7 +93,7 @@ module.exports = function(game) {
 		indicator[num].anchor.setTo(0.5, 0.5);
 		indicator[num].inputEnabled = true;
 	}
-	
+
 	//define button switches
 	function switch_button(num){
 		posy = (game.height/4);
@@ -108,7 +108,7 @@ module.exports = function(game) {
 		button[num].anchor.setTo(0.5, 0.5);
 		button[num].inputEnabled = true;
 	}
-	
+
 	//button action
 	function actionOnClick () {
 		if(this.z == 1){
@@ -127,7 +127,7 @@ module.exports = function(game) {
 			}
 		}
 	}
-	
+
 	//calculations for starting a game
 	function begin(){
 		//count frames determine players
@@ -136,30 +136,30 @@ module.exports = function(game) {
 			count = button[i].animations.frame;
 			store = store + count;
 		}
-		
+
 		if(button[0].animations.frame == 2){
 			game.keyboard_offset = 1;
 			store = store-1;
 		}else{
 			game.keyboard_offset = 0;
 		}
-		console.log("keyboard"+game.keyboard_offset);
-		
+		//console.log("keyboard"+game.keyboard_offset);
+
 		if(store == 5){
 			game.num_players = 4;
 		}else{
 			game.num_players = store;
 		}
-		console.log("players"+game.num_players);
-		
+		//console.log("players"+game.num_players);
+
 		game.state.start('game');
 	}
-	
+
 	//start it now
 	function start_game(){
 		game.state.start('game');
 	}
-	
+
 	//update loop
 	menu.update = function (){
 	/*
@@ -177,8 +177,8 @@ module.exports = function(game) {
 	};
 
 	menu.create = function () {
-			
+
 	};
-	
+
 	return menu;
 };
