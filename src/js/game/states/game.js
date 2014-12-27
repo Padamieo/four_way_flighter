@@ -54,9 +54,6 @@ gameState.create = function () {
 	game.nextKillAt = [];
 	game.KillDelay = [];
 
-	// obtain number of players
-	num_players = game.num_players;
-
 	//obtain if keyboard is active
 	keyboard_offset = game.keyboard_offset;
 
@@ -976,7 +973,7 @@ function pickup_health(player, health) {
 	// Removes the health from the screen
 	health.kill();
 	player.damage(-1);
-	
+
 	change = game.healthbars.getAt(player.z-1);
 	change.scale.y = player.health/5;
 

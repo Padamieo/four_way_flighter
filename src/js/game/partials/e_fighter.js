@@ -1,4 +1,5 @@
-// Missiles are a type of Phaser.Sprite
+var e = require('e');
+
 e_fighter.prototype = Object.create(Phaser.Sprite.prototype);
 e_fighter.prototype.constructor = e_fighter;
 
