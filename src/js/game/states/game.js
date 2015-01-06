@@ -55,7 +55,7 @@ gameState.create = function () {
 	game.KillDelay = [];
 
 	//obtain if keyboard is active
-	keyboard_offset = game.keyboard_offset;
+	//keyboard_offset = game.keyboard_offset;
 
 	//console.log("keybaord_offest"+keyboard_offset);
 
@@ -105,6 +105,7 @@ gameState.create = function () {
 	game.cal_health = 0;
 	game.players.forEachAlive( p.check_health, this);
 	game.starting_group_health = game.cal_health;
+
 	console.log(game.cal_health);
 	//scorebars
 	game.scorebars = game.add.group();
@@ -273,24 +274,6 @@ gameState.create = function () {
             //}
         }
     };
-
-	//gray = game.add.filter('Gray');
-
-	/*
-	gray_filter = game.add.sprite(0.5, 0);
-	gray_filter.width = game.width;
-	gray_filter.height = game.height;
-	*/
-	/*
-    gray_filter = game.add.graphics(0, 0);
-    gray_filter.beginFill(0x000000, 1);
-    gray_filter.drawRect(0, 0, game.width, game.height);
-    gray_filter.endFill();
-    gray_filter.alpha = 0.2;
-
-	gray_filter.gray = [gray];
-	gray.alpha = 1;
-	*/
 
 	/* //working following
 	var gray = game.add.filter('Gray');
