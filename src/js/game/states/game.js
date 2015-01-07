@@ -11,10 +11,6 @@ module.exports = function(game) {
 	var scoreText;
 	var count = 0; // this should probably be game.count
 
-//	var num_players;
-
-	//var players; //not needed but was trying to resolve group issue
-
 	var player = [];
 	var pad = [];
 	//var indicator = [];
@@ -41,7 +37,7 @@ gameState.create = function () {
 		logo.anchor.setTo(0.5, 0.5);
 	*/
 
-	generate();
+	generate_rounds();
 
 	//enemies
 	game.next_e_ShotAt = [];
@@ -283,20 +279,20 @@ gameState.create = function () {
 };
 ////////// end of create /////////
 	function pause() {
-        // When the paus button is pressed, we pause the game
-        game.paused = true;
+		// When the paus button is pressed, we pause the game
+		game.paused = true;
 
-        // Then add the menu
+		// Then add the menu
 		w = game.width/2;
 		h = game.height/2;
-        game.menu = game.add.sprite(w, h, 'menu');
+		game.menu = game.add.sprite(w, h, 'menu');
 		game.menu.anchor.setTo(0.5, 0.5);
 
-        // And a label to illustrate which menu item was chosen. (This is not necessary)
-        game.choiseLabel = game.add.text(w, h-150, 'Click outside menu to continue', { font: '30px Arial', fill: '#fff' });
-        game.choiseLabel.anchor.setTo(0.5, 0.5);
+		// And a label to illustrate which menu item was chosen. (This is not necessary)
+		game.choiseLabel = game.add.text(w, h-150, 'Click outside menu to continue', { font: '30px Arial', fill: '#fff' });
+		game.choiseLabel.anchor.setTo(0.5, 0.5);
 		game.pause_background.alpha = 0.5;
-    };
+	};
 
 	function player_setup(num){
 		pos = (game.height/3);
@@ -310,8 +306,8 @@ gameState.create = function () {
 		//player[num].health(2);
 		//player[num].body.bounce.y=0.2;
 
-			player[num].body.immovable = false;
-			//player[num].body.immovable = true;
+		player[num].body.immovable = false;
+		//player[num].body.immovable = true;
 
 		player[num].animations.frame = 0+num;
 		// animations still usefull but not being used / set
@@ -359,7 +355,7 @@ gameState.create = function () {
 	}
 
 	var rounds = [];
-	function generate(){
+	function generate_rounds(){
 		for (i = 0; i < 2; i++) {
 			element = game.rnd.integerInRange(1, 5);
 			if(rounds.indexOf(element) == -1){
