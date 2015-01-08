@@ -10,7 +10,6 @@ var g = require('general');
 
 
 module.exports = function(game) {
-	var background;
 
 	var score = 0;
 	var scoreText;
@@ -25,8 +24,6 @@ module.exports = function(game) {
 
 	var now_invincible = [];
 	var special_active = 0;
-
-	var development = 1;
 
 /*
 	var Gray = require('gray'); //filter grey
@@ -50,17 +47,6 @@ gameState.create = function () {
 	//player
 	p.setup(game);
 
-	//GENERAL?
-		//this is the standard physics with phaser
-		game.physics.startSystem(Phaser.Physics.ARCADE);
-
-		if(development == 1){
-			game.stage.backgroundColor = '#28A3CA';
-		}else{
-			//this is the background
-			background = game.add.tileSprite(0, 0, game.stage.width, game.stage.height, 'sky');
-		}
-
 	// player setup move this out to function
 	game.starting_player_health = 10;
 	game.players = game.add.group();
@@ -72,8 +58,6 @@ gameState.create = function () {
 	game.players.setAll('anchor.x', 0.5);
 	game.players.setAll('anchor.y', 0.5);
 	game.players.setAll('health', game.starting_player_health);
-
-
 
 	//health bars position currently 1342
 	game.healthbars = game.add.group();
@@ -129,10 +113,6 @@ gameState.create = function () {
 		change = game.scorebars.getAt(i);
 		change.scale.y = 1;
 	}
-
-    // Maintain aspect ratio
-	game.scale.fullScreenScaleMode = Phaser.ScaleManager.SHOW_ALL;
-	//game.input.onDown.add(gofull, this);
 
 	// setup health pickup
 	healths = game.add.group();
@@ -204,39 +184,6 @@ gameState.create = function () {
 		//setup general functions these will be used anywhere
 		g.setup(game);
 
-    function unpause(event){
-        if(game.paused){
-            // Calculate the corners of the menu
-            //var x1 = w/2 - 270/2, x2 = w/2 + 270/2,
-             //   y1 = h/2 - 180/2, y2 = h/2 + 180/2;
-
-            // Check if the click was inside the menu
-			/*
-            if(event.x > x1 && event.x < x2 && event.y > y1 && event.y < y2 ){
-                // The choicemap is an array that will help us see which item was clicked
-                var choisemap = ['one', 'two', 'three', 'four', 'five', 'six'];
-
-                // Get menu local coordinates for the click
-                var x = event.x - x1,
-                    y = event.y - y1;
-
-                // Calculate the choice
-                var choise = Math.floor(x / 90) + 3*Math.floor(y / 90);
-
-                // Display the choice
-                choiseLabel.text = 'You chose menu item: ' + choisemap[choise];
-            }
-            else{
-			*/
-                // Remove the menu and the label
-                game.menu.destroy();
-                game.choiseLabel.destroy();
-				game.pause_background.alpha = 0;
-                game.paused = false;
-            //}
-        }
-    };
-
 	/* //working following
 	var gray = game.add.filter('Gray');
 	logo.filters = [gray];
@@ -244,21 +191,6 @@ gameState.create = function () {
 
 };
 ////////// end of create /////////
-	function pause() {
-		// When the paus button is pressed, we pause the game
-		game.paused = true;
-
-		// Then add the menu
-		w = game.width/2;
-		h = game.height/2;
-		game.menu = game.add.sprite(w, h, 'menu');
-		game.menu.anchor.setTo(0.5, 0.5);
-
-		// And a label to illustrate which menu item was chosen. (This is not necessary)
-		game.choiseLabel = game.add.text(w, h-150, 'Click outside menu to continue', { font: '30px Arial', fill: '#fff' });
-		game.choiseLabel.anchor.setTo(0.5, 0.5);
-		game.pause_background.alpha = 0.5;
-	};
 
 	function player_setup(num){
 		pos = (game.height/3);
@@ -845,10 +777,7 @@ gameState.update = function (){
 		if( bulletspeed < 200){ bullet.kill(); }
 	});
 
-	if(development == 0){
-		background.tilePosition.y += 1.2;
-	}
-	if(game.input.keyboard.isDown(Phaser.Keyboard.P)){ pause();}
+	if(game.input.keyboard.isDown(Phaser.Keyboard.P)){ g.pause(game);}
 
 };
 
