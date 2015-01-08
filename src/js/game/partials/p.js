@@ -1,5 +1,14 @@
 var p = {
 
+	setup: function(game){
+
+		game.nextShotAt = [];
+		game.shotDelay = [];
+
+		game.nextKillAt = [];
+		game.KillDelay = [];
+	},
+
 	check_health: function(player){
 		g = this.game; //this is probably pretty lazy and abstract?
 		check_h = player.health;

@@ -4,6 +4,11 @@ var e_follower = require('e_follower');
 
 var p = require('p');
 
+var e = require('e');
+
+var g = require('general');
+
+
 module.exports = function(game) {
 	var background;
 
@@ -39,31 +44,22 @@ gameState.create = function () {
 
 	generate_rounds();
 
-	//enemies
-	game.next_e_ShotAt = [];
-	game.e_shotDelay = [];
+	//enemies setup
+	e.setup(game);
 
 	//player
-	game.nextShotAt = [];
-	game.shotDelay = [];
+	p.setup(game);
 
-	game.nextKillAt = [];
-	game.KillDelay = [];
+	//GENERAL?
+		//this is the standard physics with phaser
+		game.physics.startSystem(Phaser.Physics.ARCADE);
 
-	//obtain if keyboard is active
-	//keyboard_offset = game.keyboard_offset;
-
-	//console.log("keybaord_offest"+keyboard_offset);
-
-	//this is the standard physics with phaser
-	game.physics.startSystem(Phaser.Physics.ARCADE);
-
-	if(development == 1){
-		game.stage.backgroundColor = '#28A3CA';
-	}else{
-		//this is the background
-		background = game.add.tileSprite(0, 0, game.stage.width, game.stage.height, 'sky');
-	}
+		if(development == 1){
+			game.stage.backgroundColor = '#28A3CA';
+		}else{
+			//this is the background
+			background = game.add.tileSprite(0, 0, game.stage.width, game.stage.height, 'sky');
+		}
 
 	// player setup move this out to function
 	game.starting_player_health = 10;
@@ -76,6 +72,8 @@ gameState.create = function () {
 	game.players.setAll('anchor.x', 0.5);
 	game.players.setAll('anchor.y', 0.5);
 	game.players.setAll('health', game.starting_player_health);
+
+
 
 	//health bars position currently 1342
 	game.healthbars = game.add.group();
@@ -155,20 +153,6 @@ gameState.create = function () {
     player_combo.body.collideWorldBounds = true;
 	player_combo.kill();
 
-	//enemies group
-	game.enemies = game.add.group();
-	//enemies.events.onKilled(function(){console.log("dead"+this.x+this.y)}, this);
-
-	// --- enemies.enableBody = true;
-	// --- enemies.physicsBodyType = Phaser.Physics.ARCADE;
-	//add single enemy
-	//enemy = enemies.create(700, 300, 'box');
-	//enemies.setAll('health', 100);
-	// --- game.physics.enable([players,enemies], Phaser.Physics.ARCADE);
-    //enemy.body.velocity.setTo(200, 200);
-    //enemy.body.collideWorldBounds = true;
-    //enemy.body.bounce.setTo(1, 1);
-
 	tick = game.time.create(false);
 	tick.loop(2000, updateTick, this);
 	tick.start();
@@ -200,23 +184,12 @@ gameState.create = function () {
 		now_invincible[i] = 0;
 	}
 
-	//bullet pool could be individual
-	game.e_bulletPool = game.add.group();
-	game.e_bulletPool.enableBody = true;
-	game.e_bulletPool.physicsBodyType = Phaser.Physics.ARCADE
-	game.e_bulletPool.createMultiple(100*game.num_players, 'bullet'); //needs to be based on amount of players
-	game.e_bulletPool.setAll('anchor.x', 0.5);
-	game.e_bulletPool.setAll('anchor.y', 0.5);
-	game.e_bulletPool.setAll('outOfBoundsKill', true);
-	game.e_bulletPool.setAll('checkWorldBounds', true);
-
 	game.explosion = game.add.group();
 	game.explosion.createMultiple(100, 'explosion');
 	game.explosion.setAll('anchor.x', 0.5);
 	game.explosion.setAll('anchor.y', 0.5);
 	game.explosion.setAll('killOnComplete',true);
-    game.explosion.callAll('animations.add', 'animations', 'boom', [0, 1, 3], 30, false);
-    //game.explosion.callAll('animations.play', 'animations', 'boom'); //http://www.html5gamedevs.com/topic/4384-callback-when-animation-complete/
+  game.explosion.callAll('animations.add', 'animations', 'boom', [0, 1, 3], 30, false); //http://www.html5gamedevs.com/topic/4384-callback-when-animation-complete/
 
     // Create a white rectangle that we'll use to represent the flash
     game.flash = game.add.graphics(0, 0);
@@ -228,15 +201,8 @@ gameState.create = function () {
     // Make the world a bit bigger than the stage so we can shake the camera
     this.game.world.setBounds(-10, -10, this.game.width + 20, this.game.height + 20);
 
-    // Create a white rectangle that we'll use to represent the flash
-    game.pause_background = game.add.graphics(0, 0);
-    game.pause_background.beginFill(0x000000, 1);
-    game.pause_background.drawRect(0, 0, game.width, game.height);
-    game.pause_background.endFill();
-    game.pause_background.alpha = 0;
-
-    // Add a input listener that can help us return from being paused
-    game.input.onDown.add(unpause, self);
+		//setup general functions these will be used anywhere
+		g.setup(game);
 
     function unpause(event){
         if(game.paused){
@@ -310,6 +276,10 @@ gameState.create = function () {
 		//player[num].body.immovable = true;
 
 		player[num].animations.frame = 0+num;
+
+		//this is how we will control variouse screen resolutions
+		player[num].scale.y = 1;
+		player[num].scale.x = 1;
 		// animations still usefull but not being used / set
 		//player[num].animations.add('default', [0, 1, 2, 3, 4, 5, 6, 7], 8, true);
 		//player[num].animations.add('left', [0, 1, 2, 3, 4, 5, 6, 7], 8, true);
@@ -400,7 +370,7 @@ gameState.create = function () {
 
 	game.spawn_enemy = function(x, y, type) {
 
-		type = 0; // temporary
+		type = 1; // temporary
 
 		if(type == 1){
 
@@ -435,8 +405,8 @@ gameState.create = function () {
 
 	function add_revive(){
 		if(game.players.countLiving() != game.num_players && recently_created != 1){
-			live = lives.create(game.world.randomX, -30, 'live');
-			live.body.velocity.setTo(0, 100);
+			life = lives.create(game.world.randomX, -30, 'live');
+			life.body.velocity.setTo(0, 100);
 			recently_created = 1;
 		}
 	}

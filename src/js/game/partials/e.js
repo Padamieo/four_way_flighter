@@ -1,5 +1,23 @@
 var e = {
 
+	setup: function(game){
+		//setup the enemies group
+		game.enemies = game.add.group();
+		//enemies.events.onKilled(function(){console.log("dead"+this.x+this.y)}, this);
+		
+		game.next_e_ShotAt = [];
+		game.e_shotDelay = [];
+		//bullet pool could be individual
+		game.e_bulletPool = game.add.group();
+		game.e_bulletPool.enableBody = true;
+		game.e_bulletPool.physicsBodyType = Phaser.Physics.ARCADE
+		game.e_bulletPool.createMultiple(100*game.num_players, 'bullet'); //needs to be based on amount of players
+		game.e_bulletPool.setAll('anchor.x', 0.5);
+		game.e_bulletPool.setAll('anchor.y', 0.5);
+		game.e_bulletPool.setAll('outOfBoundsKill', true);
+		game.e_bulletPool.setAll('checkWorldBounds', true);
+	},
+
 	fire: function(game, e, targetAngle){
 		if (game.next_e_ShotAt[e.z] > game.time.now) {
 			return;
