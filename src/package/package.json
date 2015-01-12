@@ -1,0 +1,13 @@
+{
+  "name": "Arcade Game - Four Way Flighter",
+  "version": "1",
+  "main": "index.html",
+  "window": {
+    "frame": true,
+    "width": 1280,
+    "height": 720,
+    "toolbar": false,
+    "position": "center",
+    "resizable": false
+  }
+}

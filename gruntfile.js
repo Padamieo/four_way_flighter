@@ -96,15 +96,16 @@ module.exports = function (grunt) {
             }
           }
         }
-      }
-
-    , open:
-      { server:
-        { path: 'http://localhost:<%= project.port %>'
+      },
+	  
+	open:{
+		server:{
+			path: 'http://localhost:<%= project.port %>',
+			app: 'Chrome'
         }
-      }
-
-    , cacheBust:
+	},
+	
+	cacheBust:
       { options:
         { encoding: 'utf8'
         , algorithm: 'md5'
@@ -159,19 +160,32 @@ module.exports = function (grunt) {
               }
             ]
           }
-        }
-
-    , copy:
-      { images:
-        { files:
-          [ { expand: true, cwd: 'src/images/', src: ['**'], dest: 'build/images/' }
-          ]
-        }
-      , audio:
-        { files:
-          [ { expand: true, cwd: 'src/audio/', src: ['**'], dest: 'build/audio/' }
-          ]
-        }
+        },
+	copy:{
+		images:{
+			files:[{
+				expand: true,
+				cwd: 'src/images/',
+				src: ['**'],
+				dest: 'build/images/'
+			}]
+		},
+		audio:{
+			files:[{
+				expand: true,
+				cwd: 'src/audio/',
+				src: ['**'],
+				dest: 'build/audio/'
+			}]
+		},
+		gen:{
+			files:[{
+				expand: true,
+				cwd: 'src/package/',
+				src: ['**'],
+				dest: 'build/'
+			}]
+		}
       }
 
     , uglify:
