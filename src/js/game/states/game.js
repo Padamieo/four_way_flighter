@@ -20,9 +20,8 @@ module.exports = function(game) {
 	//var indicator = [];
 
 	var lives;
-	var recently_created = 0;
 
-	var now_invincible = [];
+
 	var special_active = 0;
 
 /*
@@ -85,6 +84,8 @@ gameState.create = function () {
 	game.starting_group_health = game.cal_health;
 
 	console.log(game.cal_health);
+
+
 	//scorebars
 	game.scorebars = game.add.group();
 	for (i = 0; i < game.num_players; i++) {
@@ -148,20 +149,10 @@ gameState.create = function () {
 		pad_setup(i);
 	}
 
-	//bullet pool could be individual
-	game.bulletPool = game.add.group();
-	game.bulletPool.enableBody = true;
-	game.bulletPool.physicsBodyType = Phaser.Physics.ARCADE
-	game.bulletPool.createMultiple(10*game.num_players, 'bullet'); //needs to be based on amount of players
-	game.bulletPool.setAll('anchor.x', 0.5);
-	game.bulletPool.setAll('anchor.y', 0.5);
-	game.bulletPool.setAll('outOfBoundsKill', true);
-	game.bulletPool.setAll('checkWorldBounds', true);
-
 	for (i = 0; i < game.num_players; i++) {
 		p.fire_setup(game, i);
 		p.invincible_setup(game, i);
-		now_invincible[i] = 0;
+		game.now_invincible[i] = 0;
 	}
 
 	game.explosion = game.add.group();
@@ -308,7 +299,7 @@ gameState.create = function () {
 
 			var nme = game.enemies.getFirstDead();
 			if (nme === null) {
-				nme = new e_follower(game, 0, 0);
+				nme = new e_basic(game, 0, 0);
 			}
 
 		}else if(type == 2){
@@ -335,11 +326,12 @@ gameState.create = function () {
 		return nme;
 	};
 
+
+
 	function add_revive(){
-		if(game.players.countLiving() != game.num_players && recently_created != 1){
+		if(game.players.countLiving() != game.num_players){
 			life = lives.create(game.world.randomX, -30, 'live');
 			life.body.velocity.setTo(0, 100);
-			recently_created = 1;
 		}
 	}
 
@@ -354,10 +346,12 @@ gameState.create = function () {
 		if(current_group_health < health_threshold){
 			health = healths.create(game.world.randomX, -30, 'health');
 			health.body.velocity.setTo(0, 100);
-			//recently_created = 1; //needs to work specifically for health?
+			//needs to work specifically for health?
 		}
 
 	}
+
+
 
 	/*
 	function gofull() {
@@ -485,7 +479,7 @@ function controls_pad(play_num, pad_num){
 			if(game.players.getAt(play_num).alive == 1){
 				player[play_num].body.velocity.y = -speed;
 				//player.animations.play('forward');
-				if(now_invincible[play_num] == 0){
+				if(game.now_invincible[play_num] == 0){
 					player[play_num].animations.frame = 8+play_num;
 				}
 			}
@@ -522,7 +516,7 @@ function controls_pad(play_num, pad_num){
 			}
 		}
 
-		if(now_invincible[play_num] == 0){
+		if(game.now_invincible[play_num] == 0){
 			if(player[play_num].animations.frame != 0+play_num){
 				player[play_num].animations.frame = 0+play_num;
 			}
@@ -625,7 +619,7 @@ function controls_key(num){
 			if(game.players.getAt(num).alive == 1){
 				player[num].body.velocity.y = -speed;
 				//player.animations.play('forward');
-				if(now_invincible[num] == 0){
+				if(game.now_invincible[num] == 0){
 					player[num].animations.frame = 8+num;
 				}
 			}
@@ -643,7 +637,7 @@ function controls_key(num){
 			if(game.players.getAt(num).alive == 1){
 				player[num].body.velocity.y = speed;
 				//player.animations.play('back');
-				if(now_invincible[num] == 0){
+				if(game.now_invincible[num] == 0){
 					player[num].animations.frame = 12+num;
 				}
 			}
@@ -662,7 +656,7 @@ function controls_key(num){
 			}
 		}
 
-		if(now_invincible[num] == 0){
+		if(game.now_invincible[num] == 0){
 			if(player[num].animations.frame != 0+num){
 				player[num].animations.frame = 0+num;
 			}
@@ -740,12 +734,12 @@ gameState.update = function (){
 			all = all+combo_notice(i);
 		}
 
-		if(now_invincible[i] == 1){
+		if(game.now_invincible[i] == 1){
 			player[i].animations.frame = 4+i;
 		}
 
 		if (game.nextKillAt[i] < game.time.now) {
-			now_invincible[i] = 0;
+			game.now_invincible[i] = 0;
 		}
 	}
 
@@ -835,7 +829,6 @@ function pickup_revive(player, lives){
 function revive_player(lives){
 	if(game.players.countLiving() == game.num_players){
 		return;
-		recently_created = 0;
 	}else{
 		dead_player = game.players.getFirstDead();
 		//move to appropriate position
@@ -843,7 +836,6 @@ function revive_player(lives){
 		dead_player.y = lives.y;
 		dead_player.revive(10);
 		//need to trigger temp invincible
-		recently_created = 0;
 	}
 }
 
@@ -872,9 +864,9 @@ function collision_notice(ply, enemy) {
 	//players.kill();
 	num = ply.z-1;
 	if (game.nextKillAt[num] > game.time.now) {
-		now_invincible[num] = 1;
+		game.now_invincible[num] = 1;
 	}else{
-		now_invincible[num] = 0;
+		game.now_invincible[num] = 0;
 		game.nextKillAt[num] = game.time.now + game.KillDelay[num];
 
 		ply.damage(1);
