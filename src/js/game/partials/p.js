@@ -23,9 +23,13 @@ var p = {
 	},
 
 	check_health: function(player){
-		g = this.game; //this is probably pretty lazy and abstract?
-		check_h = player.health;
-		g.cal_health = g.cal_health+check_h;
+		game = player.game; //this is probably pretty lazy and abstract?
+		console.log(player.game);
+
+		
+		console.log("cgh"+game.current_group_health);
+		game.current_group_health =  game.current_group_health+player.health;
+		//g.cal_health = g.cal_health+check_h;
 	},
 
 	fire_setup: function(game, num){

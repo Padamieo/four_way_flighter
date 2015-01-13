@@ -6,7 +6,7 @@ var pickup = function(game, type) {
 	// healths.physicsBodyType = Phaser.Physics.ARCADE;
 	// healths.setAll('outOfBoundsKill', true);
 
-	this.type = type;
+	this.class = type;
 
 	if(type == 0){
 		type_img = 'health';

@@ -76,12 +76,11 @@ gameState.create = function () {
 	}
 
 	//calculate groups health
+	/*
 	game.cal_health = 0;
 	game.players.forEachAlive( p.check_health, this);
 	game.starting_group_health = game.cal_health;
-
-	console.log(game.cal_health);
-
+	*/
 
 	//scorebars
 	game.scorebars = game.add.group();
@@ -313,28 +312,30 @@ gameState.create = function () {
 		return nme;
 	};
 
-
-
 	function add_pickup(){
 
-		health_threshold = (game.starting_group_health/4);
-		game.cal_health = 0;
+		//health_threshold = (game.starting_group_health/4);
+
+		game.current_group_health = 0;
 		game.players.forEachAlive( p.check_health, this);
-		current_group_health = game.cal_health;
-		if(current_group_health < health_threshold){
+
+
+
+console.log("out"+game.current_group_health);
+
+		//if(current_group_health < health_threshold){
 			var health = game.pickups.getFirstDead();
 			if (health === null) {
 				health = new pickup(game, 0);
 			}
+		//}
 
-		}
-
-		//if(game.players.countLiving() != game.num_players){
+		if(game.players.countLiving() != game.num_players){
 			var live = game.pickups.getFirstDead();
 			if (live === null) {
 				live = new pickup(game, 1);
 			}
-		//}
+		}
 
 	}
 
@@ -806,17 +807,16 @@ function add_point (bullet, enemy){
 
 /////// following needs to move out of game ///////
 		function pickedup(player, what){
-			var test = what.type;
-			console.log("picked up a"+test);
+			var test = what.class;
+			if(what.class = 0){
+				revive_player(player, what);
+			}else{
+				add_health(player, what);
+			}
 		}
 
-
-		function pickup_revive(player, lives){
+		function revive_player(player, lives){
 			lives.kill();
-			revive_player(lives); //this lives input may be an issue later
-		}
-
-		function revive_player(lives){
 			if(game.players.countLiving() == game.num_players){
 				return;
 			}else{
@@ -829,7 +829,7 @@ function add_point (bullet, enemy){
 			}
 		}
 
-		function pickup_health(player, health) {
+		function add_health(player, health) {
 			// Removes the health from the screen
 			health.kill();
 			player.damage(-1);
