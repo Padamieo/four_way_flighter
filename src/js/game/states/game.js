@@ -7,6 +7,7 @@ var p = require('p');
 var e = require('e');
 
 var g = require('general');
+var sfx = require('gui_sfx');
 
 var pickup = require('pickup');
 
@@ -16,8 +17,7 @@ module.exports = function(game) {
 	var scoreText;
 	var count = 0; // this should probably be game.count
 
-	var player = [];
-	var pad = [];
+	game.pad = [];
 	//var indicator = [];
 	var special_active = 0;
 
@@ -43,18 +43,6 @@ gameState.create = function () {
 	//player
 	p.setup(game);
 
-	// player setup move this out to function
-	game.starting_player_health = 10;
-	game.players = game.add.group();
-  game.players.enableBody = true;
-  game.players.physicsBodyType = Phaser.Physics.ARCADE;
-	for (i = 0; i < game.num_players; i++) {
-		player_setup(i);
-	}
-	game.players.setAll('anchor.x', 0.5);
-	game.players.setAll('anchor.y', 0.5);
-	game.players.setAll('health', game.starting_player_health);
-
 	//health bars position currently 1342
 	game.healthbars = game.add.group();
 	for (i = 0; i < game.num_players; i++) {
@@ -72,15 +60,8 @@ gameState.create = function () {
 		}
 		//set initial height
 		change = game.healthbars.getAt(i);
-		change.scale.y = player[i].health/5;
+		change.scale.y = game.avatar[i].health/5;
 	}
-
-	//calculate groups health
-	/*
-	game.cal_health = 0;
-	game.players.forEachAlive( p.check_health, this);
-	game.starting_group_health = game.cal_health;
-	*/
 
 	//scorebars
 	game.scorebars = game.add.group();
@@ -133,31 +114,11 @@ gameState.create = function () {
 		pad_setup(i);
 	}
 
-	for (i = 0; i < game.num_players; i++) {
-		p.fire_setup(game, i);
-		p.invincible_setup(game, i);
-		game.now_invincible[i] = 0;
-	}
+	//sfx and gui
+	sfx.setup(game);
 
-	game.explosion = game.add.group();
-	game.explosion.createMultiple(100, 'explosion');
-	game.explosion.setAll('anchor.x', 0.5);
-	game.explosion.setAll('anchor.y', 0.5);
-	game.explosion.setAll('killOnComplete',true);
-  game.explosion.callAll('animations.add', 'animations', 'boom', [0, 1, 3], 30, false); //http://www.html5gamedevs.com/topic/4384-callback-when-animation-complete/
-
-    // Create a white rectangle that we'll use to represent the flash
-    game.flash = game.add.graphics(0, 0);
-    game.flash.beginFill(0xffffff, 1);
-    game.flash.drawRect(0, 0, game.width, game.height);
-    game.flash.endFill();
-    game.flash.alpha = 0;
-
-    // Make the world a bit bigger than the stage so we can shake the camera
-    this.game.world.setBounds(-10, -10, this.game.width + 20, this.game.height + 20);
-
-		//setup general functions these will be used anywhere
-		g.setup(game);
+	//setup general functions these will be used anywhere
+	g.setup(game);
 
 	/* //working following
 	var gray = game.add.filter('Gray');
@@ -166,32 +127,6 @@ gameState.create = function () {
 
 };
 ////////// end of create /////////
-
-	function player_setup(num){
-		pos = (game.height/3);
-		pos2 = (game.width/game.num_players+2);
-		if(num == 0){ pos2 = (pos2/2)-5; }else{ pos2 = pos2*num+(pos2/2)-5; }
-
-		player[num] = game.players.create(pos2, pos*2, 'dude');
-		player[num].body.collideWorldBounds=true;
-		player[num].name=num;
-		player[num].energy = 0;
-		//player[num].health(2);
-		//player[num].body.bounce.y=0.2;
-
-		player[num].body.immovable = false;
-		//player[num].body.immovable = true;
-
-		player[num].animations.frame = 0+num;
-
-		//this is how we will control variouse screen resolutions
-		player[num].scale.y = 1;
-		player[num].scale.x = 1;
-		// animations still usefull but not being used / set
-		//player[num].animations.add('default', [0, 1, 2, 3, 4, 5, 6, 7], 8, true);
-		//player[num].animations.add('left', [0, 1, 2, 3, 4, 5, 6, 7], 8, true);
-		//player[num].animations.add('right', [0, 1, 2, 3, 4, 5, 6, 7], 20, true);
-	}
 
 	function pad_setup(num){
 
@@ -203,22 +138,22 @@ gameState.create = function () {
 		game.input.gamepad.start();
 		// To listen to buttons from a specific pad listen directly on that pad game.input.gamepad.padX, where X = pad 1-4
 		if(num == 0){
-			pad[num] = game.input.gamepad.pad1;
+			game.pad[num] = game.input.gamepad.pad1;
 		}
 		if(num == 1){
-			pad[num] = game.input.gamepad.pad2;
+			game.pad[num] = game.input.gamepad.pad2;
 		}
 		if(num == 2){
-			pad[num] = game.input.gamepad.pad3;
+			game.pad[num] = game.input.gamepad.pad3;
 		}
 		if(num == 3){
-			pad[num] = game.input.gamepad.pad4;
+			game.pad[num] = game.input.gamepad.pad4;
 		}
 	}
 
 	/*
 	function pad_connect_indicator(num){
-		if(game.input.gamepad.supported && game.input.gamepad.active && pad[num].connected) {
+		if(game.input.gamepad.supported && game.input.gamepad.active && game.pad[num].connected) {
 			indicator[num].animations.frame = 0;
 		} else {
 			indicator[num].animations.frame = 1;
@@ -314,21 +249,15 @@ gameState.create = function () {
 
 	function add_pickup(){
 
-		//health_threshold = (game.starting_group_health/4);
+		//health_threshold = (game.starting_players_health/4);
+		current_health = p.check_players_health(game, game.players);
 
-		game.current_group_health = 0;
-		game.players.forEachAlive( p.check_health, this);
-
-
-
-console.log("out"+game.current_group_health);
-
-		//if(current_group_health < health_threshold){
+		if(current_health < (game.starting_players_health/4)){
 			var health = game.pickups.getFirstDead();
 			if (health === null) {
 				health = new pickup(game, 0);
 			}
-		//}
+		}
 
 		if(game.players.countLiving() != game.num_players){
 			var live = game.pickups.getFirstDead();
@@ -361,18 +290,18 @@ console.log("out"+game.current_group_health);
 			bullet.reset(player_combo.x, player_combo.y, 'bullet');
 			//bullet.name=;
 		}else{
-			bullet.reset(player[play_num].x, player[play_num].y, 'bullet');
+			bullet.reset(game.avatar[play_num].x, game.avatar[play_num].y, 'bullet');
 			bullet.name=play_num;
 		}
 
-		if ( cursors.left.isDown ||  pad[pad_num].axis(Phaser.Gamepad.XBOX360_STICK_RIGHT_X) < -0.01 ){
+		if ( cursors.left.isDown ||  game.pad[pad_num].axis(Phaser.Gamepad.XBOX360_STICK_RIGHT_X) < -0.01 ){
 			bullet.body.velocity.x -= 500;
-		}else if (cursors.right.isDown ||  pad[pad_num].axis(Phaser.Gamepad.XBOX360_STICK_RIGHT_X) > 0.01 ){
+		}else if (cursors.right.isDown ||  game.pad[pad_num].axis(Phaser.Gamepad.XBOX360_STICK_RIGHT_X) > 0.01 ){
 			bullet.body.velocity.x += 500;
 		}
-		if (cursors.up.isDown || pad[pad_num].axis(Phaser.Gamepad.XBOX360_STICK_RIGHT_Y) < -0.01){
+		if (cursors.up.isDown || game.pad[pad_num].axis(Phaser.Gamepad.XBOX360_STICK_RIGHT_Y) < -0.01){
 			bullet.body.velocity.y -= 500;
-		}else if (cursors.down.isDown || pad[pad_num].axis(Phaser.Gamepad.XBOX360_STICK_RIGHT_Y) > 0.01){
+		}else if (cursors.down.isDown || game.pad[pad_num].axis(Phaser.Gamepad.XBOX360_STICK_RIGHT_Y) > 0.01){
 			bullet.body.velocity.y += 500;
 		}
 	}
@@ -383,7 +312,7 @@ function controls_pad(play_num, pad_num){
 	test_one = 0;
 	test_two = 0;
 
-	if ( pad[pad_num].axis(Phaser.Gamepad.XBOX360_STICK_RIGHT_Y) > 0.01 || pad[pad_num].axis(Phaser.Gamepad.XBOX360_STICK_RIGHT_Y) < -0.01 || pad[pad_num].axis(Phaser.Gamepad.XBOX360_STICK_RIGHT_X) < -0.01 ||  pad[pad_num].axis(Phaser.Gamepad.XBOX360_STICK_RIGHT_X) > 0.01){
+	if ( game.pad[pad_num].axis(Phaser.Gamepad.XBOX360_STICK_RIGHT_Y) > 0.01 || game.pad[pad_num].axis(Phaser.Gamepad.XBOX360_STICK_RIGHT_Y) < -0.01 || game.pad[pad_num].axis(Phaser.Gamepad.XBOX360_STICK_RIGHT_X) < -0.01 ||  game.pad[pad_num].axis(Phaser.Gamepad.XBOX360_STICK_RIGHT_X) > 0.01){
 		if(special_active == 1){
 			if(game.num_players == 0){
 				fire(play_num, pad_num);
@@ -402,7 +331,7 @@ function controls_pad(play_num, pad_num){
 		speed = 300;
 	}
 
-	if ( pad[pad_num].isDown(Phaser.Gamepad.XBOX360_DPAD_LEFT) || pad[pad_num].axis(Phaser.Gamepad.XBOX360_STICK_LEFT_X) < -0.01) {
+	if ( game.pad[pad_num].isDown(Phaser.Gamepad.XBOX360_DPAD_LEFT) || game.pad[pad_num].axis(Phaser.Gamepad.XBOX360_STICK_LEFT_X) < -0.01) {
 		if(special_active == 1){
 			if(game.num_players == 0){
 				player_combo.body.velocity.x = -speed;
@@ -420,13 +349,13 @@ function controls_pad(play_num, pad_num){
 
 		}else{
 			if(game.players.getAt(play_num).alive == 1){
-				player[play_num].body.velocity.x = -speed;
-				if( player[play_num].angle > -20 ){
-					player[play_num].angle -= 1;
+				game.avatar[play_num].body.velocity.x = -speed;
+				if( game.avatar[play_num].angle > -20 ){
+					game.avatar[play_num].angle -= 1;
 				}
 			}
 		}
-	}else if( pad[pad_num].isDown(Phaser.Gamepad.XBOX360_DPAD_RIGHT) || pad[pad_num].axis(Phaser.Gamepad.XBOX360_STICK_LEFT_X) > 0.01){
+	}else if( game.pad[pad_num].isDown(Phaser.Gamepad.XBOX360_DPAD_RIGHT) || game.pad[pad_num].axis(Phaser.Gamepad.XBOX360_STICK_LEFT_X) > 0.01){
 		if(special_active == 1){
 			if(game.num_players == 0){
 				player_combo.body.velocity.x = speed;
@@ -443,9 +372,9 @@ function controls_pad(play_num, pad_num){
 			}
 		}else{
 			if(game.players.getAt(play_num).alive == 1){
-				player[play_num].body.velocity.x = speed;
-				if( player[play_num].angle < 20 ){
-					player[play_num].angle += 1;
+				game.avatar[play_num].body.velocity.x = speed;
+				if( game.avatar[play_num].angle < 20 ){
+					game.avatar[play_num].angle += 1;
 				}
 			}
 		}
@@ -453,7 +382,7 @@ function controls_pad(play_num, pad_num){
 		test_one = 1;
 	}
 
-	if ( pad[pad_num].isDown(Phaser.Gamepad.XBOX360_DPAD_UP) || pad[pad_num].axis(Phaser.Gamepad.XBOX360_STICK_LEFT_Y) < -0.01) {
+	if ( game.pad[pad_num].isDown(Phaser.Gamepad.XBOX360_DPAD_UP) || game.pad[pad_num].axis(Phaser.Gamepad.XBOX360_STICK_LEFT_Y) < -0.01) {
 		if(special_active == 1){
 			if(game.num_players == 0){
 				//player_combo.body.velocity.y = -speed;
@@ -464,14 +393,14 @@ function controls_pad(play_num, pad_num){
 			}
 		}else{
 			if(game.players.getAt(play_num).alive == 1){
-				player[play_num].body.velocity.y = -speed;
-				//player.animations.play('forward');
+				game.avatar[play_num].body.velocity.y = -speed;
+				//game.avatar.animations.play('forward');
 				if(game.now_invincible[play_num] == 0){
-					player[play_num].animations.frame = 8+play_num;
+					game.avatar[play_num].animations.frame = 8+play_num;
 				}
 			}
 		}
-	}else if( pad[pad_num].isDown(Phaser.Gamepad.XBOX360_DPAD_DOWN) || pad[pad_num].axis(Phaser.Gamepad.XBOX360_STICK_LEFT_Y) > 0.01){
+	}else if( game.pad[pad_num].isDown(Phaser.Gamepad.XBOX360_DPAD_DOWN) || game.pad[pad_num].axis(Phaser.Gamepad.XBOX360_STICK_LEFT_Y) > 0.01){
 		if(special_active == 1){
 			if(game.num_players == 0){
 				player_combo.body.velocity.y = speed;
@@ -482,10 +411,10 @@ function controls_pad(play_num, pad_num){
 			}
 		}else{
 			if(game.players.getAt(play_num).alive == 1){
-				player[play_num].body.velocity.y = speed;
-				//player.animations.play('back');
+				game.avatar[play_num].body.velocity.y = speed;
+				//game.avatar.animations.play('back');
 				if(now_invincible[play_num] == 0){
-					player[play_num].animations.frame = 12+play_num;
+					game.avatar[play_num].animations.frame = 12+play_num;
 				}
 			}
 		}
@@ -494,23 +423,23 @@ function controls_pad(play_num, pad_num){
 	}
 
 	if( test_one+test_two == 3){
-		if( player[play_num].angle != 0){
-			if(player[play_num].angle < -0){
-				player[play_num].angle += 1;
+		if( game.avatar[play_num].angle != 0){
+			if(game.avatar[play_num].angle < -0){
+				game.avatar[play_num].angle += 1;
 			}
-			if(player[play_num].angle > 0){
-				player[play_num].angle -= 1;
+			if(game.avatar[play_num].angle > 0){
+				game.avatar[play_num].angle -= 1;
 			}
 		}
 
 		if(game.now_invincible[play_num] == 0){
-			if(player[play_num].animations.frame != 0+play_num){
-				player[play_num].animations.frame = 0+play_num;
+			if(game.avatar[play_num].animations.frame != 0+play_num){
+				game.avatar[play_num].animations.frame = 0+play_num;
 			}
 		}
 
-		player[play_num].body.velocity.y *= 0.96;
-		player[play_num].body.velocity.x *= 0.96;
+		game.avatar[play_num].body.velocity.y *= 0.96;
+		game.avatar[play_num].body.velocity.x *= 0.96;
 
 	}
 
@@ -559,10 +488,10 @@ function controls_key(num){
 
 		}else{
 			if(game.players.getAt(num).alive == 1){
-				player[num].body.velocity.x = -speed;
+				game.avatar[num].body.velocity.x = -speed;
 
-				if( player[num].angle > -20 ){
-					player[num].angle -= 1;
+				if( game.avatar[num].angle > -20 ){
+					game.avatar[num].angle -= 1;
 				}
 			}
 		}
@@ -583,9 +512,9 @@ function controls_key(num){
 			}
 		}else{
 			if(game.players.getAt(num).alive == 1){
-				player[num].body.velocity.x = speed;
-				if( player[num].angle < 20 ){
-					player[num].angle += 1;
+				game.avatar[num].body.velocity.x = speed;
+				if( game.avatar[num].angle < 20 ){
+					game.avatar[num].angle += 1;
 				}
 			}
 		}
@@ -604,10 +533,10 @@ function controls_key(num){
 			}
 		}else{
 			if(game.players.getAt(num).alive == 1){
-				player[num].body.velocity.y = -speed;
-				//player.animations.play('forward');
+				game.avatar[num].body.velocity.y = -speed;
+				//game.avatar.animations.play('forward');
 				if(game.now_invincible[num] == 0){
-					player[num].animations.frame = 8+num;
+					game.avatar[num].animations.frame = 8+num;
 				}
 			}
 		}
@@ -622,10 +551,10 @@ function controls_key(num){
 			}
 		}else{
 			if(game.players.getAt(num).alive == 1){
-				player[num].body.velocity.y = speed;
-				//player.animations.play('back');
+				game.avatar[num].body.velocity.y = speed;
+				//game.avatar.animations.play('back');
 				if(game.now_invincible[num] == 0){
-					player[num].animations.frame = 12+num;
+					game.avatar[num].animations.frame = 12+num;
 				}
 			}
 		}
@@ -634,23 +563,23 @@ function controls_key(num){
 	}
 
 	if( test_one+test_two == 3){
-		if( player[num].angle != 0){
-			if(player[num].angle < -0){
-				player[num].angle += 1;
+		if( game.avatar[num].angle != 0){
+			if(game.avatar[num].angle < -0){
+				game.avatar[num].angle += 1;
 			}
-			if(player[num].angle > 0){
-				player[num].angle -= 1;
+			if(game.avatar[num].angle > 0){
+				game.avatar[num].angle -= 1;
 			}
 		}
 
 		if(game.now_invincible[num] == 0){
-			if(player[num].animations.frame != 0+num){
-				player[num].animations.frame = 0+num;
+			if(game.avatar[num].animations.frame != 0+num){
+				game.avatar[num].animations.frame = 0+num;
 			}
 		}
 
-		player[num].body.velocity.y *= 0.96;
-		player[num].body.velocity.x *= 0.96;
+		game.avatar[num].body.velocity.y *= 0.96;
+		game.avatar[num].body.velocity.x *= 0.96;
 
 	}
 }
@@ -669,7 +598,7 @@ function combo_notice(num){
 		}
 	}else{
 		if(game.keyboard_offset == 1){ num = num-1;}
-		if( pad[num].isDown(Phaser.Gamepad.XBOX360_A) ){
+		if( game.pad[num].isDown(Phaser.Gamepad.XBOX360_A) ){
 			//shine and noise
 			if(game.players.countLiving() == game.num_players){
 				//also check they have engouth juice and more than 50 health
@@ -720,7 +649,7 @@ gameState.update = function (){
 		}
 
 		if(game.now_invincible[i] == 1){
-			player[i].animations.frame = 4+i;
+			game.avatar[i].animations.frame = 4+i;
 		}
 
 		if (game.nextKillAt[i] < game.time.now) {
@@ -768,6 +697,7 @@ function ricochet(bullet, player){
 	bullet.body.velocity.y *= -1;
 
 }
+
 
 function flash(){
 	game.flash.alpha = 1;

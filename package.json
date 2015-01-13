@@ -21,6 +21,7 @@
     "p": "./src/js/game/partials/p.js",
     "controls": "./src/js/game/partials/controls.js",
     "e": "./src/js/game/partials/e.js",
+    "gui_sfx": "./src/js/game/partials/gui_sfx.js",
     "e_basic": "./src/js/game/partials/e_basic.js",
     "e_follower": "./src/js/game/partials/e_follower.js",
     "e_fighter": "./src/js/game/partials/e_fighter.js",
