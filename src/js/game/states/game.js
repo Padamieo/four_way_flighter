@@ -8,6 +8,7 @@ var e = require('e');
 
 var g = require('general');
 
+var pickup = require('pickup');
 
 module.exports = function(game) {
 
@@ -19,7 +20,7 @@ module.exports = function(game) {
 	var pad = [];
 	//var indicator = [];
 
-	var lives;
+	//var lives;
 
 
 	var special_active = 0;
@@ -116,16 +117,16 @@ gameState.create = function () {
 	}
 
 	// setup health pickup
-	healths = game.add.group();
-	healths.enableBody = true;
-	healths.physicsBodyType = Phaser.Physics.ARCADE;
-	healths.setAll('outOfBoundsKill', true);
+	// healths = game.add.group();
+	// healths.enableBody = true;
+	// healths.physicsBodyType = Phaser.Physics.ARCADE;
+	// healths.setAll('outOfBoundsKill', true);
 
-	// setup live pickup
-	lives = game.add.group();
-	lives.enableBody = true;
-	lives.physicsBodyType = Phaser.Physics.ARCADE;
-	lives.setAll('outOfBoundsKill', true);
+	// // setup live pickup
+	// lives = game.add.group();
+	// lives.enableBody = true;
+	// lives.physicsBodyType = Phaser.Physics.ARCADE;
+	// lives.setAll('outOfBoundsKill', true);
 
 	//when players are combined this is what is used
 	player_combo = game.add.sprite(game.world.centerX, game.world.centerY, 'player_combo');
@@ -286,8 +287,10 @@ gameState.create = function () {
 			}
 			count++; // notice count
 		}
-			add_revive(); // issue with only once occurrence per death
-			add_health(); // still wip too many healths generated
+
+
+			add_pickup(); // issue with only once occurrence per death
+			//add_health(); // still wip too many healths generated
 			//console.log(count);
 	}
 
@@ -328,14 +331,7 @@ gameState.create = function () {
 
 
 
-	function add_revive(){
-		if(game.players.countLiving() != game.num_players){
-			life = lives.create(game.world.randomX, -30, 'live');
-			life.body.velocity.setTo(0, 100);
-		}
-	}
-
-	function add_health(){
+	function add_pickup(){
 
 		health_threshold = (game.starting_group_health/4);
 
@@ -344,13 +340,26 @@ gameState.create = function () {
 		current_group_health = game.cal_health;
 
 		if(current_group_health < health_threshold){
-			health = healths.create(game.world.randomX, -30, 'health');
-			health.body.velocity.setTo(0, 100);
+			//health = healths.create(game.world.randomX, -30, 'health');
+			//health.body.velocity.setTo(0, 100);
 			//needs to work specifically for health?
+			var health = game.pickups.getFirstDead();
+			if (health === null) {
+				health = new pickup(game, 0);
+			}
+
 		}
 
-	}
+	//	if(game.players.countLiving() != game.num_players){
+			// life = lives.create(game.world.randomX, -30, 'live');
+			// life.body.velocity.setTo(0, 100);
+			var live = game.pickups.getFirstDead();
+			if (live === null) {
+				live = new pickup(game, 1);
+			}
+	//	}
 
+	}
 
 
 	/*
@@ -699,10 +708,10 @@ gameState.update = function (){
 	//game.filter.update();
 
 	//notice a player collects health
-	game.physics.arcade.overlap(game.players, healths, pickup_health, null, this);
+	//game.physics.arcade.overlap(game.players, healths, pickup_health, null, this);
 
 	//notice a player collects revive
-	game.physics.arcade.overlap(game.players, lives, pickup_revive, null, this);
+	game.physics.arcade.overlap(game.players, game.pickups, pickedup, null, this);
 
 	game.physics.arcade.overlap(game.players, game.enemies, collision_notice, null, this);
 	game.physics.arcade.collide(game.players, game.enemies, collision_notice, null, this);
@@ -818,6 +827,11 @@ function add_point (bullet, enemy){
 	change.scale.y = change.scale.y + 1;
 
 	update_score(1);
+}
+
+function pickedup(player, what){
+	var test = what.type;
+	console.log("picked up a"+test);
 }
 
 

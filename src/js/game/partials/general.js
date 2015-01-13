@@ -12,6 +12,9 @@ var general = {
 		//this is not a great background but it will do for now
 		game.stage.backgroundColor = '#28A3CA';
 
+		//adding pickups
+		game.pickups = game.add.group();
+
 		// Create a white rectangle that we'll use to represent the flash
 		game.pause_background = game.add.graphics(0, 0);
 		game.pause_background.beginFill(0x000000, 1);

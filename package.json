@@ -24,6 +24,7 @@
     "e_basic": "./src/js/game/partials/e_basic.js",
     "e_follower": "./src/js/game/partials/e_follower.js",
     "e_fighter": "./src/js/game/partials/e_fighter.js",
+    "pickup": "./src/js/game/partials/pickups.js",
     "gray": "./src/js/lib/filters/Gray.js"
   },
   "browserify-shim": {
