@@ -19,10 +19,6 @@ module.exports = function(game) {
 	var player = [];
 	var pad = [];
 	//var indicator = [];
-
-	//var lives;
-
-
 	var special_active = 0;
 
 /*
@@ -115,18 +111,6 @@ gameState.create = function () {
 		change = game.scorebars.getAt(i);
 		change.scale.y = 1;
 	}
-
-	// setup health pickup
-	// healths = game.add.group();
-	// healths.enableBody = true;
-	// healths.physicsBodyType = Phaser.Physics.ARCADE;
-	// healths.setAll('outOfBoundsKill', true);
-
-	// // setup live pickup
-	// lives = game.add.group();
-	// lives.enableBody = true;
-	// lives.physicsBodyType = Phaser.Physics.ARCADE;
-	// lives.setAll('outOfBoundsKill', true);
 
 	//when players are combined this is what is used
 	player_combo = game.add.sprite(game.world.centerX, game.world.centerY, 'player_combo');
@@ -334,15 +318,10 @@ gameState.create = function () {
 	function add_pickup(){
 
 		health_threshold = (game.starting_group_health/4);
-
 		game.cal_health = 0;
 		game.players.forEachAlive( p.check_health, this);
 		current_group_health = game.cal_health;
-
 		if(current_group_health < health_threshold){
-			//health = healths.create(game.world.randomX, -30, 'health');
-			//health.body.velocity.setTo(0, 100);
-			//needs to work specifically for health?
 			var health = game.pickups.getFirstDead();
 			if (health === null) {
 				health = new pickup(game, 0);
@@ -350,14 +329,12 @@ gameState.create = function () {
 
 		}
 
-	//	if(game.players.countLiving() != game.num_players){
-			// life = lives.create(game.world.randomX, -30, 'live');
-			// life.body.velocity.setTo(0, 100);
+		//if(game.players.countLiving() != game.num_players){
 			var live = game.pickups.getFirstDead();
 			if (live === null) {
 				live = new pickup(game, 1);
 			}
-	//	}
+		//}
 
 	}
 
@@ -707,10 +684,8 @@ gameState.update = function (){
 
 	//game.filter.update();
 
-	//notice a player collects health
+	//notice a player collecting a pickup
 	//game.physics.arcade.overlap(game.players, healths, pickup_health, null, this);
-
-	//notice a player collects revive
 	game.physics.arcade.overlap(game.players, game.pickups, pickedup, null, this);
 
 	game.physics.arcade.overlap(game.players, game.enemies, collision_notice, null, this);
@@ -829,40 +804,42 @@ function add_point (bullet, enemy){
 	update_score(1);
 }
 
-function pickedup(player, what){
-	var test = what.type;
-	console.log("picked up a"+test);
-}
+/////// following needs to move out of game ///////
+		function pickedup(player, what){
+			var test = what.type;
+			console.log("picked up a"+test);
+		}
 
 
-function pickup_revive(player, lives){
-	lives.kill();
-	revive_player(lives); //this lives input may be an issue later
-}
+		function pickup_revive(player, lives){
+			lives.kill();
+			revive_player(lives); //this lives input may be an issue later
+		}
 
-function revive_player(lives){
-	if(game.players.countLiving() == game.num_players){
-		return;
-	}else{
-		dead_player = game.players.getFirstDead();
-		//move to appropriate position
-		dead_player.x = lives.x;
-		dead_player.y = lives.y;
-		dead_player.revive(10);
-		//need to trigger temp invincible
-	}
-}
+		function revive_player(lives){
+			if(game.players.countLiving() == game.num_players){
+				return;
+			}else{
+				dead_player = game.players.getFirstDead();
+				//move to appropriate position
+				dead_player.x = lives.x;
+				dead_player.y = lives.y;
+				dead_player.revive(10);
+				//need to trigger temp invincible
+			}
+		}
 
-function pickup_health(player, health) {
-	// Removes the health from the screen
-	health.kill();
-	player.damage(-1);
+		function pickup_health(player, health) {
+			// Removes the health from the screen
+			health.kill();
+			player.damage(-1);
 
-	change = game.healthbars.getAt(player.z-1);
-	change.scale.y = player.health/5;
+			change = game.healthbars.getAt(player.z-1);
+			change.scale.y = player.health/5;
 
-	update_score(1);
-}
+			update_score(1);
+		}
+/////// END ///////
 
 //this is not used yet
 function lose_condition(){
