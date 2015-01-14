@@ -35,6 +35,13 @@ gameState.create = function () {
 		logo.anchor.setTo(0.5, 0.5);
 	*/
 
+	// add a new graphics object at the center of the world
+	var circles = game.add.graphics(game.world.centerX, game.world.centerY);
+	// add first 1px wide unfilled red circle with a radius of 50 at the center (0, 0) of the graphics object
+	circles.lineStyle(1, 0xff0000, 0.9);
+	circles.drawCircle(0, 0, 90);
+	//arc : http://docs.phaser.io/Phaser.Graphics.html
+
 	generate_rounds();
 
 	//enemies setup
