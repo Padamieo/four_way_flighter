@@ -1,0 +1,9 @@
+{
+  "name": "lib-tracking",
+  "version": "0.0.1",
+  "dependencies": {
+	"phaser-official": "2.2.2",
+	"stats.js": "*"
+  },
+  "private": true
+}

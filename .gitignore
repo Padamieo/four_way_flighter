@@ -34,6 +34,9 @@ Icon?
 # nodejs npm modules
 /node_modules
 
+#bowerjs components
+/bower_components
+
 # node-cluster
 /pids
 *.sock

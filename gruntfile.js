@@ -97,14 +97,14 @@ module.exports = function (grunt) {
           }
         }
       },
-	  
+
 	open:{
 		server:{
 			path: 'http://localhost:<%= project.port %>',
 			app: 'Chrome'
         }
 	},
-	
+
 	cacheBust:
       { options:
         { encoding: 'utf8'
@@ -161,32 +161,48 @@ module.exports = function (grunt) {
             ]
           }
         },
-	copy:{
-		images:{
-			files:[{
-				expand: true,
-				cwd: 'src/images/',
-				src: ['**'],
-				dest: 'build/images/'
-			}]
-		},
-		audio:{
-			files:[{
-				expand: true,
-				cwd: 'src/audio/',
-				src: ['**'],
-				dest: 'build/audio/'
-			}]
-		},
-		gen:{
-			files:[{
-				expand: true,
-				cwd: 'src/package/',
-				src: ['**'],
-				dest: 'build/'
-			}]
-		}
-      }
+      	copy:{
+      		images:{
+      			files:[{
+      				expand: true,
+      				cwd: 'src/images/',
+      				src: ['**'],
+      				dest: 'build/images/'
+      			}]
+      		},
+      		audio:{
+      			files:[{
+              expand: true,
+              cwd: 'src/audio/',
+              src: ['**'],
+              dest: 'build/audio/'
+      			}]
+      		},
+      		gen:{
+      			files:[{
+      				expand: true,
+      				cwd: 'src/package/',
+      				src: ['**'],
+      				dest: 'build/'
+      			}]
+      		},
+          phaser:{
+            files:[{
+              expand: true,
+              cwd: 'bower_components/phaser-official/build/custom/',
+              src: ['phaser-arcade-physics.js'],
+              dest: 'src/js/lib/'
+            }]
+          },
+          stats:{
+            files:[{
+              expand: true,
+              cwd: 'bower_components/stats.js/build/',
+              src: ['stats.min.js'],
+              dest: 'src/js/lib/'
+            }]
+          }
+        }
 
     , uglify:
       { options:
@@ -240,6 +256,8 @@ module.exports = function (grunt) {
     , 'watch'
     ]
   );
+
+  grunt.registerTask('update-lib', ['copy:phaser', 'copy:stats']);
 
   grunt.registerTask('optimise', ['pngmin', 'copy:images']);
   grunt.registerTask('cocoon', ['compress:cocoon']);
