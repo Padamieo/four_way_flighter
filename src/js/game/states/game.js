@@ -95,8 +95,8 @@ gameState.create = function () {
 	//when players are combined this is what is used
 	player_combo = game.add.sprite(game.world.centerX, game.world.centerY, 'player_combo');
 	player_combo.anchor.setTo(0.5, 0.5);
-    game.physics.arcade.enable(player_combo);
-    player_combo.body.collideWorldBounds = true;
+  game.physics.arcade.enable(player_combo);
+  player_combo.body.collideWorldBounds = true;
 	player_combo.kill();
 
 	tick = game.time.create(false);
@@ -267,7 +267,6 @@ gameState.create = function () {
 		}
 
 	}
-
 
 	/*
 	function gofull() {
@@ -698,21 +697,6 @@ function ricochet(bullet, player){
 
 }
 
-
-function flash(){
-	game.flash.alpha = 1;
-	game.add.tween(game.flash)
-		.to({ alpha: 0 }, 100, Phaser.Easing.Cubic.In)
-		.start();
-}
-
-function shake(){
-	game.camera.y = 0;
-	game.add.tween(game.camera)
-		.to({ y: -10 }, 40, Phaser.Easing.Sinusoidal.InOut, false, 0, 5, true)
-		.start();
-}
-
 function add_point (bullet, enemy){
 	//console.log(enemies.health);
 	//console.log(bullet.name);
@@ -792,7 +776,7 @@ function collision_notice(ply, enemy) {
 
 		ply.damage(1);
 		enemy.damage(1);
-		shake();
+		sfx.shake(game);
 
 		//this need functioning out
 		//change = game.healthbars.getAt(num);

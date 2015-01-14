@@ -17,6 +17,20 @@ var u = {
 
 		// Make the world a bit bigger than the stage so we can shake the camera
 		game.world.setBounds(-10, -10, game.width + 20, game.height + 20);
+	},
+
+	flash: function (game){
+		game.flash.alpha = 1;
+		game.add.tween(game.flash)
+		.to({ alpha: 0 }, 100, Phaser.Easing.Cubic.In)
+		.start();
+	},
+
+	shake: function(game){
+		game.camera.y = 0;
+		game.add.tween(game.camera)
+		.to({ y: -10 }, 40, Phaser.Easing.Sinusoidal.InOut, false, 0, 5, true)
+		.start();
 	}
 
 };
