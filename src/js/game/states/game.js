@@ -1,13 +1,11 @@
 
 var e_basic = require('e_basic');
 var e_follower = require('e_follower');
-
 var p = require('p');
-
+var c = require('controls');
 var e = require('e');
-
 var g = require('general');
-var sfx = require('gui_sfx');
+var sfx = require('sfx');
 
 var pickup = require('pickup');
 
@@ -17,7 +15,7 @@ module.exports = function(game) {
 	var scoreText;
 	var count = 0; // this should probably be game.count
 
-	game.pad = [];
+
 	//var indicator = [];
 	var special_active = 0;
 
@@ -117,9 +115,8 @@ gameState.create = function () {
 	scoreText.anchor.y=0.5;
 	update_score(0);
 
-	for (i = 0; i < game.num_players; i++) {
-		pad_setup(i);
-	}
+	//setup controlers and keyboards
+	c.setup(game);
 
 	//sfx and gui
 	sfx.setup(game);
@@ -134,39 +131,6 @@ gameState.create = function () {
 
 };
 ////////// end of create /////////
-
-	function pad_setup(num){
-
-		//indicatorpos = (game.width)-(22);
-		//indicator[num] = game.add.sprite(indicatorpos,(num*10), 'controller-indicator');
-		//indicator[num].scale.x = indicator[num].scale.y = 1;
-		//indicator[num].animations.frame = 1;
-
-		game.input.gamepad.start();
-		// To listen to buttons from a specific pad listen directly on that pad game.input.gamepad.padX, where X = pad 1-4
-		if(num == 0){
-			game.pad[num] = game.input.gamepad.pad1;
-		}
-		if(num == 1){
-			game.pad[num] = game.input.gamepad.pad2;
-		}
-		if(num == 2){
-			game.pad[num] = game.input.gamepad.pad3;
-		}
-		if(num == 3){
-			game.pad[num] = game.input.gamepad.pad4;
-		}
-	}
-
-	/*
-	function pad_connect_indicator(num){
-		if(game.input.gamepad.supported && game.input.gamepad.active && game.pad[num].connected) {
-			indicator[num].animations.frame = 0;
-		} else {
-			indicator[num].animations.frame = 1;
-		}
-	}
-	*/
 
 	function update_score(new_score){
 		score = score + new_score;
@@ -259,17 +223,19 @@ gameState.create = function () {
 		//health_threshold = (game.starting_players_health/4);
 		current_health = p.check_players_health(game, game.players);
 
+		//health
 		if(current_health < (game.starting_players_health/4)){
-			var health = game.pickups.getFirstDead();
-			if (health === null) {
-				health = new pickup(game, 0);
+			var item = game.pickups.getFirstDead();
+			if (item === null) {
+				item = new pickup(game, 0);
 			}
 		}
 
+		//lives
 		if(game.players.countLiving() != game.num_players){
-			var live = game.pickups.getFirstDead();
-			if (live === null) {
-				live = new pickup(game, 1);
+			var item = game.pickups.getFirstDead();
+			if (item === null) {
+				item = new pickup(game, 1);
 			}
 		}
 
@@ -292,283 +258,151 @@ gameState.create = function () {
 		}
 
 		bullet = game.bulletPool.getFirstExists(false);
-		if(special_active == 1){
-			bullet.reset(player_combo.x, player_combo.y, 'bullet');
-			//bullet.name=;
+		bullet.reset(game.avatar[play_num].x, game.avatar[play_num].y, 'bullet');
+		bullet.name = play_num;
+
+		if(game.keyboard_offset == 1){
+			if ( cursors.left.isDown){
+				bullet.body.velocity.x -= 500;
+			}else if (cursors.right.isDown ){
+				bullet.body.velocity.x += 500;
+			}
+			if (cursors.up.isDown){
+				bullet.body.velocity.y -= 500;
+			}else if (cursors.down.isDown){
+				bullet.body.velocity.y += 500;
+			}
 		}else{
-			bullet.reset(game.avatar[play_num].x, game.avatar[play_num].y, 'bullet');
-			bullet.name=play_num;
+			if (game.pad[pad_num].axis(Phaser.Gamepad.XBOX360_STICK_RIGHT_X) < -0.01 ){
+				bullet.body.velocity.x -= 500;
+			}else if (game.pad[pad_num].axis(Phaser.Gamepad.XBOX360_STICK_RIGHT_X) > 0.01 ){
+				bullet.body.velocity.x += 500;
+			}
+			if (game.pad[pad_num].axis(Phaser.Gamepad.XBOX360_STICK_RIGHT_Y) < -0.01){
+				bullet.body.velocity.y -= 500;
+			}else if (game.pad[pad_num].axis(Phaser.Gamepad.XBOX360_STICK_RIGHT_Y) > 0.01){
+				bullet.body.velocity.y += 500;
+			}
 		}
 
-		if ( cursors.left.isDown ||  game.pad[pad_num].axis(Phaser.Gamepad.XBOX360_STICK_RIGHT_X) < -0.01 ){
-			bullet.body.velocity.x -= 500;
-		}else if (cursors.right.isDown ||  game.pad[pad_num].axis(Phaser.Gamepad.XBOX360_STICK_RIGHT_X) > 0.01 ){
-			bullet.body.velocity.x += 500;
-		}
-		if (cursors.up.isDown || game.pad[pad_num].axis(Phaser.Gamepad.XBOX360_STICK_RIGHT_Y) < -0.01){
-			bullet.body.velocity.y -= 500;
-		}else if (cursors.down.isDown || game.pad[pad_num].axis(Phaser.Gamepad.XBOX360_STICK_RIGHT_Y) > 0.01){
-			bullet.body.velocity.y += 500;
-		}
 	}
 
 function controls_pad(play_num, pad_num){
 
 	//cursors = game.input.keyboard.createCursorKeys();
-	test_one = 0;
-	test_two = 0;
+	h_test = 0;
+	v_test = 0;
 
 	if ( game.pad[pad_num].axis(Phaser.Gamepad.XBOX360_STICK_RIGHT_Y) > 0.01 || game.pad[pad_num].axis(Phaser.Gamepad.XBOX360_STICK_RIGHT_Y) < -0.01 || game.pad[pad_num].axis(Phaser.Gamepad.XBOX360_STICK_RIGHT_X) < -0.01 ||  game.pad[pad_num].axis(Phaser.Gamepad.XBOX360_STICK_RIGHT_X) > 0.01){
-		if(special_active == 1){
-			if(game.num_players == 0){
-				fire(play_num, pad_num);
-			}else{
-				if(play_num == 1){
-					//fire(1);
-				}
-			}
-		}else{
-			if(game.players.getAt(play_num).alive == 1){
-				fire(play_num, pad_num);
-				speed = 220;
-			}
+		if(game.players.getAt(play_num).alive == 1){
+			fire(play_num, pad_num);
+			speed = 220;
 		}
 	}else{
 		speed = 300;
 	}
 
 	if ( game.pad[pad_num].isDown(Phaser.Gamepad.XBOX360_DPAD_LEFT) || game.pad[pad_num].axis(Phaser.Gamepad.XBOX360_STICK_LEFT_X) < -0.01) {
-		if(special_active == 1){
-			if(game.num_players == 0){
-				player_combo.body.velocity.x = -speed;
-				if( player_combo.angle > -20 ){
-					player_combo.angle -= 1;
-				}
-			}else{
-				if(play_num == 0){
-					player_combo.body.velocity.x = -speed;
-					if( player_combo.angle > -20 ){
-						player_combo.angle -= 1;
-					}
-				}
-			}
-
-		}else{
-			if(game.players.getAt(play_num).alive == 1){
-				game.avatar[play_num].body.velocity.x = -speed;
-				if( game.avatar[play_num].angle > -20 ){
-					game.avatar[play_num].angle -= 1;
-				}
-			}
-		}
-	}else if( game.pad[pad_num].isDown(Phaser.Gamepad.XBOX360_DPAD_RIGHT) || game.pad[pad_num].axis(Phaser.Gamepad.XBOX360_STICK_LEFT_X) > 0.01){
-		if(special_active == 1){
-			if(game.num_players == 0){
-				player_combo.body.velocity.x = speed;
-				if( player_combo.angle < 20 ){
-					player_combo.angle += 1;
-				}
-			}else{
-				if(play_num == 0){
-					player_combo.body.velocity.x = speed;
-					if( player_combo.angle < 20 ){
-						player_combo.angle += 1;
-					}
-				}
-			}
-		}else{
-			if(game.players.getAt(play_num).alive == 1){
-				game.avatar[play_num].body.velocity.x = speed;
-				if( game.avatar[play_num].angle < 20 ){
-					game.avatar[play_num].angle += 1;
-				}
-			}
-		}
-	}else{
-		test_one = 1;
-	}
-
-	if ( game.pad[pad_num].isDown(Phaser.Gamepad.XBOX360_DPAD_UP) || game.pad[pad_num].axis(Phaser.Gamepad.XBOX360_STICK_LEFT_Y) < -0.01) {
-		if(special_active == 1){
-			if(game.num_players == 0){
-				//player_combo.body.velocity.y = -speed;
-			}else{
-				if(play_num == 0){
-					player_combo.body.velocity.y = -speed;
-				}
-			}
-		}else{
-			if(game.players.getAt(play_num).alive == 1){
-				game.avatar[play_num].body.velocity.y = -speed;
-				//game.avatar.animations.play('forward');
-				if(game.now_invincible[play_num] == 0){
-					game.avatar[play_num].animations.frame = 8+play_num;
-				}
-			}
-		}
-	}else if( game.pad[pad_num].isDown(Phaser.Gamepad.XBOX360_DPAD_DOWN) || game.pad[pad_num].axis(Phaser.Gamepad.XBOX360_STICK_LEFT_Y) > 0.01){
-		if(special_active == 1){
-			if(game.num_players == 0){
-				player_combo.body.velocity.y = speed;
-			}else{
-				if(play_num == 0){
-					player_combo.body.velocity.y = speed;
-				}
-			}
-		}else{
-			if(game.players.getAt(play_num).alive == 1){
-				game.avatar[play_num].body.velocity.y = speed;
-				//game.avatar.animations.play('back');
-				if(now_invincible[play_num] == 0){
-					game.avatar[play_num].animations.frame = 12+play_num;
-				}
-			}
-		}
-	}else{
-		test_two = 2;
-	}
-
-	if( test_one+test_two == 3){
-		if( game.avatar[play_num].angle != 0){
-			if(game.avatar[play_num].angle < -0){
-				game.avatar[play_num].angle += 1;
-			}
-			if(game.avatar[play_num].angle > 0){
+		if(game.players.getAt(play_num).alive == 1){
+			game.avatar[play_num].body.velocity.x = -speed;
+			if( game.avatar[play_num].angle > -20 ){
 				game.avatar[play_num].angle -= 1;
 			}
 		}
-
-		if(game.now_invincible[play_num] == 0){
-			if(game.avatar[play_num].animations.frame != 0+play_num){
-				game.avatar[play_num].animations.frame = 0+play_num;
+	}else if( game.pad[pad_num].isDown(Phaser.Gamepad.XBOX360_DPAD_RIGHT) || game.pad[pad_num].axis(Phaser.Gamepad.XBOX360_STICK_LEFT_X) > 0.01){
+		if(game.players.getAt(play_num).alive == 1){
+			game.avatar[play_num].body.velocity.x = speed;
+			if( game.avatar[play_num].angle < 20 ){
+				game.avatar[play_num].angle += 1;
 			}
 		}
-
-		game.avatar[play_num].body.velocity.y *= 0.96;
-		game.avatar[play_num].body.velocity.x *= 0.96;
-
+	}else{
+		h_test = 1;
 	}
+
+	if ( game.pad[pad_num].isDown(Phaser.Gamepad.XBOX360_DPAD_UP) || game.pad[pad_num].axis(Phaser.Gamepad.XBOX360_STICK_LEFT_Y) < -0.01) {
+		if(game.players.getAt(play_num).alive == 1){
+			game.avatar[play_num].body.velocity.y = -speed;
+			//game.avatar.animations.play('forward');
+			if(game.now_invincible[play_num] == 0){
+				game.avatar[play_num].animations.frame = 8+play_num;
+			}
+		}
+	}else if( game.pad[pad_num].isDown(Phaser.Gamepad.XBOX360_DPAD_DOWN) || game.pad[pad_num].axis(Phaser.Gamepad.XBOX360_STICK_LEFT_Y) > 0.01){
+			if(game.players.getAt(play_num).alive == 1){
+				game.avatar[play_num].body.velocity.y = speed;
+				//game.avatar.animations.play('back');
+				if(game.now_invincible[play_num] == 0){
+					game.avatar[play_num].animations.frame = 12+play_num;
+				}
+			}
+	}else{
+		v_test = 2;
+	}
+
+	avatar_ani_reset(game, h_test, v_test, play_num);
 
 }
 
 function controls_key(num){
 
-	cursors = game.input.keyboard.createCursorKeys();
-	test_one = 0;
-	test_two = 0;
+	// cursors = game.input.keyboard.createCursorKeys();
+	h_test = 0;
+	v_test = 0;
 
 	if ( cursors.left.isDown || cursors.right.isDown || cursors.up.isDown || cursors.down.isDown ){
-		if(special_active == 1){
-			if(game.num_players == 0){
-				fire(num,num);
-			}else{
-				if(num == 1){
-					//fire(1);
-				}
-			}
-		}else{
 			if(game.players.getAt(num).alive == 1){
 				fire(num, num);
 				speed = 220;
 			}
-		}
 	}else{
 		speed = 300;
 	}
 
 	if ( game.input.keyboard.isDown(Phaser.Keyboard.A) ) {
-		if(special_active == 1){
-			if(game.num_players == 0){
-				player_combo.body.velocity.x = -speed;
-				if( player_combo.angle > -20 ){
-					player_combo.angle -= 1;
-				}
-			}else{
-				if(num == 0){
-					player_combo.body.velocity.x = -speed;
-					if( player_combo.angle > -20 ){
-						player_combo.angle -= 1;
-					}
-				}
-			}
-
-		}else{
-			if(game.players.getAt(num).alive == 1){
-				game.avatar[num].body.velocity.x = -speed;
-
-				if( game.avatar[num].angle > -20 ){
-					game.avatar[num].angle -= 1;
-				}
+		if(game.players.getAt(num).alive == 1){
+			game.avatar[num].body.velocity.x = -speed;
+			if( game.avatar[num].angle > -20 ){
+				game.avatar[num].angle -= 1;
 			}
 		}
 	}else if( game.input.keyboard.isDown(Phaser.Keyboard.D) ){
-		if(special_active == 1){
-			if(game.num_players == 0){
-				player_combo.body.velocity.x = speed;
-				if( player_combo.angle < 20 ){
-					player_combo.angle += 1;
-				}
-			}else{
-				if(num == 0){
-					player_combo.body.velocity.x = speed;
-					if( player_combo.angle < 20 ){
-						player_combo.angle += 1;
-					}
-				}
-			}
-		}else{
-			if(game.players.getAt(num).alive == 1){
-				game.avatar[num].body.velocity.x = speed;
-				if( game.avatar[num].angle < 20 ){
-					game.avatar[num].angle += 1;
-				}
+		if(game.players.getAt(num).alive == 1){
+			game.avatar[num].body.velocity.x = speed;
+			if( game.avatar[num].angle < 20 ){
+				game.avatar[num].angle += 1;
 			}
 		}
 	}else{
-		test_one = 1;
+		h_test = 1;
 	}
 
 	if ( game.input.keyboard.isDown(Phaser.Keyboard.W) ) {
-		if(special_active == 1){
-			if(game.num_players == 0){
-				player_combo.body.velocity.y = -speed;
-			}else{
-				if(num == 0){
-					player_combo.body.velocity.y = -speed;
-				}
-			}
-		}else{
-			if(game.players.getAt(num).alive == 1){
-				game.avatar[num].body.velocity.y = -speed;
-				//game.avatar.animations.play('forward');
-				if(game.now_invincible[num] == 0){
-					game.avatar[num].animations.frame = 8+num;
-				}
+		if(game.players.getAt(num).alive == 1){
+			game.avatar[num].body.velocity.y = -speed;
+			//game.avatar.animations.play('forward');
+			if(game.now_invincible[num] == 0){
+				game.avatar[num].animations.frame = 8+num;
 			}
 		}
 	}else if(game.input.keyboard.isDown(Phaser.Keyboard.S) ){
-		if(special_active == 1){
-			if(game.num_players == 0){
-				player_combo.body.velocity.y = speed;
-			}else{
-				if(num == 0){
-					player_combo.body.velocity.y = speed;
-				}
-			}
-		}else{
-			if(game.players.getAt(num).alive == 1){
-				game.avatar[num].body.velocity.y = speed;
-				//game.avatar.animations.play('back');
-				if(game.now_invincible[num] == 0){
-					game.avatar[num].animations.frame = 12+num;
-				}
+		if(game.players.getAt(num).alive == 1){
+			game.avatar[num].body.velocity.y = speed;
+			//game.avatar.animations.play('back');
+			if(game.now_invincible[num] == 0){
+				game.avatar[num].animations.frame = 12+num;
 			}
 		}
 	}else{
-		test_two = 2;
+		v_test = 2;
 	}
 
-	if( test_one+test_two == 3){
+	avatar_ani_reset(game, h_test, v_test, num);
+
+}
+
+function avatar_ani_reset(game, h, v, num){
+	if( h+v == 3){
 		if( game.avatar[num].angle != 0){
 			if(game.avatar[num].angle < -0){
 				game.avatar[num].angle += 1;
@@ -577,18 +411,15 @@ function controls_key(num){
 				game.avatar[num].angle -= 1;
 			}
 		}
-
 		if(game.now_invincible[num] == 0){
 			if(game.avatar[num].animations.frame != 0+num){
 				game.avatar[num].animations.frame = 0+num;
 			}
 		}
-
 		game.avatar[num].body.velocity.y *= 0.96;
 		game.avatar[num].body.velocity.x *= 0.96;
-
 	}
-}
+};
 
 
 function combo_notice(num){
@@ -637,6 +468,7 @@ gameState.update = function (){
 
 
 	all = 0;
+	if(game.keyboard_offset == 1){ cursors = game.input.keyboard.createCursorKeys(); }
 	for (i = 0; i < game.num_players; i++) {
 		//pad_connect_indicator(i);
 
@@ -644,15 +476,17 @@ gameState.update = function (){
 			if(!i == 0){
 				controls_pad(i, (i-1));
 			}else{
-				controls_key(0);
+				controls_key(i);
 			}
 		}else{
 			controls_pad(i , i);
 		}
 
+		/*
 		if(special_active == 0){
 			all = all+combo_notice(i);
 		}
+		*/
 
 		if(game.now_invincible[i] == 1){
 			game.avatar[i].animations.frame = 4+i;

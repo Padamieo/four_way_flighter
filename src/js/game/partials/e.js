@@ -4,9 +4,10 @@ var e = {
 		//setup the enemies group
 		game.enemies = game.add.group();
 		//enemies.events.onKilled(function(){console.log("dead"+this.x+this.y)}, this);
-		
+
 		game.next_e_ShotAt = [];
 		game.e_shotDelay = [];
+		
 		//bullet pool could be individual
 		game.e_bulletPool = game.add.group();
 		game.e_bulletPool.enableBody = true;

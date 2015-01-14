@@ -28,17 +28,14 @@ var p = {
 		game.players.physicsBodyType = Phaser.Physics.ARCADE;
 		for (i = 0; i < game.num_players; i++) {
 			p.player_game_avatar_setup(i, game);
+			p.fire_setup(game, i);
+			p.invincible_setup(game, i);
+			game.now_invincible[i] = 0;
 		}
 		game.players.setAll('anchor.x', 0.5);
 		game.players.setAll('anchor.y', 0.5);
 		game.players.setAll('health', 10);
 
-		for (i = 0; i < game.num_players; i++) {
-			p.fire_setup(game, i);
-			p.invincible_setup(game, i);
-			game.now_invincible[i] = 0;
-		}
-		
 		//calculate groups health
 		game.starting_players_health = p.check_players_health(game, game.players);
 
