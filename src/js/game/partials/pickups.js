@@ -26,7 +26,7 @@ pickup.prototype.constructor = pickup;
 
 pickup.prototype.update = function(game) {
 
-
+//console.log("testing"+game); // undefined
 	/*
 	if(this.alive){
 		e.fire(this.game, this, this.body.rotation);

@@ -137,12 +137,12 @@ module.exports = function(game) {
 		}
 		//console.log("players"+game.num_players);
 
-		game.state.start('game');
+		game.state.start('level');
 	}
 
 	//start it now
 	function start_game(){
-		game.state.start('game');
+		game.state.start('level');
 	}
 
 	//update loop

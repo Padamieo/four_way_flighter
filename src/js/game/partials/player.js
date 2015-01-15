@@ -1,4 +1,4 @@
-var p = {
+var player = {
 
 	setup: function(game){
 
@@ -27,9 +27,9 @@ var p = {
 		game.players.enableBody = true;
 		game.players.physicsBodyType = Phaser.Physics.ARCADE;
 		for (i = 0; i < game.num_players; i++) {
-			p.player_game_avatar_setup(i, game);
-			p.fire_setup(game, i);
-			p.invincible_setup(game, i);
+			player._game_avatar_setup(i, game);
+			player.fire_setup(game, i);
+			player.invincible_setup(game, i);
 			game.now_invincible[i] = 0;
 		}
 		game.players.setAll('anchor.x', 0.5);
@@ -37,13 +37,13 @@ var p = {
 		game.players.setAll('health', 10);
 
 		//calculate groups health
-		game.starting_players_health = p.check_players_health(game, game.players);
+		game.starting_players_health = player.check_players_health(game, game.players);
 
 	},
 
 	check_players_health: function(game, players){
 		game.current_players_health = 0;
-		game.players.forEachAlive( p.check_player_health, this, game);
+		game.players.forEachAlive( player.check_player_health, this, game);
 		return game.current_players_health;
 	},
 
@@ -61,7 +61,7 @@ var p = {
 		game.KillDelay[num] = 600;
 	},
 
-	player_game_avatar_setup: function(num, game){
+	_game_avatar_setup: function(num, game){
 		h = (game.height/3);
 		w = (game.width/game.num_players+2);
 		if(num == 0){ w = (w/2)-5; }else{ w = w*num+(w/2)-5; }
@@ -89,4 +89,4 @@ var p = {
 
 };
 
-module.exports = p;
+module.exports = player;
