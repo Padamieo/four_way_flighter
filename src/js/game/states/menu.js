@@ -1,3 +1,4 @@
+var c = require('controls');
 module.exports = function(game) {
 
 	var menu = {};
@@ -7,10 +8,10 @@ module.exports = function(game) {
 	var count = 0;
 
 	menu.preload = function () {
-
+		c.setup(game);
 		for (i = 0; i < 4; i++) {
 			switch_button(i);
-			pad_setup(i);
+			c.pad_setup(game, i);
 			controller_indicator(i);
 			test(i);
 		}
@@ -29,7 +30,7 @@ module.exports = function(game) {
 
 	//add currently active pads up
 	function pad_connect_indicator(num){
-		if(game.input.gamepad.supported && game.input.gamepad.active && pad[num].connected) {
+		if(game.input.gamepad.supported && game.input.gamepad.active && game.pad[num].connected) {
 			count = count+1;
 		}else{
 			count = count+0;
@@ -60,22 +61,6 @@ module.exports = function(game) {
 			}else{
 				indicator[num].animations.frame = 0;
 			}
-		}
-	}
-
-	//arborteroraly assign pads
-	function pad_setup(num){
-		if(num == 0){
-			pad[num] = game.input.gamepad.pad1;
-		}
-		if(num == 1){
-			pad[num] = game.input.gamepad.pad2;
-		}
-		if(num == 2){
-			pad[num] = game.input.gamepad.pad3;
-		}
-		if(num == 3){
-			pad[num] = game.input.gamepad.pad4;
 		}
 	}
 

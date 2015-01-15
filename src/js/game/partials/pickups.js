@@ -1,11 +1,6 @@
 // pickup constructor
 var pickup = function(game, type) {
 
-	// healths = game.add.group();
-	// healths.enableBody = true;
-	// healths.physicsBodyType = Phaser.Physics.ARCADE;
-	// healths.setAll('outOfBoundsKill', true);
-
 	this.class = type;
 
 	if(type == 0){
@@ -20,31 +15,7 @@ var pickup = function(game, type) {
 	this.anchor.setTo(0.5, 0.5);
 	game.physics.enable(this, Phaser.Physics.ARCADE);
 
-
 	this.body.velocity.setTo(0, 100);
-	/*
-
-	Phaser.Sprite.call(this, game, x, y, 'box');
-	game.enemies.add(this);
-
-	//sprite.events.onRevived( doo,this);
-
-	this.events.onRevived.add(function(){this.health = 1}, this);
-	this.events.onKilled.add(function(){e.explosion(game, this)}, this);
-
-	game.next_e_ShotAt[this.z] = 0;
-	game.e_shotDelay[this.z] = 1200;
-
-	this.anchor.setTo(0.5, 0.5);
-
-	game.physics.enable(this, Phaser.Physics.ARCADE);
-
-	this.health = 1;
-
-	this.MAX_SPEED = 250;
-	this.MIN_DISTANCE = 90;
-	*/
-
 
 };
 

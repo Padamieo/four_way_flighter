@@ -56,7 +56,7 @@ var general = {
 	},
 
 	pause: function(game) {
-		// When the paus button is pressed, we pause the game
+		// When the pause button is pressed, we pause the game
 		game.paused = true;
 		// Then add the menu
 		w = game.width/2;

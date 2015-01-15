@@ -7,6 +7,8 @@ var e = require('e');
 var g = require('general');
 var sfx = require('sfx');
 
+var healthbar = require('healthbar');
+
 var pickup = require('pickup');
 
 module.exports = function(game) {
@@ -32,13 +34,6 @@ gameState.create = function () {
 		var logo = game.add.sprite(game.world.centerX, game.world.centerY, 'Gray');
 		logo.anchor.setTo(0.5, 0.5);
 	*/
-
-	// add a new graphics object at the center of the world
-	var circles = game.add.graphics(game.world.centerX, game.world.centerY);
-	// add first 1px wide unfilled red circle with a radius of 50 at the center (0, 0) of the graphics object
-	circles.lineStyle(1, 0xff0000, 0.9);
-	circles.drawCircle(0, 0, 90);
-	//arc : http://docs.phaser.io/Phaser.Graphics.html
 
 	generate_rounds();
 
@@ -128,6 +123,13 @@ gameState.create = function () {
 	var gray = game.add.filter('Gray');
 	logo.filters = [gray];
 	*/
+	
+	game.healthbars = game.add.group();
+	var h = game.healthbars.getFirstDead();
+	if (h === null) {
+		h = new healthbar(game);
+	}
+
 
 };
 ////////// end of create /////////
@@ -473,7 +475,7 @@ gameState.update = function (){
 		//pad_connect_indicator(i);
 
 		if(game.keyboard_offset == 1){
-			if(!i == 0){
+			if(i != 0){
 				controls_pad(i, (i-1));
 			}else{
 				controls_key(i);
