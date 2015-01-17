@@ -12,6 +12,9 @@ var player = {
 
 		game.now_invincible = [];
 
+		var healthbar = require('healthbar');
+		game.healthbars = game.add.group();
+
 		//bullet pool could be individual
 		game.bulletPool = game.add.group();
 		game.bulletPool.enableBody = true;
@@ -31,13 +34,59 @@ var player = {
 			player.fire_setup(game, i);
 			player.invincible_setup(game, i);
 			game.now_invincible[i] = 0;
+
+			var h = game.healthbars.getFirstDead();
+			if (h === null) {
+				h = new healthbar(game, i);
+			}
 		}
 		game.players.setAll('anchor.x', 0.5);
 		game.players.setAll('anchor.y', 0.5);
-		game.players.setAll('health', 10);
+		game.player_starting_health = 11;
+		game.players.setAll('health', game.player_starting_health);
 
 		//calculate groups health
-		game.starting_players_health = player.check_players_health(game, game.players);
+		//game.starting_players_health = player.check_players_health(game, game.players);
+		game.starting_players_health = game.player_starting_health*game.num_players;
+		//player.test(game, 0);
+	},
+
+	pickedup: function(p, what){
+		var test = what.class;
+		if(what.class = 0){
+			player.revive_player(p, what);
+		}else{
+			player.add_health(p, what);
+		}
+	},
+
+	revive_player: function(player, lives){
+		lives.kill();
+		if(game.players.countLiving() == game.num_players){
+			return;
+		}else{
+			dead_player = game.players.getFirstDead();
+			//move to appropriate position
+			dead_player.x = lives.x;
+			dead_player.y = lives.y;
+			dead_player.revive(10);
+			//need to trigger temp invincible
+		}
+	},
+
+	add_health: function(player, health) {
+		game = player.game;
+		health.kill();
+		if(player.health < game.starting_players_health){
+			player.damage(-1);
+		}
+	},
+
+	health_visual_value: function(game, player_id){
+		this_player = game.players.getAt(player_id);
+		health_section = 360/game.player_starting_health;
+		display_health = this_player.health*health_section;
+		return game.math.degToRad(display_health+90);
 
 	},
 

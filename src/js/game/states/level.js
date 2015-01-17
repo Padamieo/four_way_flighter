@@ -9,7 +9,6 @@ var g = require('general');
 
 var sfx = require('sfx');
 
-var healthbar = require('healthbar');
 var pickup = require('pickup');
 
 var m = require('modal');
@@ -133,11 +132,11 @@ gameState.create = function () {
 	logo.filters = [gray];
 	*/
 
-	game.healthbars = game.add.group();
-	var h = game.healthbars.getFirstDead();
-	if (h === null) {
-		h = new healthbar(game, 0);
-	}
+	// game.healthbars = game.add.group();
+	// var h = game.healthbars.getFirstDead();
+	// if (h === null) {
+	// 	h = new healthbar(game, 0);
+	// }
 
 	//console.log(h);
 
@@ -460,7 +459,7 @@ gameState.update = function (){
 
 	//notice a player collecting a pickup
 	//game.physics.arcade.overlap(game.players, healths, pickup_health, null, this);
-	game.physics.arcade.overlap(game.players, game.pickups, pickedup, null, this);
+	game.physics.arcade.overlap(game.players, game.pickups, p.pickedup, null, this);
 
 	game.physics.arcade.overlap(game.players, game.enemies, collision_notice, null, this);
 	game.physics.arcade.collide(game.players, game.enemies, collision_notice, null, this);
@@ -566,42 +565,6 @@ function add_point (bullet, enemy){
 
 	update_score(1);
 }
-
-/////// following needs to move out of level ///////
-		function pickedup(player, what){
-			var test = what.class;
-			if(what.class = 0){
-				revive_player(player, what);
-			}else{
-				add_health(player, what);
-			}
-		}
-
-		function revive_player(player, lives){
-			lives.kill();
-			if(game.players.countLiving() == game.num_players){
-				return;
-			}else{
-				dead_player = game.players.getFirstDead();
-				//move to appropriate position
-				dead_player.x = lives.x;
-				dead_player.y = lives.y;
-				dead_player.revive(10);
-				//need to trigger temp invincible
-			}
-		}
-
-		function add_health(player, health) {
-			// Removes the health from the screen
-			health.kill();
-			player.damage(-1);
-
-			//change = game.healthbars.getAt(player.z-1);
-			//change.scale.y = player.health/5;
-
-			update_score(1);
-		}
-/////// END ///////
 
 //this is not used yet
 function lose_condition(){

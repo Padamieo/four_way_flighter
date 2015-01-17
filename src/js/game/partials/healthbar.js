@@ -1,3 +1,5 @@
+var player = require('player');
+
 // healthbar constructor
 var healthbar = function(game, i) {
 
@@ -10,17 +12,8 @@ var healthbar = function(game, i) {
 
 	game.healthbars.add(this);
 
-	this.lineStyle(2, 0x00ff00, 0.5);
-
-	value = game.math.degToRad(450); //450 is tol health
-
-	start_point = game.math.degToRad(90);
-
-	this.arc(0, 0, 35, start_point, value, false);
-
 };
 
-// e_followers are a type of Phaser.Sprite
 healthbar.prototype = Object.create(Phaser.Graphics.prototype);
 healthbar.prototype.constructor = healthbar;
 
@@ -30,6 +23,12 @@ healthbar.prototype.update = function(game) {
 	game = this.game;
 	this.x = game.avatar[this.for_player].x;
 	this.y = game.avatar[this.for_player].y;
+
+	this.clear();
+	this.lineStyle(2, 0x00ff00, 1);
+	value = player.health_visual_value(game, 0);
+	start_point = game.math.degToRad(90);
+	this.arc(0, 0, 35, start_point, value, false);
 
 };
 
