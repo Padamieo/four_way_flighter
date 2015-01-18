@@ -19,7 +19,6 @@ module.exports = function(game) {
 	var scoreText;
 	var count = 0; // this should probably be game.count
 
-
 	//var indicator = [];
 	var special_active = 0;
 
@@ -49,57 +48,6 @@ gameState.create = function () {
 	p.setup(game);
 
 /*
-	//health bars position currently 1342
-	game.healthbars = game.add.group();
-	for (i = 0; i < game.num_players; i++) {
-		if(i == 0){ x = 5;}
-		if(i == 1){ x = (game.width-5); }
-		if(i == 2) { x = (game.width/4);}
-		if(i == 3){ x = (game.width-(game.width/4)); }
-		game.healthbar = game.healthbars.create(x,  game.height-5, 'health_bar');
-		if(i == 0 || i == 2){
-			game.healthbar.anchor.x=0;
-			game.healthbar.anchor.y=1;
-		}else{
-			game.healthbar.anchor.x=1;
-			game.healthbar.anchor.y=1;
-		}
-		//set initial height
-		change = game.healthbars.getAt(i);
-		change.scale.y = game.avatar[i].health/5;
-	}
-*/
-
-	//scorebars
-	game.scorebars = game.add.group();
-	for (i = 0; i < game.num_players; i++) {
-		if(i == 0){ x = 5;}
-		if(i == 1){ x = (game.width-5); }
-		if(i == 2) { x = (game.width/4);}
-		if(i == 3){ x = (game.width-(game.width/4)); }
-
-		if(i == 0 || i == 2){
-			x = x + 12;
-		}else{
-			x = x - 12;
-		}
-
-		game.scorebar = game.scorebars.create(x,  game.height-5, 'score_bar');
-
-		if(i == 0 || i == 2){
-			game.scorebar.anchor.x=0;
-			game.scorebar.anchor.y=1;
-		}else{
-			game.scorebar.anchor.x=1;
-			game.scorebar.anchor.y=1;
-		}
-
-		//set initial height
-		change = game.scorebars.getAt(i);
-		change.scale.y = 1;
-	}
-
-/*
 	//when players are combined this is what is used
 	player_combo = game.add.sprite(game.world.centerX, game.world.centerY, 'player_combo');
 	player_combo.anchor.setTo(0.5, 0.5);
@@ -107,6 +55,7 @@ gameState.create = function () {
   player_combo.body.collideWorldBounds = true;
 	player_combo.kill();
 */
+
 	tick = game.time.create(false);
 	tick.loop(2000, updateTick, this);
 	tick.start();
@@ -131,15 +80,6 @@ gameState.create = function () {
 	var gray = game.add.filter('Gray');
 	logo.filters = [gray];
 	*/
-
-	// game.healthbars = game.add.group();
-	// var h = game.healthbars.getFirstDead();
-	// if (h === null) {
-	// 	h = new healthbar(game, 0);
-	// }
-
-	//console.log(h);
-
 
 };
 ////////// end of create /////////
@@ -189,10 +129,7 @@ gameState.create = function () {
 			count++; // notice count
 		}
 
-
-			add_pickup(); // issue with only once occurrence per death
-			//add_health(); // still wip too many healths generated
-			//console.log(count);
+			add_pickup(); // issues
 	}
 
 	game.spawn_enemy = function(x, y, type) {
@@ -458,20 +395,17 @@ gameState.update = function (){
 	//game.filter.update();
 
 	//notice a player collecting a pickup
-	//game.physics.arcade.overlap(game.players, healths, pickup_health, null, this);
 	game.physics.arcade.overlap(game.players, game.pickups, p.pickedup, null, this);
+
 
 	game.physics.arcade.overlap(game.players, game.enemies, collision_notice, null, this);
 	game.physics.arcade.collide(game.players, game.enemies, collision_notice, null, this);
-
-	//game.physics.arcade.collide(enemies, enemies); //do we want overlap!
 
 	//this is just for registering who shot what
 	game.physics.arcade.overlap(game.bulletPool, game.enemies, add_point, null, this);
 
 	//this is for a bit of fun players shoot move other players, may want to drop if resources are concern
 	game.physics.arcade.collide(game.bulletPool, game.players, ricochet, null, this);
-
 
 	all = 0;
 	if(game.keyboard_offset == 1){ cursors = game.input.keyboard.createCursorKeys(); }
@@ -536,34 +470,20 @@ gameState.update = function (){
 };
 
 function ricochet(bullet, player){
-	//console.log(bullet.body.velocity.x);
-	//console.log(this.body.angle);
-
+	//this does not work quite right
 	bullet.body.velocity.x *= -1;
 	bullet.body.velocity.y *= -1;
 
 }
 
 function add_point (bullet, enemy){
-	//console.log(enemies.health);
-	//console.log(bullet.name);
-	//enemies.kill();
-
 	bullet.kill();
 	enemy.damage(1);
-	/*
-		//untill i sort out energy bars do not use this.
-		console.log(bullet.name);
-		player[bullet.name].energy = player[bullet.name].energy+1;
-		console.log("test"+player[bullet.name].energy);
-	*/
+	if(enemy.health == 0){
+		//bullet.name //get player who shots id
+		update_score(1);
+	}
 
-	//this need to check emeny dies and ensure its not adding more than 100!
-	change = game.scorebars.getAt(bullet.name);
-	//console.log(change.scale.y);
-	change.scale.y = change.scale.y + 1;
-
-	update_score(1);
 }
 
 //this is not used yet
@@ -576,8 +496,6 @@ function lose_condition(){
 }
 
 function collision_notice(ply, enemy) {
-  // Removes the star from the screen
-	//players.kill();
 	num = ply.z-1;
 	if (game.nextKillAt[num] > game.time.now) {
 		game.now_invincible[num] = 1;
@@ -587,11 +505,8 @@ function collision_notice(ply, enemy) {
 
 		ply.damage(1);
 		enemy.damage(1);
-		sfx.shake(game);
 
-		//this need functioning out
-		//change = game.healthbars.getAt(num);
-		//game.healthbars.getAt(num).scale.y = ply.health/5;
+		sfx.shake(game);
 	}
 }
 

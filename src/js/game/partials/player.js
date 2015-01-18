@@ -15,6 +15,9 @@ var player = {
 		var healthbar = require('healthbar');
 		game.healthbars = game.add.group();
 
+		var powerbar = require('powerbar');
+		game.powerbars = game.add.group();
+
 		//bullet pool could be individual
 		game.bulletPool = game.add.group();
 		game.bulletPool.enableBody = true;
@@ -38,6 +41,11 @@ var player = {
 			var h = game.healthbars.getFirstDead();
 			if (h === null) {
 				h = new healthbar(game, i);
+			}
+
+			var s = game.powerbars.getFirstDead();
+			if (s === null) {
+				s = new powerbar(game, i);
 			}
 		}
 		game.players.setAll('anchor.x', 0.5);
@@ -87,7 +95,6 @@ var player = {
 		health_section = 360/game.player_starting_health;
 		display_health = this_player.health*health_section;
 		return game.math.degToRad(display_health+90);
-
 	},
 
 	check_players_health: function(game, players){

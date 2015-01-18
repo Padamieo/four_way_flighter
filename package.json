@@ -28,6 +28,7 @@
     "e_fighter": "./src/js/game/partials/e_fighter.js",
     "pickup": "./src/js/game/partials/pickups.js",
     "healthbar": "./src/js/game/partials/healthbar.js",
+    "powerbar": "./src/js/game/partials/powerbar.js",
     "gray": "./src/js/lib/filters/Gray.js"
   },
   "browserify-shim": {

@@ -25,10 +25,10 @@ healthbar.prototype.update = function(game) {
 	this.y = game.avatar[this.for_player].y;
 
 	this.clear();
-	this.lineStyle(2, 0x00ff00, 1);
+	this.lineStyle(2, 0x00fff0, 1);
 	value = player.health_visual_value(game, 0);
 	start_point = game.math.degToRad(90);
-	this.arc(0, 0, 35, start_point, value, false);
+	this.arc(0, 0, 40, start_point, value, false);
 
 };
 

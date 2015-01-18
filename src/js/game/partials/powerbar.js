@@ -1,4 +1,4 @@
-// healthbar constructor
+
 var powerbar = function(game, i) {
 
 	this.for_player = i;
@@ -8,15 +8,7 @@ var powerbar = function(game, i) {
 
 	Phaser.Graphics.call(this, game, x, y);
 
-	game.healthbars.add(this);
-
-	this.lineStyle(3, 0xffff00, 0.5);
-
-	value = game.math.degToRad(450); //450 is tol health
-
-	start_point = game.math.degToRad(90);
-
-	this.arc(0, 0, 32, start_point, value, false);
+	game.powerbars.add(this);
 
 };
 
@@ -30,6 +22,13 @@ powerbar.prototype.update = function(game) {
 	game = this.game;
 	this.x = game.avatar[this.for_player].x;
 	this.y = game.avatar[this.for_player].y;
+
+	this.clear();
+	//this.lineStyle(2, 0x00ff00, 1);
+	//value = player.health_visual_value(game, 0);
+	//start_point = game.math.degToRad(90);
+	//this.arc(0, 0, 40, start_point, value, false);
+
 
 };
 
