@@ -32,6 +32,7 @@ var player = {
 		game.players = game.add.group();
 		game.players.enableBody = true;
 		game.players.physicsBodyType = Phaser.Physics.ARCADE;
+
 		for (i = 0; i < game.num_players; i++) {
 			player._game_avatar_setup(i, game);
 			player.fire_setup(game, i);
@@ -131,6 +132,8 @@ var player = {
 
 		game.avatar[num].body.immovable = false;
 		//game.avatar[num].body.immovable = true;
+
+		game.avatar[num].tint = 0xff00ff;
 
 		game.avatar[num].animations.frame = 0+num;
 

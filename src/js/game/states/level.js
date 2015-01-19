@@ -81,6 +81,7 @@ gameState.create = function () {
 	logo.filters = [gray];
 	*/
 
+	console.log(game.players.getAt(0));
 };
 ////////// end of create /////////
 
@@ -209,6 +210,7 @@ gameState.create = function () {
 		bullet = game.bulletPool.getFirstExists(false);
 		bullet.reset(game.avatar[play_num].x, game.avatar[play_num].y, 'bullet');
 		bullet.name = play_num;
+		bullet.tint = 0xff00ff;
 
 		if(game.keyboard_offset == 1){
 			if(play_num == 0){
