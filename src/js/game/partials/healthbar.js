@@ -14,21 +14,31 @@ var healthbar = function(game, i) {
 
 };
 
+var test = function(){
+		console.log('oh hello');
+}
+
 healthbar.prototype = Object.create(Phaser.Graphics.prototype);
 healthbar.prototype.constructor = healthbar;
 
 healthbar.prototype.update = function(game) {
-
-	//there must be a better way to just lock these together
 	game = this.game;
-	this.x = game.avatar[this.for_player].x;
-	this.y = game.avatar[this.for_player].y;
-
 	this.clear();
-	this.lineStyle(2, 0x00fff0, 1);
-	value = player.health_visual_value(game, 0);
-	start_point = game.math.degToRad(90);
-	this.arc(0, 0, 40, start_point, value, false);
+
+
+
+	if(game.input.keyboard.isDown(Phaser.Keyboard.E)){
+		//there must be a better way to just lock these together
+		test();
+		this.x = game.avatar[this.for_player].x;
+		this.y = game.avatar[this.for_player].y;
+
+		this.lineStyle(2, 0x00fff0, 1);
+		value = player.health_visual_value(game, 0);
+		start_point = game.math.degToRad(90);
+		this.arc(0, 0, 40, start_point, value, false);
+	}
+
 
 };
 

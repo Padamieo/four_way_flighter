@@ -122,7 +122,7 @@ var player = {
 		w = (game.width/game.num_players+2);
 		if(num == 0){ w = (w/2)-5; }else{ w = w*num+(w/2)-5; }
 
-		game.avatar[num] = game.players.create(w, h*2, 'dude');
+		game.avatar[num] = game.players.create(w, h*2, 'fighter');
 		game.avatar[num].body.collideWorldBounds=true;
 		game.avatar[num].name=num;
 		game.avatar[num].energy = 0;
