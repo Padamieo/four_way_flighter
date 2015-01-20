@@ -5,7 +5,7 @@
   "main": "build/js/app.min.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-	"start": "nodewebkit build"
+    "start": "nodewebkit build"
   },
   "repository": {
     "type": "git",
@@ -29,6 +29,7 @@
     "pickup": "./src/js/game/partials/pickups.js",
     "healthbar": "./src/js/game/partials/healthbar.js",
     "powerbar": "./src/js/game/partials/powerbar.js",
+    "avatar": "./src/js/game/partials/avatar.js",
     "gray": "./src/js/lib/filters/Gray.js"
   },
   "browserify-shim": {

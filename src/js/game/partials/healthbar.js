@@ -5,8 +5,9 @@ var healthbar = function(game, i) {
 
 	this.for_player = i;
 
-	x = game.avatar[i].x;
-	y = game.avatar[i].y;
+	//x = game.player.get[i].x;
+	x = game.players.getAt(i).x;
+	y = game.players.getAt(i).y;
 
 	Phaser.Graphics.call(this, game, x, y);
 
@@ -25,16 +26,14 @@ healthbar.prototype.update = function(game) {
 	game = this.game;
 	this.clear();
 
-
-
 	if(game.input.keyboard.isDown(Phaser.Keyboard.E)){
 		//there must be a better way to just lock these together
 		test();
-		this.x = game.avatar[this.for_player].x;
-		this.y = game.avatar[this.for_player].y;
+		this.x = game.players.getAt(this.for_player).x;
+		this.y = game.players.getAt(this.for_player).y;
 
 		this.lineStyle(2, 0x00fff0, 1);
-		value = player.health_visual_value(game, 0);
+		value = player.health_visual_value(game, this.for_player);
 		start_point = game.math.degToRad(90);
 		this.arc(0, 0, 40, start_point, value, false);
 	}

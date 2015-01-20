@@ -2,21 +2,18 @@ var c = require('controls');
 module.exports = function(game) {
 
 	var menu = {};
-	var button = [];
-	var indicator = [];
-	var pad = [];
-	var count = 0;
 
 	menu.preload = function () {
+
 		c.setup(game);
+		/*
 		for (i = 0; i < 4; i++) {
 			switch_button(i);
 			c.pad_setup(game, i);
 			controller_indicator(i);
 			test(i);
 		}
-		game.input.gamepad.start();
-
+		*/
 
 		game.start = game.add.sprite(game.world.width/2, game.world.height/4, 'switch');
 		game.start.animations.frame = 0;
@@ -26,6 +23,7 @@ module.exports = function(game) {
 		game.start.scale.x = 3;
 
 		game.stage.backgroundColor = '#565756';
+
 	};
 
 	//add currently active pads up
@@ -37,15 +35,7 @@ module.exports = function(game) {
 		}
 	}
 
-	//set-up initial indicator to not connected
-	function test(num){
-		if(num == 0){
-			return;
-		}else{
-			indicator[num].animations.frame = 0;
-		}
-	}
-
+	/*
 	function count_change(count_input, num){
 		if(button[0].animations.frame == 2){
 			if(num+1 < 4){
@@ -112,51 +102,33 @@ module.exports = function(game) {
 			}
 		}
 	}
+	*/
 
 	//calculations for starting a game
 	function begin(){
-		//count frames determine players
-		store = 0;
-		for (i = 0; i < 4; i++) {
-			count = button[i].animations.frame;
-			store = store + count;
-		}
 
-		if(button[0].animations.frame == 2){
-			game.keyboard_offset = 1;
-			store = store-1;
-		}else{
-			game.keyboard_offset = 0;
-		}
-		//console.log("keyboard"+game.keyboard_offset);
+		game.controls = ['K','0','1','2'];
 
-		if(store == 5){
-			game.num_players = 4;
-		}else{
-			game.num_players = store;
-		}
-		//console.log("players"+game.num_players);
+		game.num_players = 2;
 
 		game.state.start('level');
 	}
 
-	//start it now
+	//start it now not used
 	function start_game(){
 		game.state.start('level');
 	}
 
 	//update loop
 	menu.update = function (){
-	/*
-	console.log( "game" + game.width);
-	console.log( "stage" + game.stage.width);
-	*/
+		/*
 		count = 0;
 		for (i = 0; i < 4; i++) {
 			button[i].events.onInputDown.add(actionOnClick, button[i]);
 			pad_connect_indicator(i);
 			count_change(count, i);
 		}
+		*/
 		game.start.events.onInputDown.add(begin, game.start);
 
 	};

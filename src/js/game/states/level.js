@@ -81,7 +81,7 @@ gameState.create = function () {
 	logo.filters = [gray];
 	*/
 
-	console.log(game.players.getAt(0));
+	//console.log(game.players.getAt(0));
 };
 ////////// end of create /////////
 
@@ -208,7 +208,7 @@ gameState.create = function () {
 		}
 
 		bullet = game.bulletPool.getFirstExists(false);
-		bullet.reset(game.avatar[play_num].x, game.avatar[play_num].y, 'bullet');
+		bullet.reset(game.players.getAt(play_num).x, game.players.getAt(play_num).y, 'bullet');
 		bullet.name = play_num;
 		bullet.tint = 0xff00ff;
 
@@ -309,30 +309,30 @@ function controls_key(num){
 	}
 
 	if ( game.input.keyboard.isDown(Phaser.Keyboard.A) ) {
-		game.avatar[num].body.velocity.x = -speed;
-		if( game.avatar[num].angle > -20 ){
-			game.avatar[num].angle -= 1;
+		game.players.getAt(num).body.velocity.x = -speed;
+		if( game.players.getAt(num).angle > -20 ){
+			game.players.getAt(num).angle -= 1;
 		}
 	}else if( game.input.keyboard.isDown(Phaser.Keyboard.D) ){
-			game.avatar[num].body.velocity.x = speed;
-			if( game.avatar[num].angle < 20 ){
-				game.avatar[num].angle += 1;
+		game.players.getAt(num).body.velocity.x = speed;
+			if( game.players.getAt(num).angle < 20 ){
+				game.players.getAt(num).angle += 1;
 			}
 	}else{
 		h_test = 1;
 	}
 
 	if ( game.input.keyboard.isDown(Phaser.Keyboard.W) ) {
-			game.avatar[num].body.velocity.y = -speed;
+			game.players.getAt(num).body.velocity.y = -speed;
 			//game.avatar.animations.play('forward');
 			if(game.now_invincible[num] == 0){
-				game.avatar[num].animations.frame = 8+num;
+				//game.players.getAt(num).animations.frame = 8+num;
 			}
 	}else if(game.input.keyboard.isDown(Phaser.Keyboard.S) ){
-			game.avatar[num].body.velocity.y = speed;
+		game.players.getAt(num).body.velocity.y = speed;
 			//game.avatar.animations.play('back');
 			if(game.now_invincible[num] == 0){
-				game.avatar[num].animations.frame = 12+num;
+				//game.players.getAt(num).animations.frame = 12+num;
 			}
 	}else{
 		v_test = 2;
@@ -344,23 +344,24 @@ function controls_key(num){
 
 function avatar_ani_reset(game, h, v, num){
 	if( h+v == 3){
-		if( game.avatar[num].angle != 0){
-			if(game.avatar[num].angle < -0){
-				game.avatar[num].angle += 1;
+		if( game.players.getAt(num).angle != 0){
+			y = game.players.getAt(num).y;
+			if(game.players.getAt(num).angle < -0){
+				game.players.getAt(num).angle += 1;
 			}
-			if(game.avatar[num].angle > 0){
-				game.avatar[num].angle -= 1;
+			if(game.players.getAt(num).angle > 0){
+				game.players.getAt(num).angle -= 1;
 			}
 		}
 
 		if(game.now_invincible[num] == 0){
-			if(game.avatar[num].animations.frame != 0+num){
-				game.avatar[num].animations.frame = 0+num;
+			if(game.players.getAt(num).animations.frame != 0+num){
+				game.players.getAt(num).animations.frame = 0+num;
 			}
 		}
 
-		game.avatar[num].body.velocity.y *= 0.96;
-		game.avatar[num].body.velocity.x *= 0.96;
+		game.players.getAt(num).body.velocity.y *= 0.96;
+		game.players.getAt(num).body.velocity.x *= 0.96;
 
 	}
 };
@@ -410,10 +411,11 @@ gameState.update = function (){
 	game.physics.arcade.collide(game.bulletPool, game.players, ricochet, null, this);
 
 	all = 0;
-	if(game.keyboard_offset == 1){ cursors = game.input.keyboard.createCursorKeys(); }
+	cursors = game.input.keyboard.createCursorKeys();
 	for (i = 0; i < game.num_players; i++) {
 		//pad_connect_indicator(i);
 		//if(game.players.getAt(i).alive == 1){
+		/*
 			if(game.keyboard_offset == 1){
 				if(i != 0){
 					controls_pad(i, (i-1));
@@ -423,6 +425,9 @@ gameState.update = function (){
 			}else{
 				controls_pad(i , i);
 			}
+		*/
+		console.log(game.controls[i]);
+		controls_key(i);
 		//}
 		/*
 		if(special_active == 0){
@@ -431,7 +436,7 @@ gameState.update = function (){
 		*/
 
 		if(game.now_invincible[i] == 1){
-			game.avatar[i].animations.frame = 4+i;
+			game.players.getAt(i).alpha = 0.2;
 		}
 
 		if (game.nextKillAt[i] < game.time.now) {

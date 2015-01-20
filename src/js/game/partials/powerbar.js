@@ -3,8 +3,8 @@ var powerbar = function(game, i) {
 
 	this.for_player = i;
 
-	x = game.avatar[i].x;
-	y = game.avatar[i].y;
+	x = game.players.getAt(i).x;
+	y = game.players.getAt(i).y;
 
 	Phaser.Graphics.call(this, game, x, y);
 
@@ -20,8 +20,9 @@ powerbar.prototype.update = function(game) {
 
 	//there must be a better way to just lock these together
 	game = this.game;
-	this.x = game.avatar[this.for_player].x;
-	this.y = game.avatar[this.for_player].y;
+	i = this.for_player;
+	this.x = game.players.getAt(i).x;
+	this.y = game.players.getAt(i).y;
 
 	this.clear();
 	//this.lineStyle(2, 0x00ff00, 1);

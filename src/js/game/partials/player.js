@@ -2,7 +2,7 @@ var player = {
 
 	setup: function(game){
 
-		game.avatar = [];
+		//game.avatar = [];
 
 		game.nextShotAt = [];
 		game.shotDelay = [];
@@ -28,16 +28,23 @@ var player = {
 		game.bulletPool.setAll('outOfBoundsKill', true);
 		game.bulletPool.setAll('checkWorldBounds', true);
 
+		var avatar = require('avatar');
+		game.player_starting_health = 11;
 		// player setup move this out to function
 		game.players = game.add.group();
-		game.players.enableBody = true;
-		game.players.physicsBodyType = Phaser.Physics.ARCADE;
+		//game.players.enableBody = true;
+		//game.players.physicsBodyType = Phaser.Physics.ARCADE;
 
 		for (i = 0; i < game.num_players; i++) {
-			player._game_avatar_setup(i, game);
-			player.fire_setup(game, i);
-			player.invincible_setup(game, i);
-			game.now_invincible[i] = 0;
+			//player._game_avatar_setup(i, game);
+			//player.fire_setup(game, i);
+			//player.invincible_setup(game, i);
+			//game.now_invincible[i] = 0;
+
+			var p = game.players.getFirstDead();
+			if (p === null) {
+				p = new avatar(game, i);
+			}
 
 			var h = game.healthbars.getFirstDead();
 			if (h === null) {
@@ -49,10 +56,9 @@ var player = {
 				s = new powerbar(game, i);
 			}
 		}
-		game.players.setAll('anchor.x', 0.5);
-		game.players.setAll('anchor.y', 0.5);
-		game.player_starting_health = 11;
-		game.players.setAll('health', game.player_starting_health);
+
+
+		//game.players.setAll('health', game.player_starting_health);
 
 		//calculate groups health
 		//game.starting_players_health = player.check_players_health(game, game.players);
@@ -116,34 +122,6 @@ var player = {
 	invincible_setup: function(game, num){
 		game.nextKillAt[num] = 0;
 		game.KillDelay[num] = 600;
-	},
-
-	_game_avatar_setup: function(num, game){
-		h = (game.height/3);
-		w = (game.width/game.num_players+2);
-		if(num == 0){ w = (w/2)-5; }else{ w = w*num+(w/2)-5; }
-
-		game.avatar[num] = game.players.create(w, h*2, 'fighter');
-		game.avatar[num].body.collideWorldBounds=true;
-		game.avatar[num].name=num;
-		game.avatar[num].energy = 0;
-		//game.avatar[num].health(2);
-		//game.avatar[num].body.bounce.y=0.2;
-
-		game.avatar[num].body.immovable = false;
-		//game.avatar[num].body.immovable = true;
-
-		game.avatar[num].tint = 0xff00ff;
-
-		game.avatar[num].animations.frame = 0+num;
-
-		//this is how we will control variouse screen resolutions
-		game.avatar[num].scale.y = 1;
-		game.avatar[num].scale.x = 1;
-		// animations still usefull but not being used / set
-		//game.avatar[num].animations.add('default', [0, 1, 2, 3, 4, 5, 6, 7], 8, true);
-		//game.avatar[num].animations.add('left', [0, 1, 2, 3, 4, 5, 6, 7], 8, true);
-		//game.avatar[num].animations.add('right', [0, 1, 2, 3, 4, 5, 6, 7], 20, true);
 	}
 
 };
