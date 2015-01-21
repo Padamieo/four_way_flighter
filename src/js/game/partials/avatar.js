@@ -1,5 +1,7 @@
 //var e = require('e'); // we will probably need player functions
 
+var c = require('controls');
+
 // avatar constructor
 var avatar = function(game, i) {
 
@@ -50,8 +52,22 @@ avatar.prototype = Object.create(Phaser.Sprite.prototype);
 avatar.prototype.constructor = avatar;
 
 avatar.prototype.update = function(game) {
+	if(this.alive){
+		game = this.game;
+		if(isNaN(game.controls[this.name])){
+			if(game.controls[this.name] == 'K'){
+				c.controls_key(game, this.name);
+			}else{
+				//custom controls
+			}
+		}else{
+			//its a number so its a gamepad
+		}
 
-
+	}else{
+		//console.log(this.name+"alive");
+		//we will need to make them visable for testing
+	}
 };
 
 module.exports = avatar;

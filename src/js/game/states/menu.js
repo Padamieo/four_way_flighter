@@ -107,7 +107,7 @@ module.exports = function(game) {
 	//calculations for starting a game
 	function begin(){
 
-		game.controls = ['K','0','1','2'];
+		game.controls = ['0','K','1','2'];
 
 		game.num_players = 2;
 
