@@ -114,7 +114,7 @@ var controls = {
 
 		if ( game.pad[pad_num].axis(Phaser.Gamepad.XBOX360_STICK_RIGHT_Y) > 0.01 || game.pad[pad_num].axis(Phaser.Gamepad.XBOX360_STICK_RIGHT_Y) < -0.01 || game.pad[pad_num].axis(Phaser.Gamepad.XBOX360_STICK_RIGHT_X) < -0.01 ||  game.pad[pad_num].axis(Phaser.Gamepad.XBOX360_STICK_RIGHT_X) > 0.01){
 			if(game.players.getAt(play_num).alive == 1){
-				controls.fire(play_num, pad_num);
+				controls.fire(game, pad_num);
 				speed = 220;
 			}
 		}else{
@@ -122,30 +122,30 @@ var controls = {
 		}
 
 		if ( game.pad[pad_num].isDown(Phaser.Gamepad.XBOX360_DPAD_LEFT) || game.pad[pad_num].axis(Phaser.Gamepad.XBOX360_STICK_LEFT_X) < -0.01) {
-			game.avatar[play_num].body.velocity.x = -speed;
-			if( game.avatar[play_num].angle > -20 ){
-				game.avatar[play_num].angle -= 1;
+			game.players.getAt(play_num).body.velocity.x = -speed;
+			if( game.players.getAt(play_num).angle > -20 ){
+				game.players.getAt(play_num).angle -= 1;
 			}
 		}else if( game.pad[pad_num].isDown(Phaser.Gamepad.XBOX360_DPAD_RIGHT) || game.pad[pad_num].axis(Phaser.Gamepad.XBOX360_STICK_LEFT_X) > 0.01){
-			game.avatar[play_num].body.velocity.x = speed;
-			if( game.avatar[play_num].angle < 20 ){
-				game.avatar[play_num].angle += 1;
+			game.players.getAt(play_num).body.velocity.x = speed;
+			if( game.players.getAt(play_num).angle < 20 ){
+				game.players.getAt(play_num).angle += 1;
 			}
 		}else{
 			h_test = 1;
 		}
 
 		if ( game.pad[pad_num].isDown(Phaser.Gamepad.XBOX360_DPAD_UP) || game.pad[pad_num].axis(Phaser.Gamepad.XBOX360_STICK_LEFT_Y) < -0.01) {
-			game.avatar[play_num].body.velocity.y = -speed;
+			game.players.getAt(play_num).body.velocity.y = -speed;
 			//game.avatar.animations.play('forward');
 			if(game.now_invincible[play_num] == 0){
-				game.avatar[play_num].animations.frame = 8+play_num;
+				game.players.getAt(play_num).animations.frame = 8+play_num;
 			}
 		}else if( game.pad[pad_num].isDown(Phaser.Gamepad.XBOX360_DPAD_DOWN) || game.pad[pad_num].axis(Phaser.Gamepad.XBOX360_STICK_LEFT_Y) > 0.01){
-			game.avatar[play_num].body.velocity.y = speed;
+			game.players.getAt(play_num).body.velocity.y = speed;
 			//game.avatar.animations.play('back');
 			if(game.now_invincible[play_num] == 0){
-				game.avatar[play_num].animations.frame = 12+play_num;
+				game.players.getAt(play_num).animations.frame = 12+play_num;
 			}
 		}else{
 			v_test = 2;
@@ -170,19 +170,10 @@ var controls = {
 		bullet.name = play_num;
 		bullet.tint = 0xff00ff;
 
-		if(play_num == 0){
-			if ( cursors.left.isDown){
-				bullet.body.velocity.x -= 500;
-			}else if (cursors.right.isDown ){
-				bullet.body.velocity.x += 500;
-			}
-			if (cursors.up.isDown){
-				bullet.body.velocity.y -= 500;
-			}else if (cursors.down.isDown){
-				bullet.body.velocity.y += 500;
-			}
+		if(game.controls[play_num] == 'K'){
+			controls.keyboard_fire(game, bullet);
 		}else{
-		//	controls.gamepad_fire(game, pad_num);
+			controls.gamepad_fire(game, play_num);
 		}
 
 	},
@@ -196,6 +187,19 @@ var controls = {
 		if (game.pad[pad_num].axis(Phaser.Gamepad.XBOX360_STICK_RIGHT_Y) < -0.01){
 			bullet.body.velocity.y -= 500;
 		}else if (game.pad[pad_num].axis(Phaser.Gamepad.XBOX360_STICK_RIGHT_Y) > 0.01){
+			bullet.body.velocity.y += 500;
+		}
+	},
+
+	keyboard_fire: function(game, bullet){
+		if ( cursors.left.isDown){
+			bullet.body.velocity.x -= 500;
+		}else if (cursors.right.isDown ){
+			bullet.body.velocity.x += 500;
+		}
+		if (cursors.up.isDown){
+			bullet.body.velocity.y -= 500;
+		}else if (cursors.down.isDown){
 			bullet.body.velocity.y += 500;
 		}
 	}

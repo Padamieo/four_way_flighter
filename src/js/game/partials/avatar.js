@@ -61,7 +61,7 @@ avatar.prototype.update = function(game) {
 				//custom controls
 			}
 		}else{
-			//its a number so its a gamepad
+			c.controls_pad(game, this.name, this.name);
 		}
 
 	}else{
