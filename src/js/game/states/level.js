@@ -251,11 +251,6 @@ gameState.update = function (){
 			all = all+combo_notice(i);
 		}
 		*/
-		/*
-		if(game.now_invincible[i] == 1){
-			game.players.getAt(i).alpha = 0.2;
-		}
-		*/
 	}
 
 	if(all == game.num_players){
@@ -290,7 +285,7 @@ gameState.update = function (){
 
 };
 
-function add_point (bullet, enemy){
+function add_point(bullet, enemy){
 	bullet.kill();
 	enemy.damage(1);
 	if(enemy.health == 0){

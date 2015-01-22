@@ -11,8 +11,6 @@ var player = {
 		game.nextKillAt = [];
 		game.KillDelay = [];
 
-		game.now_invincible = [];
-
 		var healthbar = require('healthbar');
 		game.healthbars = game.add.group();
 
@@ -33,13 +31,8 @@ var player = {
 		game.player_starting_health = 11;
 		// player setup move this out to function
 		game.players = game.add.group();
-		//game.players.enableBody = true;
-		//game.players.physicsBodyType = Phaser.Physics.ARCADE;
 
 		for (i = 0; i < game.num_players; i++) {
-
-			//player.invincible_setup(game, i);
-			//game.now_invincible[i] = 0;
 
 			var p = game.players.getFirstDead();
 			if (p === null) {
@@ -57,13 +50,9 @@ var player = {
 			}
 		}
 
-
-		//game.players.setAll('health', game.player_starting_health);
-
 		//calculate groups health
-		//game.starting_players_health = player.check_players_health(game, game.players);
 		game.starting_players_health = game.player_starting_health*game.num_players;
-		//player.test(game, 0);
+		
 	},
 
 	pickedup: function(p, what){
