@@ -25,7 +25,7 @@ var avatar = function(game, i) {
 
 	this.body.collideWorldBounds = true;
 	this.name = i;
-	this.pad = i; // needs to be set to pad id 1-4
+	this.pad = game.controls[i]; // needs to be set to pad id 1-4
 	this.energy = 0;
 	this.health = game.player_starting_health;
 	//game.avatar[num].body.bounce.y=0.2;
@@ -53,8 +53,8 @@ avatar.prototype = Object.create(Phaser.Sprite.prototype);
 avatar.prototype.constructor = avatar;
 
 avatar.prototype.update = function(game) {
+	game = this.game;
 	if(this.alive){
-		game = this.game;
 		if(isNaN(game.controls[this.name])){
 			if(game.controls[this.name] == 'K'){
 				c.controls_key(game, this.name);
@@ -68,6 +68,10 @@ avatar.prototype.update = function(game) {
 	}else{
 		//console.log(this.name+"alive");
 		//we will need to make them visable for testing
+	}
+
+	if (game.nextKillAt[this.name] < game.time.now) {
+		game.players.getAt(this.name).alpha = 1;
 	}
 };
 

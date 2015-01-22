@@ -232,33 +232,30 @@ gameState.update = function (){
 	game.physics.arcade.overlap(game.players, game.pickups, p.pickedup, null, this);
 
 
-	game.physics.arcade.overlap(game.players, game.enemies, collision_notice, null, this);
-	game.physics.arcade.collide(game.players, game.enemies, collision_notice, null, this);
+	//game.physics.arcade.overlap(game.players, game.enemies, p.collision_notice, null, this);
+	game.physics.arcade.collide(game.players, game.enemies, p.collision_notice, null, this);
 
 	//this is just for registering who shot what
 	game.physics.arcade.overlap(game.bulletPool, game.enemies, add_point, null, this);
 
 	//this is for a bit of fun players shoot move other players, may want to drop if resources are concern
-	game.physics.arcade.collide(game.bulletPool, game.players, ricochet, null, this);
+	game.physics.arcade.collide(game.bulletPool, game.players, p.ricochet, null, this);
 
 	all = 0;
 	cursors = game.input.keyboard.createCursorKeys();
 	for (i = 0; i < game.num_players; i++) {
 		//pad_connect_indicator(i);
-		
+
 		/*
 		if(special_active == 0){
 			all = all+combo_notice(i);
 		}
 		*/
-
+		/*
 		if(game.now_invincible[i] == 1){
 			game.players.getAt(i).alpha = 0.2;
 		}
-
-		if (game.nextKillAt[i] < game.time.now) {
-			game.now_invincible[i] = 0;
-		}
+		*/
 	}
 
 	if(all == game.num_players){
@@ -293,13 +290,6 @@ gameState.update = function (){
 
 };
 
-function ricochet(bullet, player){
-	//this does not work quite right
-	bullet.body.velocity.x *= -1;
-	bullet.body.velocity.y *= -1;
-
-}
-
 function add_point (bullet, enemy){
 	bullet.kill();
 	enemy.damage(1);
@@ -307,7 +297,6 @@ function add_point (bullet, enemy){
 		//bullet.name //get player who shots id
 		update_score(1);
 	}
-
 }
 
 //this is not used yet
@@ -317,21 +306,6 @@ function lose_condition(){
 			//lose game
 		}
 	//}
-}
-
-function collision_notice(ply, enemy) {
-	num = ply.z-1;
-	if (game.nextKillAt[num] > game.time.now) {
-		game.now_invincible[num] = 1;
-	}else{
-		game.now_invincible[num] = 0;
-		game.nextKillAt[num] = game.time.now + game.KillDelay[num];
-
-		ply.damage(1);
-		enemy.damage(1);
-
-		sfx.shake(game);
-	}
 }
 
 function kill_players(player) {

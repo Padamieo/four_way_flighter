@@ -15,8 +15,9 @@ var healthbar = function(game, i) {
 
 };
 
-var test = function(){
-		console.log('oh hello');
+var test = function(graphic, test){
+		console.log('oh hello'+graphic+" test"+test);
+
 }
 
 healthbar.prototype = Object.create(Phaser.Graphics.prototype);
@@ -26,9 +27,13 @@ healthbar.prototype.update = function(game) {
 	game = this.game;
 	this.clear();
 
+	//game.players.forEach( kill_players, this, true);
+
+	//game.players.forEachAlive(test, this, this.for_player);
+
 	if(game.input.keyboard.isDown(Phaser.Keyboard.E)){
 		//there must be a better way to just lock these together
-		test();
+
 		this.x = game.players.getAt(this.for_player).x;
 		this.y = game.players.getAt(this.for_player).y;
 
@@ -37,7 +42,7 @@ healthbar.prototype.update = function(game) {
 		start_point = game.math.degToRad(90);
 		this.arc(0, 0, 40, start_point, value, false);
 	}
-	
+
 };
 
 module.exports = healthbar;

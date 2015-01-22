@@ -1,3 +1,4 @@
+var sfx = require('sfx');
 var player = {
 
 	setup: function(game){
@@ -66,25 +67,24 @@ var player = {
 	},
 
 	pickedup: function(p, what){
-		var test = what.class;
-		if(what.class = 0){
-			player.revive_player(p, what);
-		}else{
+
+		if(what.class == 0){
 			player.add_health(p, what);
+		}else{
+			player.revive_player(p, what);
 		}
 	},
 
 	revive_player: function(player, lives){
 		lives.kill();
+		game = player.game;
 		if(game.players.countLiving() == game.num_players){
 			return;
 		}else{
 			dead_player = game.players.getFirstDead();
-			//move to appropriate position
 			dead_player.x = lives.x;
 			dead_player.y = lives.y;
-			dead_player.revive(10);
-			//need to trigger temp invincible
+			dead_player.revive(game.starting_players_health/2);
 		}
 	},
 
@@ -111,6 +111,24 @@ var player = {
 
 	check_player_health: function(player, game){
 		game.current_players_health =  game.current_players_health+player.health;
+	},
+
+	collision_notice: function(player, enemy) {
+		game = player.game;
+		if (game.nextKillAt[player.name] > game.time.now) {
+			return;
+		}
+		game.nextKillAt[player.name] = game.time.now + game.KillDelay[player.name];
+		game.players.getAt(player.name).alpha = 0.2;
+		player.damage(1);
+		enemy.damage(1);
+		sfx.shake(game);
+	},
+
+	ricochet: function(bullet, player){
+		//this does not work quite right
+		bullet.body.velocity.x *= -1;
+		bullet.body.velocity.y *= -1;
 	}
 
 };

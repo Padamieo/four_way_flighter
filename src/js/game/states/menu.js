@@ -36,24 +36,6 @@ module.exports = function(game) {
 	}
 
 	/*
-	function count_change(count_input, num){
-		if(button[0].animations.frame == 2){
-			if(num+1 < 4){
-				if(num < count_input){
-					indicator[num+1].animations.frame = 1;
-				}else{
-					indicator[num+1].animations.frame = 0;
-				}
-			}
-		}else{
-			if(num < count_input){
-				indicator[num].animations.frame = 1;
-			}else{
-				indicator[num].animations.frame = 0;
-			}
-		}
-	}
-
 	//set-up default indicators
 	function controller_indicator(num){
 		posy = (game.height/2.8);
@@ -109,7 +91,7 @@ module.exports = function(game) {
 
 		game.controls = ['0','K','1','2'];
 
-		game.num_players = 2;
+		game.num_players = 3;
 
 		game.state.start('level');
 	}
@@ -126,7 +108,6 @@ module.exports = function(game) {
 		for (i = 0; i < 4; i++) {
 			button[i].events.onInputDown.add(actionOnClick, button[i]);
 			pad_connect_indicator(i);
-			count_change(count, i);
 		}
 		*/
 		game.start.events.onInputDown.add(begin, game.start);
