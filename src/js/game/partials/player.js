@@ -36,8 +36,7 @@ var player = {
 		//game.players.physicsBodyType = Phaser.Physics.ARCADE;
 
 		for (i = 0; i < game.num_players; i++) {
-			//player._game_avatar_setup(i, game);
-			//player.fire_setup(game, i);
+
 			//player.invincible_setup(game, i);
 			//game.now_invincible[i] = 0;
 
@@ -112,16 +111,6 @@ var player = {
 
 	check_player_health: function(player, game){
 		game.current_players_health =  game.current_players_health+player.health;
-	},
-
-	fire_setup: function(game, num){
-		game.nextShotAt[num] = 0;
-		game.shotDelay[num] = 50;
-	},
-
-	invincible_setup: function(game, num){
-		game.nextKillAt[num] = 0;
-		game.KillDelay[num] = 600;
 	}
 
 };

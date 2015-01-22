@@ -37,8 +37,7 @@ healthbar.prototype.update = function(game) {
 		start_point = game.math.degToRad(90);
 		this.arc(0, 0, 40, start_point, value, false);
 	}
-
-
+	
 };
 
 module.exports = healthbar;

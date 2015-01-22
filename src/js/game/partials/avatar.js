@@ -25,6 +25,7 @@ var avatar = function(game, i) {
 
 	this.body.collideWorldBounds = true;
 	this.name = i;
+	this.pad = i; // needs to be set to pad id 1-4
 	this.energy = 0;
 	this.health = game.player_starting_health;
 	//game.avatar[num].body.bounce.y=0.2;
@@ -61,7 +62,7 @@ avatar.prototype.update = function(game) {
 				//custom controls
 			}
 		}else{
-			c.controls_pad(game, this.name, this.name);
+			c.controls_pad(game, this.name, this.pad);
 		}
 
 	}else{

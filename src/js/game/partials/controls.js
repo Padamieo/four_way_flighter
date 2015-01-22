@@ -64,15 +64,15 @@ var controls = {
 		if ( game.input.keyboard.isDown(Phaser.Keyboard.W) ) {
 			game.players.getAt(num).body.velocity.y = -speed;
 			//game.avatar.animations.play('forward');
-			if(game.now_invincible[num] == 0){
-				//game.players.getAt(num).animations.frame = 8+num;
-			}
+			// if(game.now_invincible[num] == 0){
+			// 	//game.players.getAt(num).animations.frame = 8+num;
+			// }
 		}else if(game.input.keyboard.isDown(Phaser.Keyboard.S) ){
 			game.players.getAt(num).body.velocity.y = speed;
 			//game.avatar.animations.play('back');
-			if(game.now_invincible[num] == 0){
-				//game.players.getAt(num).animations.frame = 12+num;
-			}
+			// if(game.now_invincible[num] == 0){
+			// 	//game.players.getAt(num).animations.frame = 12+num;
+			// }
 		}else{
 			v_test = 2;
 		}
@@ -106,87 +106,87 @@ var controls = {
 		}
 	},
 
-	controls_pad: function(game, play_num, pad_num){
+	controls_pad: function(game, player_id, pad_id){
 
 		//cursors = game.input.keyboard.createCursorKeys();
 		h_test = 0;
 		v_test = 0;
 
-		if ( game.pad[pad_num].axis(Phaser.Gamepad.XBOX360_STICK_RIGHT_Y) > 0.01 || game.pad[pad_num].axis(Phaser.Gamepad.XBOX360_STICK_RIGHT_Y) < -0.01 || game.pad[pad_num].axis(Phaser.Gamepad.XBOX360_STICK_RIGHT_X) < -0.01 ||  game.pad[pad_num].axis(Phaser.Gamepad.XBOX360_STICK_RIGHT_X) > 0.01){
-			if(game.players.getAt(play_num).alive == 1){
-				controls.fire(game, pad_num);
+		if ( game.pad[pad_id].axis(Phaser.Gamepad.XBOX360_STICK_RIGHT_Y) > 0.01 || game.pad[pad_id].axis(Phaser.Gamepad.XBOX360_STICK_RIGHT_Y) < -0.01 || game.pad[pad_id].axis(Phaser.Gamepad.XBOX360_STICK_RIGHT_X) < -0.01 ||  game.pad[pad_id].axis(Phaser.Gamepad.XBOX360_STICK_RIGHT_X) > 0.01){
+			if(game.players.getAt(player_id).alive == 1){
+				controls.fire(game, player_id, pad_id);
 				speed = 220;
 			}
 		}else{
 			speed = 300;
 		}
 
-		if ( game.pad[pad_num].isDown(Phaser.Gamepad.XBOX360_DPAD_LEFT) || game.pad[pad_num].axis(Phaser.Gamepad.XBOX360_STICK_LEFT_X) < -0.01) {
-			game.players.getAt(play_num).body.velocity.x = -speed;
-			if( game.players.getAt(play_num).angle > -20 ){
-				game.players.getAt(play_num).angle -= 1;
+		if ( game.pad[pad_id].isDown(Phaser.Gamepad.XBOX360_DPAD_LEFT) || game.pad[pad_id].axis(Phaser.Gamepad.XBOX360_STICK_LEFT_X) < -0.01) {
+			game.players.getAt(player_id).body.velocity.x = -speed;
+			if( game.players.getAt(player_id).angle > -20 ){
+				game.players.getAt(player_id).angle -= 1;
 			}
-		}else if( game.pad[pad_num].isDown(Phaser.Gamepad.XBOX360_DPAD_RIGHT) || game.pad[pad_num].axis(Phaser.Gamepad.XBOX360_STICK_LEFT_X) > 0.01){
-			game.players.getAt(play_num).body.velocity.x = speed;
-			if( game.players.getAt(play_num).angle < 20 ){
-				game.players.getAt(play_num).angle += 1;
+		}else if( game.pad[pad_id].isDown(Phaser.Gamepad.XBOX360_DPAD_RIGHT) || game.pad[pad_id].axis(Phaser.Gamepad.XBOX360_STICK_LEFT_X) > 0.01){
+			game.players.getAt(player_id).body.velocity.x = speed;
+			if( game.players.getAt(player_id).angle < 20 ){
+				game.players.getAt(player_id).angle += 1;
 			}
 		}else{
 			h_test = 1;
 		}
 
-		if ( game.pad[pad_num].isDown(Phaser.Gamepad.XBOX360_DPAD_UP) || game.pad[pad_num].axis(Phaser.Gamepad.XBOX360_STICK_LEFT_Y) < -0.01) {
-			game.players.getAt(play_num).body.velocity.y = -speed;
+		if ( game.pad[pad_id].isDown(Phaser.Gamepad.XBOX360_DPAD_UP) || game.pad[pad_id].axis(Phaser.Gamepad.XBOX360_STICK_LEFT_Y) < -0.01) {
+			game.players.getAt(player_id).body.velocity.y = -speed;
 			//game.avatar.animations.play('forward');
-			if(game.now_invincible[play_num] == 0){
-				game.players.getAt(play_num).animations.frame = 8+play_num;
-			}
-		}else if( game.pad[pad_num].isDown(Phaser.Gamepad.XBOX360_DPAD_DOWN) || game.pad[pad_num].axis(Phaser.Gamepad.XBOX360_STICK_LEFT_Y) > 0.01){
-			game.players.getAt(play_num).body.velocity.y = speed;
+			//if(game.now_invincible[player_id] == 0){
+				//game.players.getAt(player_id).animations.frame = 8+play_num;
+			//}
+		}else if( game.pad[pad_id].isDown(Phaser.Gamepad.XBOX360_DPAD_DOWN) || game.pad[pad_id].axis(Phaser.Gamepad.XBOX360_STICK_LEFT_Y) > 0.01){
+			game.players.getAt(player_id).body.velocity.y = speed;
 			//game.avatar.animations.play('back');
-			if(game.now_invincible[play_num] == 0){
-				game.players.getAt(play_num).animations.frame = 12+play_num;
-			}
+			// if(game.now_invincible[player_id] == 0){
+			// 	game.players.getAt(player_id).animations.frame = 12+player_id;
+			// }
 		}else{
 			v_test = 2;
 		}
 
-		controls.avatar_ani_reset(game, h_test, v_test, play_num);
+		controls.avatar_ani_reset(game, h_test, v_test, player_id);
 
 	},
 
-	fire: function(game, play_num) {
-		if (game.nextShotAt[play_num] > game.time.now) {
+	fire: function(game, player_id, pad_id) {
+		if (game.nextShotAt[player_id] > game.time.now) {
 			return;
 		}
-		game.nextShotAt[play_num] = game.time.now + game.shotDelay[play_num];
+		game.nextShotAt[player_id] = game.time.now + game.shotDelay[player_id];
 
 		if (game.bulletPool.countDead() === 0) {
 			return;
 		}
 
 		bullet = game.bulletPool.getFirstExists(false);
-		bullet.reset(game.players.getAt(play_num).x, game.players.getAt(play_num).y, 'bullet');
-		bullet.name = play_num;
+		bullet.reset(game.players.getAt(player_id).x, game.players.getAt(player_id).y, 'bullet');
+		bullet.name = player_id;
 		bullet.tint = 0xff00ff;
 
-		if(game.controls[play_num] == 'K'){
+		if(game.controls[player_id] == 'K'){
 			controls.keyboard_fire(game, bullet);
 		}else{
-			controls.gamepad_fire(game, play_num);
+			controls.gamepad_fire(game, pad_id);
 		}
 
 	},
 
-	gamepad_fire: function(game, pad_num){
-		if (game.pad[pad_num].axis(Phaser.Gamepad.XBOX360_STICK_RIGHT_X) < -0.01 ){
+	gamepad_fire: function(game, pad_id){
+		if (game.pad[pad_id].axis(Phaser.Gamepad.XBOX360_STICK_RIGHT_X) < -0.01 ){
 			bullet.body.velocity.x -= 500;
-		}else if (game.pad[pad_num].axis(Phaser.Gamepad.XBOX360_STICK_RIGHT_X) > 0.01 ){
+		}else if (game.pad[pad_id].axis(Phaser.Gamepad.XBOX360_STICK_RIGHT_X) > 0.01 ){
 			bullet.body.velocity.x += 500;
 		}
-		if (game.pad[pad_num].axis(Phaser.Gamepad.XBOX360_STICK_RIGHT_Y) < -0.01){
+		if (game.pad[pad_id].axis(Phaser.Gamepad.XBOX360_STICK_RIGHT_Y) < -0.01){
 			bullet.body.velocity.y -= 500;
-		}else if (game.pad[pad_num].axis(Phaser.Gamepad.XBOX360_STICK_RIGHT_Y) > 0.01){
+		}else if (game.pad[pad_id].axis(Phaser.Gamepad.XBOX360_STICK_RIGHT_Y) > 0.01){
 			bullet.body.velocity.y += 500;
 		}
 	},
