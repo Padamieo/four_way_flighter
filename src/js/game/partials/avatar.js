@@ -28,6 +28,7 @@ var avatar = function(game, i) {
 	this.pad = game.controls[i]; // needs to be set to pad id 1-4
 	this.energy = 0;
 	this.health = game.player_starting_health;
+	this.show_health = 0;
 	//game.avatar[num].body.bounce.y=0.2;
 
 	//game.avatar[num].body.immovable = false;
@@ -65,13 +66,13 @@ avatar.prototype.update = function(game) {
 			c.controls_pad(game, this.name, this.pad);
 		}
 
+		if (game.nextKillAt[this.name] < game.time.now) {
+			game.players.getAt(this.name).alpha = 1;
+		}
+
 	}else{
 		//console.log(this.name+"alive");
 		//we will need to make them visable for testing
-	}
-
-	if (game.nextKillAt[this.name] < game.time.now) {
-		game.players.getAt(this.name).alpha = 1;
 	}
 };
 

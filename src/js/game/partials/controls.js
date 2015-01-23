@@ -34,74 +34,72 @@ var controls = {
 		}
 	},
 
-	controls_key: function(game, num){
+	controls_key: function(game, player_id){
 
 		// cursors = game.input.keyboard.createCursorKeys();
 		h_test = 0;
 		v_test = 0;
 
 		if ( cursors.left.isDown || cursors.right.isDown || cursors.up.isDown || cursors.down.isDown ){
-			controls.fire(game, num);
+			controls.fire(game, player_id);
 			speed = 220;
 		}else{
 			speed = 300;
 		}
 
 		if ( game.input.keyboard.isDown(Phaser.Keyboard.A) ) {
-			game.players.getAt(num).body.velocity.x = -speed;
-			if( game.players.getAt(num).angle > -20 ){
-				game.players.getAt(num).angle -= 1;
+			game.players.getAt(player_id).body.velocity.x = -speed;
+			if( game.players.getAt(player_id).angle > -20 ){
+				game.players.getAt(player_id).angle -= 1;
 			}
 		}else if( game.input.keyboard.isDown(Phaser.Keyboard.D) ){
-			game.players.getAt(num).body.velocity.x = speed;
-			if( game.players.getAt(num).angle < 20 ){
-				game.players.getAt(num).angle += 1;
+			game.players.getAt(player_id).body.velocity.x = speed;
+			if( game.players.getAt(player_id).angle < 20 ){
+				game.players.getAt(player_id).angle += 1;
 			}
 		}else{
 			h_test = 1;
 		}
 
 		if ( game.input.keyboard.isDown(Phaser.Keyboard.W) ) {
-			game.players.getAt(num).body.velocity.y = -speed;
+			game.players.getAt(player_id).body.velocity.y = -speed;
 			//game.avatar.animations.play('forward');
-			// if(game.now_invincible[num] == 0){
-			// 	//game.players.getAt(num).animations.frame = 8+num;
+			// if(game.now_invincible[player_id] == 0){
+			// 	//game.players.getAt(player_id).animations.frame = 8+player_id;
 			// }
 		}else if(game.input.keyboard.isDown(Phaser.Keyboard.S) ){
-			game.players.getAt(num).body.velocity.y = speed;
+			game.players.getAt(player_id).body.velocity.y = speed;
 			//game.avatar.animations.play('back');
-			// if(game.now_invincible[num] == 0){
-			// 	//game.players.getAt(num).animations.frame = 12+num;
+			// if(game.now_invincible[player_id] == 0){
+			// 	//game.players.getAt(player_id).animations.frame = 12+player_id;
 			// }
 		}else{
 			v_test = 2;
 		}
 
-		controls.avatar_ani_reset(game, h_test, v_test, num);
+		controls.avatar_ani_reset(game, h_test, v_test, player_id);
+
+		if(game.input.keyboard.isDown(Phaser.Keyboard.E)){
+			game.players.getAt(player_id).show_health = 1;
+		}
 
 	},
 
-	avatar_ani_reset: function(game, h, v, num){
+	avatar_ani_reset: function(game, h, v, player_id){
 		if( h+v == 3){
-			if( game.players.getAt(num).angle != 0){
-				y = game.players.getAt(num).y;
+			if( game.players.getAt(player_id).angle != 0){
+				y = game.players.getAt(player_id).y;
 
-				if(game.players.getAt(num).angle < -0){
-					game.players.getAt(num).angle += 1;
+				if(game.players.getAt(player_id).angle < -0){
+					game.players.getAt(player_id).angle += 1;
 				}
-				if(game.players.getAt(num).angle > 0){
-					game.players.getAt(num).angle -= 1;
-				}
-			}
-
-			if(game.now_invincible[num] == 0){
-				if(game.players.getAt(num).animations.frame != 0+num){
-					game.players.getAt(num).animations.frame = 0+num;
+				if(game.players.getAt(player_id).angle > 0){
+					game.players.getAt(player_id).angle -= 1;
 				}
 			}
 
-			game.players.getAt(num).body.velocity.y *= 0.96;
-			game.players.getAt(num).body.velocity.x *= 0.96;
+			game.players.getAt(player_id).body.velocity.y *= 0.96;
+			game.players.getAt(player_id).body.velocity.x *= 0.96;
 
 		}
 	},
@@ -152,6 +150,10 @@ var controls = {
 		}
 
 		controls.avatar_ani_reset(game, h_test, v_test, player_id);
+
+		if(game.pad[pad_id].isDown(Phaser.Gamepad.XBOX360_A)){
+			game.players.getAt(player_id).show_health = 1;
+		}
 
 	},
 

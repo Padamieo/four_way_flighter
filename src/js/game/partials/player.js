@@ -52,7 +52,7 @@ var player = {
 
 		//calculate groups health
 		game.starting_players_health = game.player_starting_health*game.num_players;
-		
+
 	},
 
 	pickedup: function(p, what){
@@ -109,9 +109,11 @@ var player = {
 		}
 		game.nextKillAt[player.name] = game.time.now + game.KillDelay[player.name];
 		game.players.getAt(player.name).alpha = 0.2;
+		game.players.getAt(player.name).show_health = 1;
 		player.damage(1);
 		enemy.damage(1);
 		sfx.shake(game);
+
 	},
 
 	ricochet: function(bullet, player){
