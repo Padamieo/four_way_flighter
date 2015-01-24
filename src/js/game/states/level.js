@@ -11,7 +11,7 @@ var sfx = require('sfx');
 
 var pickup = require('pickup');
 
-var m = require('modal');
+var m = require('pause');
 
 module.exports = function(game) {
 
@@ -129,22 +129,18 @@ gameState.create = function () {
 			}
 			count++; // notice count
 		}
-
-			add_pickup(); // issues
 	}
 
 	game.spawn_enemy = function(x, y, type) {
 
-		type = 1; // temporary
-
-		if(type == 1){
+		if(type == 0 || type == 1 || type == 2){
 
 			var nme = game.enemies.getFirstDead();
 			if (nme === null) {
-				nme = new e_basic(game, 0, 0);
+				nme = new e_basic(game, 0, 0, type);
 			}
 
-		}else if(type == 2){
+		}else if(type == 3){
 
 			var nme = game.enemies.getFirstDead();
 			if (nme === null) {
@@ -168,28 +164,6 @@ gameState.create = function () {
 		return nme;
 	};
 
-	function add_pickup(){
-
-		//health_threshold = (game.starting_players_health/4);
-		current_health = p.check_players_health(game, game.players);
-
-		//health
-		if(current_health < (game.starting_players_health/4)){
-			var item = game.pickups.getFirstDead();
-			if (item === null) {
-				item = new pickup(game, 0);
-			}
-		}
-
-		//lives
-		if(game.players.countLiving() != game.num_players){
-			var item = game.pickups.getFirstDead();
-			if (item === null) {
-				item = new pickup(game, 1);
-			}
-		}
-
-	}
 
 	/*
 	function gofull() {
@@ -281,7 +255,7 @@ gameState.update = function (){
 		if( bulletspeed < 200){ bullet.kill(); }
 	});
 
-	if(game.input.keyboard.isDown(Phaser.Keyboard.P)){ g.pause(game);}
+	if(game.input.keyboard.isDown(Phaser.Keyboard.ESC)){ m.pause(game);}
 
 };
 

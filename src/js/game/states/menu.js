@@ -89,9 +89,9 @@ module.exports = function(game) {
 	//calculations for starting a game
 	function begin(){
 
-		game.controls = ['0','K','1','2'];
+		game.controls = ['K','1','2','3'];
 
-		game.num_players = 3;
+		game.num_players = 1;
 
 		game.state.start('level');
 	}

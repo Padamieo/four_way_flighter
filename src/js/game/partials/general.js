@@ -1,3 +1,5 @@
+var pickup = require('pickup');
+var p = require('player');
 var general = {
 
 	setup: function(game){
@@ -14,8 +16,37 @@ var general = {
 
 		//adding pickups
 		game.pickups = game.add.group();
+
+	},
+
+	add_pickup: function(game){
+		//game = spawn.game;
+		console.log("hello"+game);
+		console.log("hello"+c.game);
+		//health_threshold = (game.starting_players_health/4);
+		current_health = p.check_players_health(game, game.players);
+
+		//health
+		if(current_health < (game.starting_players_health/4)){
+			var item = game.pickups.getFirstDead();
+			if (item === null) {
+				item = new pickup(game, 0);
+			}else{
+				item.revive();
+			}
+		}
+
+		//lives
+		if(game.players.countLiving() != game.num_players){
+			var item = game.pickups.getFirstDead();
+			if (item === null) {
+				item = new pickup(game, 1);
+			}else{
+				item.revive();
+			}
+		}
 	}
-	
+
 };
 
 module.exports = general;

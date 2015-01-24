@@ -14,7 +14,7 @@ var healthbar = function(game, i) {
 	game.healthbars.add(this);
 };
 
-var test = function(graphic, test){
+var test = function(graphic, game){
 		console.log('oh hello'+graphic+" test"+test);
 
 }
@@ -31,7 +31,7 @@ healthbar.prototype.update = function(game) {
 	//game.players.forEachAlive(test, this, this.for_player);
 
 	if(game.players.getAt(this.for_player).show_health != 0){
-		
+
 		//there must be a better way to just lock these together
 		this.x = game.players.getAt(this.for_player).x;
 		this.y = game.players.getAt(this.for_player).y;
@@ -41,8 +41,6 @@ healthbar.prototype.update = function(game) {
 		start_point = game.math.degToRad(90);
 		this.arc(0, 0, 40, start_point, value, false);
 	}
-
-
 
 };
 
