@@ -27,9 +27,6 @@ var general = {
 		game.scoreText.anchor.x=0.5;
 		game.scoreText.anchor.y=0.5;
 		general.update_score(game, 0);
-
-		cursors = game.input.keyboard.createCursorKeys();
-
 	},
 
 	add_pickup: function(game){

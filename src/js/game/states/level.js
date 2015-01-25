@@ -64,7 +64,6 @@ gameState.create = function () {
 	logo.filters = [gray];
 	*/
 
-	//console.log(game.players.getAt(0));
 };
 ////////// end of create /////////
 
@@ -142,64 +141,61 @@ gameState.create = function () {
 		return nme;
 	};
 
-
 	/*
+	//this needs to be a modal general element
 	function gofull() {
 		game.scale.startFullScreen();
 	}
 	*/
 
-gameState.update = function (){
+	gameState.update = function (){
 
-	//game.filter.update();
+		//game.filter.update();
 
-	//notice a player collecting a pickup
-	game.physics.arcade.overlap(game.players, game.pickups, p.pickedup, null, this);
+		//notice a player collecting a pickup
+		game.physics.arcade.overlap(game.players, game.pickups, p.pickedup, null, this);
 
+		//game.physics.arcade.overlap(game.players, game.enemies, p.collision_notice, null, this);
+		game.physics.arcade.collide(game.players, game.enemies, p.collision_notice, null, this);
 
-	//game.physics.arcade.overlap(game.players, game.enemies, p.collision_notice, null, this);
-	game.physics.arcade.collide(game.players, game.enemies, p.collision_notice, null, this);
+		//this is just for registering who shot what
+		game.physics.arcade.overlap(game.bulletPool, game.enemies, p.add_point, null, this);
 
-	//this is just for registering who shot what
-	game.physics.arcade.overlap(game.bulletPool, game.enemies, p.add_point, null, this);
+		//this is for a bit of fun players shoot move other players, may want to drop if resources are concern
+		game.physics.arcade.collide(game.bulletPool, game.players, p.ricochet, null, this);
 
-	//this is for a bit of fun players shoot move other players, may want to drop if resources are concern
-	game.physics.arcade.collide(game.bulletPool, game.players, p.ricochet, null, this);
+		if((p.check_players_megazoid(game, game.players)) == game.num_players){
+			//animation
+			//calculate combined health
+			var a_mega_zord = game.mega_zord.getFirstDead();
+			if (a_mega_zord === null) {
+				a_mega_zord = new megazord(game);
+			}
 
-	if((p.check_players_megazoid(game, game.players)) == game.num_players){
-		//animation
-		//calculate combined health
-		var a_mega_zord = game.mega_zord.getFirstDead();
-		if (a_mega_zord === null) {
-			a_mega_zord = new megazord(game);
+			game.players.forEach( p.kill_players, this, true);
 		}
 
-		game.players.forEach( p.kill_players, this, true);
-	}
+		//if player bullets remove them please.
+		game.bulletPool.forEachAlive(function(bullet){
+			bulletspeed = Math.abs(bullet.body.velocity.y) + Math.abs(bullet.body.velocity.x);
+			if( bulletspeed < 200){ bullet.kill(); }
+		});
 
-	//if player bullets remove them please.
-	game.bulletPool.forEachAlive(function(bullet){
-		bulletspeed = Math.abs(bullet.body.velocity.y) + Math.abs(bullet.body.velocity.x);
-		if( bulletspeed < 200){ bullet.kill(); }
-	});
+		if(game.input.keyboard.isDown(Phaser.Keyboard.ESC)){ m.pause(game);}
 
-	if(game.input.keyboard.isDown(Phaser.Keyboard.ESC)){ m.pause(game);}
+		lose_condition();
 
-	lose_condition();
+	};
 
-};
-
-//this is not used yet
-function lose_condition(){
-	console.log(game.mega_zord.countAlive());
-	if(game.mega_zord.countAlive() == 0){
-		if(game.players.countDead() == game.num_players){
-			//lose game
+	//this is not used yet
+	function lose_condition(){
+		console.log(game.mega_zord.countAlive());
+		if(game.mega_zord.countAlive() == 0){
+			if(game.players.countDead() == game.num_players){
+				//lose game
+			}
 		}
 	}
-}
-
-
 
 	return gameState;
 };

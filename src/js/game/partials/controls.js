@@ -1,24 +1,15 @@
 var controls = {
 
 	setup: function(game){
-
 		game.input.gamepad.start();
-
+		cursors = game.input.keyboard.createCursorKeys();
 		game.pad = [];
-
 		for (i = 0; i < game.num_players; i++) {
 			controls.pad_setup(game, i);
 		}
-
 	},
 
 	pad_setup: function(game, num){
-
-	//indicatorpos = (game.width)-(22);
-	//indicator[num] = game.add.sprite(indicatorpos,(num*10), 'controller-indicator');
-	//indicator[num].scale.x = indicator[num].scale.y = 1;
-	//indicator[num].animations.frame = 1;
-
 		// To listen to buttons from a specific pad listen directly on that pad game.input.gamepad.padX, where X = pad 1-4
 		if(num == 0){
 			game.pad[num] = game.input.gamepad.pad1;
@@ -34,9 +25,14 @@ var controls = {
 		}
 	},
 
-	controls_key: function(game, player_id){
+	controlers_indicators: function(game, x, y){
+		//indicatorpos = (game.width)-(22);
+		//indicator[num] = game.add.sprite(indicatorpos,(num*10), 'controller-indicator');
+		//indicator[num].scale.x = indicator[num].scale.y = 1;
+		//indicator[num].animations.frame = 1;
+	},
 
-		// cursors = game.input.keyboard.createCursorKeys();
+	controls_key: function(game, player_id){
 		h_test = 0;
 		v_test = 0;
 
@@ -113,8 +109,6 @@ var controls = {
 	},
 
 	controls_pad: function(game, player_id, pad_id){
-
-		//cursors = game.input.keyboard.createCursorKeys();
 		h_test = 0;
 		v_test = 0;
 
