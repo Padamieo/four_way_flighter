@@ -1,17 +1,18 @@
 var c = require('controls');
 
 // megazord constructor
-var megazord = function(game, i) {
-
-	Phaser.Sprite.call(this, game, (game.height/2), (game.width/2), 'fighter');
+var megazord = function(game) {
+	x = game.width/2;
+	y = game.height/2;
+	Phaser.Sprite.call(this, game, x, y, 'fighter');
 	game.physics.enable(this, Phaser.Physics.ARCADE);
-	//game.players.add(this); //do we want to add this to group?
+	game.mega_zord.add(this);
 
-	game.nextShotAt[i] = 0;
-	game.shotDelay[i] = 50;
-
-	game.nextKillAt[i] = 0;
-	game.KillDelay[i] = 600
+	// game.nextShotAt[i] = 0;
+	// game.shotDelay[i] = 50;
+	//
+	// game.nextKillAt[i] = 0;
+	// game.KillDelay[i] = 600
 
 	this.anchor.setTo(0.5, 0.5);
 
@@ -48,28 +49,15 @@ megazord.prototype = Object.create(Phaser.Sprite.prototype);
 megazord.prototype.constructor = megazord;
 
 megazord.prototype.update = function(game) {
-	/*
+
 	game = this.game;
 	if(this.alive){
-		if(isNaN(game.controls[this.name])){
-			if(game.controls[this.name] == 'K'){
-				c.controls_key(game, this.name);
-			}else{
-				//custom controls
-			}
-		}else{
-			c.controls_pad(game, this.name, this.pad);
-		}
-
-		if (game.nextKillAt[this.name] < game.time.now) {
-			game.players.getAt(this.name).alpha = 1;
-		}
 
 	}else{
 		//console.log(this.name+"alive");
 		//we will need to make them visable for testing
 	}
-	*/
+	
 };
 
 module.exports = megazord;

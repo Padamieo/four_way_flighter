@@ -144,22 +144,28 @@ var controls = {
 		if ( game.pad[pad_id].isDown(Phaser.Gamepad.XBOX360_DPAD_UP) || game.pad[pad_id].axis(Phaser.Gamepad.XBOX360_STICK_LEFT_Y) < -0.01) {
 			game.players.getAt(player_id).body.velocity.y = -speed;
 			//game.avatar.animations.play('forward');
-			//if(game.now_invincible[player_id] == 0){
-				//game.players.getAt(player_id).animations.frame = 8+play_num;
-			//}
 		}else if( game.pad[pad_id].isDown(Phaser.Gamepad.XBOX360_DPAD_DOWN) || game.pad[pad_id].axis(Phaser.Gamepad.XBOX360_STICK_LEFT_Y) > 0.01){
 			game.players.getAt(player_id).body.velocity.y = speed;
 			//game.avatar.animations.play('back');
-			// if(game.now_invincible[player_id] == 0){
-			// 	game.players.getAt(player_id).animations.frame = 12+player_id;
-			// }
 		}else{
 			v_test = 2;
 		}
 
 		controls.avatar_ani_reset(game, h_test, v_test, player_id);
 
-		//
+		if( game.pad[pad_id].isDown(Phaser.Gamepad.XBOX360_Y) ){
+			if(game.players.getAt(player_id).energy >= game.MAX_ENERGY){
+				game.players.getAt(player_id).zoid_request = 1;
+			}
+		}else{
+			if(game.players.getAt(player_id).zoid_request == 1){
+				game.players.getAt(player_id).zoid_request = 0;
+			}
+		}
+
+		if( game.pad[pad_id].isDown(Phaser.Gamepad.XBOX360_A) ){
+			game.players.getAt(player_id).show_energy = 1;
+		}
 
 		if(game.pad[pad_id].isDown(Phaser.Gamepad.XBOX360_B)){
 			game.players.getAt(player_id).show_health = 1;

@@ -53,13 +53,19 @@ var player = {
 			}
 		}
 
+		var megazord = require('megazord');
+		game.mega_zord = game.add.group();
+		// var a_mega_zord = game.mega_zord.getFirstDead();
+		// if (a_mega_zord === null) {
+		// 	a_mega_zord = new megazord(game);
+		// }
+
 		//calculate groups health
 		game.starting_players_health = game.player_starting_health*game.num_players;
 
 	},
 
 	pickedup: function(p, what){
-
 		if(what.class == 0){
 			player.add_health(p, what);
 		}else{
@@ -109,7 +115,7 @@ var player = {
 	},
 
 	check_player_health: function(player, game){
-		//game.current_players_health =  game.current_players_health+player.health;
+		game.current_players_health =  game.current_players_health+player.health;
 	},
 
 	check_players_megazoid: function(game, players){
@@ -131,7 +137,7 @@ var player = {
 		game.players.getAt(player.name).alpha = 0.2;
 		game.players.getAt(player.name).show_health = 1;
 		player.damage(1);
-		enemy.damage(1);
+		enemy.damage(1);//should be based on players bullet damage
 		sfx.shake(game);
 
 	},

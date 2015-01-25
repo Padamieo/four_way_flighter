@@ -19,7 +19,7 @@ module.exports = function(game) {
 	var count = 0; // this should probably be game.count
 
 	//var indicator = [];
-	var special_active = 0;
+	//var special_active = 0;
 
 /*
 	var Gray = require('gray'); //filter grey
@@ -167,31 +167,15 @@ gameState.update = function (){
 	game.physics.arcade.collide(game.bulletPool, game.players, p.ricochet, null, this);
 
 	if((p.check_players_megazoid(game, game.players)) == game.num_players){
-		//console.log("merge"+all);
-		value = game.players.countLiving();
-		//console.log(value);
-
-		//var p = game.players.getFirstDead();
-		if (megazord === null) {
-			megazord = new megazord(game, i);
+		//animation
+		//calculate combined health
+		var a_mega_zord = game.mega_zord.getFirstDead();
+		if (a_mega_zord === null) {
+			a_mega_zord = new megazord(game);
 		}
 
-		//we need this visually
-		//var logo = game.add.sprite(game.world.centerX, game.world.centerY, 'logo');
-		//logo.anchor.setTo(0.5, 0.5);
-
-		//combo health based on group health, complex i know
-		//player_combo.revive(10);
-
-		//would be nice to animate joining in center
-		//players.forEach(game.physics.arcade.moveToObject, this, this, logo);
 		game.players.forEach( p.kill_players, this, true);
-
-		special_active = 1;
-		//if health or maintance of combo drop this will become 0
 	}
-
-	//console.log(players.getAt(0).health);
 
 	//if player bullets remove them please.
 	game.bulletPool.forEachAlive(function(bullet){
@@ -201,15 +185,18 @@ gameState.update = function (){
 
 	if(game.input.keyboard.isDown(Phaser.Keyboard.ESC)){ m.pause(game);}
 
+	lose_condition();
+
 };
 
 //this is not used yet
 function lose_condition(){
-	//if(special_active == 0){
+	console.log(game.mega_zord.countAlive());
+	if(game.mega_zord.countAlive() == 0){
 		if(game.players.countDead() == game.num_players){
 			//lose game
 		}
-	//}
+	}
 }
 
 
