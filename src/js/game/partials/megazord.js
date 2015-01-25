@@ -34,8 +34,8 @@ var megazord = function(game, i) {
 	//this.animations.frame = i;
 
 	//this is how we will control variouse screen resolutions
-	this.scale.y = 1;
-	this.scale.x = 1;
+	this.scale.y = 5;
+	this.scale.x = 5;
 
 	// animations still usefull but not being used / set
 	//game.megazord[num].animations.add('default', [0, 1, 2, 3, 4, 5, 6, 7], 8, true);

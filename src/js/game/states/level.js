@@ -4,6 +4,7 @@ var e_follower = require('e_follower');
 var e = require('e');
 
 var p = require('player');
+var megazord = require('megazord');
 var c = require('controls');
 var g = require('general');
 
@@ -148,33 +149,6 @@ gameState.create = function () {
 	}
 	*/
 
-/*
-function combo_notice(num){
-	value = 0;
-
-	if(game.keyboard_offset == 1 && num == 0){
-		if( game.input.keyboard.isDown(Phaser.Keyboard.E) ){
-			//shine and noise
-			if(game.players.countLiving() == game.num_players){
-				//also check they have engouth juice and more than 50 health
-					value = 1;
-			}
-		}
-	}else{
-		if(game.keyboard_offset == 1){ num = num-1;}
-		if( game.pad[num].isDown(Phaser.Gamepad.XBOX360_A) ){
-			//shine and noise
-			if(game.players.countLiving() == game.num_players){
-				//also check they have engouth juice and more than 50 health
-					value = 1;
-			}
-		}
-	}
-
-	return value;
-}
-*/
-
 gameState.update = function (){
 
 	//game.filter.update();
@@ -192,25 +166,15 @@ gameState.update = function (){
 	//this is for a bit of fun players shoot move other players, may want to drop if resources are concern
 	game.physics.arcade.collide(game.bulletPool, game.players, p.ricochet, null, this);
 
-	all = 0;
-	cursors = game.input.keyboard.createCursorKeys();
-	for (i = 0; i < game.num_players; i++) {
-		//pad_connect_indicator(i);
-
-		/*
-		if(special_active == 0){
-			all = all+combo_notice(i);
-		}
-		*/
-	}
-
-
-	
-
-	if(all == game.num_players){
+	if((p.check_players_megazoid(game, game.players)) == game.num_players){
 		//console.log("merge"+all);
 		value = game.players.countLiving();
 		//console.log(value);
+
+		//var p = game.players.getFirstDead();
+		if (megazord === null) {
+			megazord = new megazord(game, i);
+		}
 
 		//we need this visually
 		//var logo = game.add.sprite(game.world.centerX, game.world.centerY, 'logo');
@@ -221,7 +185,7 @@ gameState.update = function (){
 
 		//would be nice to animate joining in center
 		//players.forEach(game.physics.arcade.moveToObject, this, this, logo);
-		game.players.forEach( kill_players, this, true);
+		game.players.forEach( p.kill_players, this, true);
 
 		special_active = 1;
 		//if health or maintance of combo drop this will become 0
@@ -248,9 +212,7 @@ function lose_condition(){
 	//}
 }
 
-function kill_players(player) {
-	player.kill();
-}
+
 
 	return gameState;
 };

@@ -29,8 +29,10 @@ var avatar = function(game, i) {
 	this.energy = 0;
 	this.health = game.player_starting_health;
 	this.show_health = 0;
+	this.show_energy = 0;
 	this.TOP_SPEED = 300;
 	this.LOW_SPEED = 220;
+	this.zoid_request = 0;
 	//game.avatar[num].body.bounce.y=0.2;
 
 	//game.avatar[num].body.immovable = false;
@@ -57,6 +59,7 @@ avatar.prototype.constructor = avatar;
 avatar.prototype.update = function(game) {
 	game = this.game;
 	if(this.alive){
+		if(this.zoid_request){console.log(this.name+"wants to zoid")}
 		if(isNaN(game.controls[this.name])){
 			if(game.controls[this.name] == 'K'){
 				c.controls_key(game, this.name);

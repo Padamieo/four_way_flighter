@@ -30,6 +30,7 @@
     "healthbar": "./src/js/game/partials/healthbar.js",
     "powerbar": "./src/js/game/partials/powerbar.js",
     "avatar": "./src/js/game/partials/avatar.js",
+    "megazord": "./src/js/game/partials/megazord.js",
     "gray": "./src/js/lib/filters/Gray.js"
   },
   "browserify-shim": {

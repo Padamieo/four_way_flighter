@@ -30,7 +30,8 @@ var player = {
 		game.bulletPool.setAll('checkWorldBounds', true);
 
 		var avatar = require('avatar');
-		game.player_starting_health = 11;
+		game.player_starting_health = 11; //this could be array for individuals
+		game.MAX_ENERGY = 10;
 		// player setup move this out to function
 		game.players = game.add.group();
 
@@ -96,7 +97,7 @@ var player = {
 
 	energy_visual_value: function(game, player_id){
 		this_player = game.players.getAt(player_id);
-		energy_section = 360/100;
+		energy_section = 360/game.MAX_ENERGY;
 		display_energy = this_player.energy*energy_section;
 		return game.math.degToRad(display_energy+90);
 	},
@@ -108,7 +109,17 @@ var player = {
 	},
 
 	check_player_health: function(player, game){
-		game.current_players_health =  game.current_players_health+player.health;
+		//game.current_players_health =  game.current_players_health+player.health;
+	},
+
+	check_players_megazoid: function(game, players){
+		game.zoid = 0;
+		game.players.forEachAlive( player.zoid_request, this, game);
+		return game.zoid;
+	},
+
+	zoid_request: function(player, game){
+		game.zoid =  game.zoid+player.zoid_request;
 	},
 
 	collision_notice: function(player, enemy) {
@@ -133,10 +144,11 @@ var player = {
 
 	update_energy: function(game, i){
 		energy = game.players.getAt(i).energy;
-		if(energy >= 100){
+		if(energy >= game.MAX_ENERGY){
 			return;
 		}
 		game.players.getAt(i).energy = energy+1;
+		//game.players.getAt(i).show_energy = 1;
 	},
 
 	add_point: function(bullet, enemy){
@@ -146,10 +158,13 @@ var player = {
 		enemy.damage(1);
 
 		if(enemy.health <= 0){
-
 			player.update_energy(game, bullet.name);
 			general.update_score(game, enemy.kill_point);
 		}
+	},
+
+	kill_players: function(player) {
+		player.kill();
 	}
 
 };

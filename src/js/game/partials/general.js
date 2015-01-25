@@ -19,15 +19,16 @@ var general = {
 		//adding pickups
 		game.pickups = game.add.group();
 
+		//setup energy score info
 		game.score = 0;
 		game.scoreText;
-
-		//setup energy score info
 		textpos = (game.width)-(game.width/2);
 		game.scoreText = game.add.text(textpos, game.height-14, '0', { fontSize: '12px', fill: '#fff' });
 		game.scoreText.anchor.x=0.5;
 		game.scoreText.anchor.y=0.5;
 		general.update_score(game, 0);
+
+		cursors = game.input.keyboard.createCursorKeys();
 
 	},
 
