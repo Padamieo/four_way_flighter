@@ -5,7 +5,7 @@
   "main": "build/js/app.min.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-	"start": "nodewebkit build"
+    "start": "nodewebkit build"
   },
   "repository": {
     "type": "git",
@@ -19,7 +19,7 @@
     "Stats": "./src/js/lib/stats.min.js",
     "general": "./src/js/game/partials/general.js",
     "player": "./src/js/game/partials/player.js",
-    "modal": "./src/js/game/partials/modal.js",
+    "pause": "./src/js/game/modals/pause.js",
     "controls": "./src/js/game/partials/controls.js",
     "e": "./src/js/game/partials/e.js",
     "sfx": "./src/js/game/partials/sfx.js",
@@ -29,6 +29,8 @@
     "pickup": "./src/js/game/partials/pickups.js",
     "healthbar": "./src/js/game/partials/healthbar.js",
     "powerbar": "./src/js/game/partials/powerbar.js",
+    "avatar": "./src/js/game/partials/avatar.js",
+    "megazord": "./src/js/game/partials/megazord.js",
     "gray": "./src/js/lib/filters/Gray.js"
   },
   "browserify-shim": {

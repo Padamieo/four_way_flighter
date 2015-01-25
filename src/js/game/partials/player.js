@@ -1,16 +1,17 @@
+var sfx = require('sfx');
+var general = require('general');
+
 var player = {
 
 	setup: function(game){
 
-		game.avatar = [];
+		//game.avatar = [];
 
 		game.nextShotAt = [];
 		game.shotDelay = [];
 
 		game.nextKillAt = [];
 		game.KillDelay = [];
-
-		game.now_invincible = [];
 
 		var healthbar = require('healthbar');
 		game.healthbars = game.add.group();
@@ -28,16 +29,18 @@ var player = {
 		game.bulletPool.setAll('outOfBoundsKill', true);
 		game.bulletPool.setAll('checkWorldBounds', true);
 
+		var avatar = require('avatar');
+		game.player_starting_health = 11; //this could be array for individuals
+		game.MAX_ENERGY = 10;
 		// player setup move this out to function
 		game.players = game.add.group();
-		game.players.enableBody = true;
-		game.players.physicsBodyType = Phaser.Physics.ARCADE;
 
 		for (i = 0; i < game.num_players; i++) {
-			player._game_avatar_setup(i, game);
-			player.fire_setup(game, i);
-			player.invincible_setup(game, i);
-			game.now_invincible[i] = 0;
+
+			var p = game.players.getFirstDead();
+			if (p === null) {
+				p = new avatar(game, i);
+			}
 
 			var h = game.healthbars.getFirstDead();
 			if (h === null) {
@@ -49,37 +52,37 @@ var player = {
 				s = new powerbar(game, i);
 			}
 		}
-		game.players.setAll('anchor.x', 0.5);
-		game.players.setAll('anchor.y', 0.5);
-		game.player_starting_health = 11;
-		game.players.setAll('health', game.player_starting_health);
+
+		var megazord = require('megazord');
+		game.mega_zord = game.add.group();
+		// var a_mega_zord = game.mega_zord.getFirstDead();
+		// if (a_mega_zord === null) {
+		// 	a_mega_zord = new megazord(game);
+		// }
 
 		//calculate groups health
-		//game.starting_players_health = player.check_players_health(game, game.players);
 		game.starting_players_health = game.player_starting_health*game.num_players;
-		//player.test(game, 0);
+
 	},
 
 	pickedup: function(p, what){
-		var test = what.class;
-		if(what.class = 0){
-			player.revive_player(p, what);
-		}else{
+		if(what.class == 0){
 			player.add_health(p, what);
+		}else{
+			player.revive_player(p, what);
 		}
 	},
 
 	revive_player: function(player, lives){
 		lives.kill();
+		game = player.game;
 		if(game.players.countLiving() == game.num_players){
 			return;
 		}else{
 			dead_player = game.players.getFirstDead();
-			//move to appropriate position
 			dead_player.x = lives.x;
 			dead_player.y = lives.y;
-			dead_player.revive(10);
-			//need to trigger temp invincible
+			dead_player.revive(game.starting_players_health/2);
 		}
 	},
 
@@ -98,6 +101,13 @@ var player = {
 		return game.math.degToRad(display_health+90);
 	},
 
+	energy_visual_value: function(game, player_id){
+		this_player = game.players.getAt(player_id);
+		energy_section = 360/game.MAX_ENERGY;
+		display_energy = this_player.energy*energy_section;
+		return game.math.degToRad(display_energy+90);
+	},
+
 	check_players_health: function(game, players){
 		game.current_players_health = 0;
 		game.players.forEachAlive( player.check_player_health, this, game);
@@ -108,42 +118,59 @@ var player = {
 		game.current_players_health =  game.current_players_health+player.health;
 	},
 
-	fire_setup: function(game, num){
-		game.nextShotAt[num] = 0;
-		game.shotDelay[num] = 50;
+	check_players_megazoid: function(game, players){
+		game.zoid = 0;
+		game.players.forEachAlive( player.zoid_request, this, game);
+		return game.zoid;
 	},
 
-	invincible_setup: function(game, num){
-		game.nextKillAt[num] = 0;
-		game.KillDelay[num] = 600;
+	zoid_request: function(player, game){
+		game.zoid =  game.zoid+player.zoid_request;
 	},
 
-	_game_avatar_setup: function(num, game){
-		h = (game.height/3);
-		w = (game.width/game.num_players+2);
-		if(num == 0){ w = (w/2)-5; }else{ w = w*num+(w/2)-5; }
+	collision_notice: function(player, enemy) {
+		game = player.game;
+		if (game.nextKillAt[player.name] > game.time.now) {
+			return;
+		}
+		game.nextKillAt[player.name] = game.time.now + game.KillDelay[player.name];
+		game.players.getAt(player.name).alpha = 0.2;
+		game.players.getAt(player.name).show_health = 1;
+		player.damage(1);
+		enemy.damage(1);//should be based on players bullet damage
+		sfx.shake(game);
 
-		game.avatar[num] = game.players.create(w, h*2, 'fighter');
-		game.avatar[num].body.collideWorldBounds=true;
-		game.avatar[num].name=num;
-		game.avatar[num].energy = 0;
-		//game.avatar[num].health(2);
-		//game.avatar[num].body.bounce.y=0.2;
+	},
 
-		game.avatar[num].body.immovable = false;
-		//game.avatar[num].body.immovable = true;
+	ricochet: function(bullet, player){
+		//this does not work quite right
+		bullet.body.velocity.x *= -1;
+		bullet.body.velocity.y *= -1;
+	},
 
-		game.avatar[num].tint = 0xff00ff;
+	update_energy: function(game, i){
+		energy = game.players.getAt(i).energy;
+		if(energy >= game.MAX_ENERGY){
+			return;
+		}
+		game.players.getAt(i).energy = energy+1;
+		//game.players.getAt(i).show_energy = 1;
+	},
 
-		game.avatar[num].animations.frame = 0+num;
+	add_point: function(bullet, enemy){
+		//I think this is a player function
+		game = enemy.game;
+		bullet.kill();
+		enemy.damage(1);
 
-		//this is how we will control variouse screen resolutions
-		game.avatar[num].scale.y = 1;
-		game.avatar[num].scale.x = 1;
-		// animations still usefull but not being used / set
-		//game.avatar[num].animations.add('default', [0, 1, 2, 3, 4, 5, 6, 7], 8, true);
-		//game.avatar[num].animations.add('left', [0, 1, 2, 3, 4, 5, 6, 7], 8, true);
-		//game.avatar[num].animations.add('right', [0, 1, 2, 3, 4, 5, 6, 7], 20, true);
+		if(enemy.health <= 0){
+			player.update_energy(game, bullet.name);
+			general.update_score(game, enemy.kill_point);
+		}
+	},
+
+	kill_players: function(player) {
+		player.kill();
 	}
 
 };

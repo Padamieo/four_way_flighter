@@ -1,7 +1,7 @@
 var e = require('e');
 
 // e_basic constructor
-var e_basic = function(game, x, y) {
+var e_basic = function(game, x, y, type) {
 
 	Phaser.Sprite.call(this, game, x, y, 'box');
 	game.enemies.add(this);
@@ -12,16 +12,17 @@ var e_basic = function(game, x, y) {
 	this.events.onKilled.add(function(){e.explosion(game, this)}, this);
 
 	game.next_e_ShotAt[this.z] = 0;
-	game.e_shotDelay[this.z] = 1200;
+	game.e_shotDelay[this.z] = 1400;
 
 	this.anchor.setTo(0.5, 0.5);
 
 	game.physics.enable(this, Phaser.Physics.ARCADE);
 
 	this.health = 1;
-
+	this.type = type;
 	this.MAX_SPEED = 250;
 	this.MIN_DISTANCE = 90;
+	this.kill_point = type+1;
 };
 
 // e_followers are a type of Phaser.Sprite
@@ -30,7 +31,10 @@ e_basic.prototype.constructor = e_basic;
 
 e_basic.prototype.update = function(game) {
 	if(this.alive){
-		e.fire(this.game, this, this.body.rotation);
+		if(this.type != 0){
+			v = this.game.math.degToRad(90);
+			e.fire(this.game, this, v);
+		}
 		if(this.body.y < this.game.height+50){
 			this.body.velocity.x = 0;
 			this.body.velocity.y = 50;

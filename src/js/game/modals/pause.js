@@ -1,7 +1,7 @@
 var modal = {
 
 	setup: function(game){
-		
+
 		// Create a white rectangle that we'll use to represent the flash
 		game.pause_background = game.add.graphics(0, 0);
 		game.pause_background.beginFill(0x000000, 1);
