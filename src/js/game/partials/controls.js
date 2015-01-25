@@ -42,9 +42,9 @@ var controls = {
 
 		if ( cursors.left.isDown || cursors.right.isDown || cursors.up.isDown || cursors.down.isDown ){
 			controls.fire(game, player_id);
-			speed = 220;
+			speed = game.players.getAt(player_id).LOW_SPEED;
 		}else{
-			speed = 300;
+			speed = game.players.getAt(player_id).TOP_SPEED;
 		}
 
 		if ( game.input.keyboard.isDown(Phaser.Keyboard.A) ) {
@@ -113,10 +113,10 @@ var controls = {
 		if ( game.pad[pad_id].axis(Phaser.Gamepad.XBOX360_STICK_RIGHT_Y) > 0.01 || game.pad[pad_id].axis(Phaser.Gamepad.XBOX360_STICK_RIGHT_Y) < -0.01 || game.pad[pad_id].axis(Phaser.Gamepad.XBOX360_STICK_RIGHT_X) < -0.01 ||  game.pad[pad_id].axis(Phaser.Gamepad.XBOX360_STICK_RIGHT_X) > 0.01){
 			if(game.players.getAt(player_id).alive == 1){
 				controls.fire(game, player_id, pad_id);
-				speed = 220;
+				speed = game.players.getAt(player_id).LOW_SPEED;
 			}
 		}else{
-			speed = 300;
+			speed = game.players.getAt(player_id).TOP_SPEED;
 		}
 
 		if ( game.pad[pad_id].isDown(Phaser.Gamepad.XBOX360_DPAD_LEFT) || game.pad[pad_id].axis(Phaser.Gamepad.XBOX360_STICK_LEFT_X) < -0.01) {
@@ -170,7 +170,7 @@ var controls = {
 		bullet = game.bulletPool.getFirstExists(false);
 		bullet.reset(game.players.getAt(player_id).x, game.players.getAt(player_id).y, 'bullet');
 		bullet.name = player_id;
-		bullet.tint = 0xff00ff;
+		bullet.tint = speed = game.players.getAt(player_id).tint;
 
 		if(game.controls[player_id] == 'K'){
 			controls.keyboard_fire(game, bullet);

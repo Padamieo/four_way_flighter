@@ -4,6 +4,8 @@ var general = {
 
 	setup: function(game){
 
+		game.player_colours = ['0xff00ff','0xffff00','0x00ffff','0x0000ff','0xff0000']; //need to be varouse pallets assigned from main menu. example classic, normal
+
 		//this is the standard physics with phaser
 		game.physics.startSystem(Phaser.Physics.ARCADE);
 
@@ -16,6 +18,16 @@ var general = {
 
 		//adding pickups
 		game.pickups = game.add.group();
+
+		game.score = 0;
+		game.scoreText;
+
+		//setup energy score info
+		textpos = (game.width)-(game.width/2);
+		game.scoreText = game.add.text(textpos, game.height-14, '0', { fontSize: '12px', fill: '#fff' });
+		game.scoreText.anchor.x=0.5;
+		game.scoreText.anchor.y=0.5;
+		general.update_score(game, 0);
 
 	},
 
@@ -45,6 +57,11 @@ var general = {
 				item.revive();
 			}
 		}
+	},
+
+	update_score: function(game, new_score){
+		game.score = game.score + new_score;
+		game.scoreText.text = '' + game.score + '';
 	}
 
 };

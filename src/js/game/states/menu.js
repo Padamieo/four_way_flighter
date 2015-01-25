@@ -90,8 +90,9 @@ module.exports = function(game) {
 	function begin(){
 
 		game.controls = ['K','1','2','3'];
+		game.selected_colour = ['1','0','2','3'];
 
-		game.num_players = 1;
+		game.num_players = 2;
 
 		game.state.start('level');
 	}

@@ -12,7 +12,7 @@ var e_basic = function(game, x, y, type) {
 	this.events.onKilled.add(function(){e.explosion(game, this)}, this);
 
 	game.next_e_ShotAt[this.z] = 0;
-	game.e_shotDelay[this.z] = 1200;
+	game.e_shotDelay[this.z] = 1400;
 
 	this.anchor.setTo(0.5, 0.5);
 
@@ -22,6 +22,7 @@ var e_basic = function(game, x, y, type) {
 	this.type = type;
 	this.MAX_SPEED = 250;
 	this.MIN_DISTANCE = 90;
+	this.kill_point = type+1;
 };
 
 // e_followers are a type of Phaser.Sprite

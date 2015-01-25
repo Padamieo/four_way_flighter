@@ -1,4 +1,6 @@
 var sfx = require('sfx');
+var general = require('general');
+
 var player = {
 
 	setup: function(game){
@@ -92,6 +94,13 @@ var player = {
 		return game.math.degToRad(display_health+90);
 	},
 
+	energy_visual_value: function(game, player_id){
+		this_player = game.players.getAt(player_id);
+		energy_section = 360/100;
+		display_energy = this_player.energy*energy_section;
+		return game.math.degToRad(display_energy+90);
+	},
+
 	check_players_health: function(game, players){
 		game.current_players_health = 0;
 		game.players.forEachAlive( player.check_player_health, this, game);
@@ -120,6 +129,27 @@ var player = {
 		//this does not work quite right
 		bullet.body.velocity.x *= -1;
 		bullet.body.velocity.y *= -1;
+	},
+
+	update_energy: function(game, i){
+		energy = game.players.getAt(i).energy;
+		if(energy >= 100){
+			return;
+		}
+		game.players.getAt(i).energy = energy+1;
+	},
+
+	add_point: function(bullet, enemy){
+		//I think this is a player function
+		game = enemy.game;
+		bullet.kill();
+		enemy.damage(1);
+
+		if(enemy.health <= 0){
+
+			player.update_energy(game, bullet.name);
+			general.update_score(game, enemy.kill_point);
+		}
 	}
 
 };

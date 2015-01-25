@@ -29,12 +29,14 @@ var avatar = function(game, i) {
 	this.energy = 0;
 	this.health = game.player_starting_health;
 	this.show_health = 0;
+	this.TOP_SPEED = 300;
+	this.LOW_SPEED = 220;
 	//game.avatar[num].body.bounce.y=0.2;
 
 	//game.avatar[num].body.immovable = false;
 	//game.avatar[num].body.immovable = true;
-
-	this.tint = 0xff00ff;
+	set = game.selected_colour[i];
+	this.tint = game.player_colours[set];
 
 	//this.animations.frame = i;
 
@@ -49,7 +51,6 @@ var avatar = function(game, i) {
 
 };
 
-// e_followers are a type of Phaser.Sprite
 avatar.prototype = Object.create(Phaser.Sprite.prototype);
 avatar.prototype.constructor = avatar;
 

@@ -15,8 +15,6 @@ var m = require('pause');
 
 module.exports = function(game) {
 
-	var score = 0;
-	var scoreText;
 	var count = 0; // this should probably be game.count
 
 	//var indicator = [];
@@ -47,25 +45,9 @@ gameState.create = function () {
 	//player
 	p.setup(game);
 
-/*
-	//when players are combined this is what is used
-	player_combo = game.add.sprite(game.world.centerX, game.world.centerY, 'player_combo');
-	player_combo.anchor.setTo(0.5, 0.5);
-  game.physics.arcade.enable(player_combo);
-  player_combo.body.collideWorldBounds = true;
-	player_combo.kill();
-*/
-
 	tick = game.time.create(false);
 	tick.loop(2000, updateTick, this);
 	tick.start();
-
-	//setup energy score info
-	textpos = (game.width)-(game.width/2);
-	scoreText = game.add.text(textpos, game.height-14, '0', { fontSize: '12px', fill: '#000' });
-	scoreText.anchor.x=0.5;
-	scoreText.anchor.y=0.5;
-	update_score(0);
 
 	//setup controlers and keyboards
 	c.setup(game);
@@ -84,11 +66,6 @@ gameState.create = function () {
 	//console.log(game.players.getAt(0));
 };
 ////////// end of create /////////
-
-	function update_score(new_score){
-		score = score + new_score;
-		scoreText.text = '' + score + '';
-	}
 
 	var rounds = [];
 	function generate_rounds(){
@@ -210,7 +187,7 @@ gameState.update = function (){
 	game.physics.arcade.collide(game.players, game.enemies, p.collision_notice, null, this);
 
 	//this is just for registering who shot what
-	game.physics.arcade.overlap(game.bulletPool, game.enemies, add_point, null, this);
+	game.physics.arcade.overlap(game.bulletPool, game.enemies, p.add_point, null, this);
 
 	//this is for a bit of fun players shoot move other players, may want to drop if resources are concern
 	game.physics.arcade.collide(game.bulletPool, game.players, p.ricochet, null, this);
@@ -226,6 +203,9 @@ gameState.update = function (){
 		}
 		*/
 	}
+
+
+	
 
 	if(all == game.num_players){
 		//console.log("merge"+all);
@@ -258,15 +238,6 @@ gameState.update = function (){
 	if(game.input.keyboard.isDown(Phaser.Keyboard.ESC)){ m.pause(game);}
 
 };
-
-function add_point(bullet, enemy){
-	bullet.kill();
-	enemy.damage(1);
-	if(enemy.health == 0){
-		//bullet.name //get player who shots id
-		update_score(1);
-	}
-}
 
 //this is not used yet
 function lose_condition(){
