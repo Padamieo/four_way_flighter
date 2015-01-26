@@ -21,9 +21,9 @@ module.exports = function(game) {
 
 	game.load.spritesheet('explosion', 'images/explosion.svg', 256, 256);
 
-	game.load.image('health_bar', 'images/healthbar.png');
-	game.load.image('score_bar', 'images/scorebars.png');
+	game.load.image('test', 'images/test.png');
 
+  //enemiers
 	game.load.image('box', 'images/enemy.png');
 	game.load.image('e_follow', 'images/e_follow.png');
 	game.load.image('e_swift', 'images/e_swift.png');

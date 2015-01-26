@@ -1,4 +1,5 @@
 var e = require('e');
+var g = require('general');
 
 // e_basic constructor
 var e_basic = function(game, x, y, type) {
@@ -9,7 +10,7 @@ var e_basic = function(game, x, y, type) {
 	//sprite.events.onRevived( doo,this);
 
 	this.events.onRevived.add(function(){this.health = 1}, this);
-	this.events.onKilled.add(function(){e.explosion(game, this)}, this);
+	this.events.onKilled.add(function(){ e.explosion(game, this)}, this);
 
 	game.next_e_ShotAt[this.z] = 0;
 	game.e_shotDelay[this.z] = 1400;

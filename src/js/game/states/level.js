@@ -189,10 +189,10 @@ gameState.create = function () {
 
 	//this is not used yet
 	function lose_condition(){
-		console.log(game.mega_zord.countAlive());
-		if(game.mega_zord.countAlive() == 0){
+
+		if(game.mega_zord.countDead() == 0){
 			if(game.players.countDead() == game.num_players){
-				//lose game
+				console.log("everyone dead");
 			}
 		}
 	}
