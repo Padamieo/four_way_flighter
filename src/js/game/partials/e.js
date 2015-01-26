@@ -1,3 +1,5 @@
+var sfx = require('sfx');
+
 var e = {
 
 	setup: function(game){
@@ -7,7 +9,7 @@ var e = {
 
 		game.next_e_ShotAt = [];
 		game.e_shotDelay = [];
-		
+
 		//bullet pool could be individual
 		game.e_bulletPool = game.add.group();
 		game.e_bulletPool.enableBody = true;
@@ -43,10 +45,12 @@ var e = {
 		if (game.explosion.countDead() === 0) {
 			return;
 		}
+		sfx.burst(game, loc.x, loc.y);
 		bang = game.explosion.getFirstExists(false);
 		//bang.rotation = 180;
 		bang.reset(loc.x, loc.y);
 		bang.play('boom', 30, 1, true);
+
 	},
 
 	random_alive_player: function(game){

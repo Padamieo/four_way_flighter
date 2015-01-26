@@ -161,6 +161,9 @@ gameState.create = function () {
 		//this is just for registering who shot what
 		game.physics.arcade.overlap(game.bulletPool, game.enemies, p.add_point, null, this);
 
+		//enemies hitting player
+		game.physics.arcade.overlap(game.e_bulletPool, game.players, p.hit, null, this);
+
 		//this is for a bit of fun players shoot move other players, may want to drop if resources are concern
 		game.physics.arcade.collide(game.bulletPool, game.players, p.ricochet, null, this);
 

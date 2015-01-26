@@ -17,6 +17,17 @@ var u = {
 
 		// Make the world a bit bigger than the stage so we can shake the camera
 		game.world.setBounds(-10, -10, game.width + 20, game.height + 20);
+
+		//setup emitter for burst
+		game.emitter = game.add.emitter(0, 0, 100);
+		game.emitter.makeParticles('test');
+		game.emitter.gravity = 200;
+	},
+
+	burst: function(game, x, y){
+		game.emitter.x = x;
+		game.emitter.y = y;
+		game.emitter.start(true, 2000, null, 10);
 	},
 
 	flash: function (game){
@@ -29,8 +40,14 @@ var u = {
 	shake: function(game){
 		game.camera.y = 0;
 		game.add.tween(game.camera)
+
 		.to({ y: -10 }, 40, Phaser.Easing.Sinusoidal.InOut, false, 0, 5, true)
 		.start();
+		/*
+		//think this is a lighter shake
+		.to({ y: -10 }, 40, Phaser.Easing.Elastic.InOut, false, 0, 5, true)
+		.start();
+		*/
 	}
 
 };

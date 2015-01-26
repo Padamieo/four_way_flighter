@@ -1,5 +1,4 @@
 var sfx = require('sfx');
-var general = require('general');
 
 var player = {
 
@@ -59,6 +58,15 @@ var player = {
 		// if (a_mega_zord === null) {
 		// 	a_mega_zord = new megazord(game);
 		// }
+
+		//setup energy score info
+		game.score = 0;
+		game.scoreText;
+		textpos = (game.width)-(game.width/2);
+		game.scoreText = game.add.text(textpos, game.height-14, '0', { fontSize: '12px', fill: '#fff' });
+		game.scoreText.anchor.x=0.5;
+		game.scoreText.anchor.y=0.5;
+		player.update_score(game, 0);
 
 		//calculate groups health
 		game.starting_players_health = game.player_starting_health*game.num_players;
@@ -162,11 +170,31 @@ var player = {
 		game = enemy.game;
 		bullet.kill();
 		enemy.damage(1);
-
 		if(enemy.health <= 0){
 			player.update_energy(game, bullet.name);
-			general.update_score(game, enemy.kill_point);
+			player.update_score(game, enemy.kill_point);
 		}
+	},
+
+	hit: function(bullet, player){
+		game = player.game;
+		bullet.kill();
+		/*
+		if (game.nextKillAt[player.name] > game.time.now) {
+			return;
+		}
+		game.nextKillAt[player.name] = game.time.now + game.KillDelay[player.name];
+		game.players.getAt(player.name).alpha = 0.2;
+		*/
+		game.players.getAt(player.name).show_health = 1;
+		player.damage(1);
+
+		sfx.shake(game); // this might be a little too much
+	},
+
+	update_score: function(game, new_score){
+		game.score = game.score + new_score;
+		game.scoreText.text = '' + game.score + '';
 	},
 
 	kill_players: function(player) {

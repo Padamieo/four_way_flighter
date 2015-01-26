@@ -19,32 +19,6 @@ var general = {
 		//adding pickups
 		game.pickups = game.add.group();
 
-		//setup energy score info
-		game.score = 0;
-		game.scoreText;
-		textpos = (game.width)-(game.width/2);
-		game.scoreText = game.add.text(textpos, game.height-14, '0', { fontSize: '12px', fill: '#fff' });
-		game.scoreText.anchor.x=0.5;
-		game.scoreText.anchor.y=0.5;
-		general.update_score(game, 0);
-
-		game.emitter = game.add.emitter(0, 0, 100);
-		game.emitter.makeParticles('test');
-		game.emitter.gravity = 200;
-		game.input.onDown.add(general.burst, this);
-
-	},
-
-	burst: function(pointer){
-		game = pointer.game;
-		game.emitter.x = 100;
-		game.emitter.y = 100;
-
-		//  The first parameter sets the effect to "explode" which means all particles are emitted at once
-		//  The second gives each particle a 2000ms lifespan
-		//  The third is ignored when using burst/explode mode
-		//  The final parameter (10) is how many particles will be emitted in this single burst
-		game.emitter.start(true, 2000, null, 10);
 	},
 
 	add_pickup: function(game){
@@ -73,11 +47,6 @@ var general = {
 				item.revive();
 			}
 		}
-	},
-
-	update_score: function(game, new_score){
-		game.score = game.score + new_score;
-		game.scoreText.text = '' + game.score + '';
 	}
 
 };
