@@ -1,19 +1,32 @@
 var c = require('controls');
+var something = require('something');
+var m = require('pause');
+
 module.exports = function(game) {
 
 	var menu = {};
 
 	menu.preload = function () {
 
-		c.setup(game);
-		/*
+		c.setup(game); //setup controllers and keyboard
+
+		m.setup(game);	//modal screen setups ie pause and popups
+		
+		game.characters = game.add.group();
+
 		for (i = 0; i < 4; i++) {
-			switch_button(i);
-			c.pad_setup(game, i);
-			controller_indicator(i);
+			//switch_button(i);
+			//c.pad_setup(game, i);
+			//controller_indicator(i);
+			//test(i);
 			test(i);
+
+			var pc = game.characters.getFirstDead();
+			if (pc === null) {
+				pc = new something(game, 0, 0, i);
+			}
+
 		}
-		*/
 
 		game.start = game.add.sprite(game.world.width/2, game.world.height/4, 'switch');
 		game.start.animations.frame = 0;
@@ -26,6 +39,11 @@ module.exports = function(game) {
 
 	};
 
+	function test(i){
+
+	}
+
+	/*
 	//add currently active pads up
 	function pad_connect_indicator(num){
 		if(game.input.gamepad.supported && game.input.gamepad.active && game.pad[num].connected) {
@@ -34,7 +52,7 @@ module.exports = function(game) {
 			count = count+0;
 		}
 	}
-
+	*/
 	/*
 	//set-up default indicators
 	function controller_indicator(num){
@@ -89,7 +107,7 @@ module.exports = function(game) {
 	//calculations for starting a game
 	function begin(){
 
-		game.controls = ['K','0','1','2'];
+		game.controls = ['K','0','1','2','3'];
 		game.selected_colour = ['0','2','1','3'];
 
 		game.num_players = 3;
@@ -112,7 +130,7 @@ module.exports = function(game) {
 		}
 		*/
 		game.start.events.onInputDown.add(begin, game.start);
-
+		if(game.input.keyboard.isDown(Phaser.Keyboard.ESC)){ m.pause(game);}
 	};
 
 	menu.create = function () {

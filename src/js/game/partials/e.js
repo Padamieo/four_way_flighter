@@ -63,9 +63,12 @@ var e = {
 		if(game.players.getAt(target).alive){
 			x = game.players.getAt(target).x;
 			y = game.players.getAt(target).y;
+		/*
+		//not sure if using player group or zord group	
 		}else if(player_combo.alive){
 			x = player_combo.x;
 			y = player_combo.y;
+		*/
 		}else{
 			if(game.players.countDead() == game.num_players){
 				rl = e.random_location(game);

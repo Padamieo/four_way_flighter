@@ -31,6 +31,7 @@
     "powerbar": "./src/js/game/partials/powerbar.js",
     "avatar": "./src/js/game/partials/avatar.js",
     "megazord": "./src/js/game/partials/megazord.js",
+    "something": "./src/js/game/modals/SOMETHING.js",
     "gray": "./src/js/lib/filters/Gray.js"
   },
   "browserify-shim": {

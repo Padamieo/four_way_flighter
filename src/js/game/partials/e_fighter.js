@@ -1,12 +1,14 @@
 var e = require('e');
 
 	var e_fighter = function(game, x, y) {
-		Phaser.Sprite.call(this, game, x, y, 'e_swift');
 
-		enemies.add(this);
-		//console.log(this.z+"m");
-		next_e_ShotAt[this.z] = 0;
-		e_shotDelay[this.z] = 400;
+		Phaser.Sprite.call(this, game, x, y, 'e_swift');
+		game.enemies.add(this);
+
+
+		game.next_e_ShotAt[this.z] = 0;
+		game.e_shotDelay[this.z] = 1400;
+
 		game.stuck_on_path = 0;
 
 		// Set the pivot point for this sprite to the center
@@ -14,12 +16,10 @@ var e = require('e');
 
 		this.events.onRevived.add(function(){this.health = 4}, this);
 		this.health = 4;
-		
+
 		// Enable physics on the missile
 		game.physics.enable(this, Phaser.Physics.ARCADE);
-
-		target = random_alive_player();
-		this.TARGET = target;//select random alive target
+		this.TARGET = e.random_alive_player();
 
 		this.RANDOM_X = game.rnd.integerInRange(-100, game.width+100);
 		this.RANDOM_Y = -30;//game.rnd.integerInRange(0, game.height);
@@ -29,6 +29,7 @@ var e = require('e');
 		this.TURN_RATE = 2; // turn rate in degrees/frame
 		this.MIN_DISTANCE = 150;
 		this.MAX_DISTANCE = 300;
+		this.kill_point = 4;
 	};
 
 	e_fighter.prototype = Object.create(Phaser.Sprite.prototype);

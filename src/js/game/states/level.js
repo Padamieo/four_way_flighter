@@ -1,6 +1,7 @@
 
 var e_basic = require('e_basic');
 var e_follower = require('e_follower');
+var e_fighter = require('e_fighter');
 var e = require('e');
 
 var p = require('player');
@@ -69,7 +70,7 @@ gameState.create = function () {
 
 	var rounds = [];
 	function generate_rounds(){
-		for (i = 0; i < 2; i++) {
+		for (i = 0; i < 5; i++) {
 			element = game.rnd.integerInRange(1, 5);
 			if(rounds.indexOf(element) == -1){
 				rounds.push(element);
@@ -99,9 +100,14 @@ gameState.create = function () {
 					game.spawn_enemy(this.game.rnd.integerInRange(0, this.game.width), -30, 1);
 				}
 			}
-			if(rounds[2] < count){
+			if(rounds[3] < count){
 				for (i = 0; i < 10; i++) {
-					game.spawn_enemy(this.game.rnd.integerInRange(0, this.game.width), -30, 2);
+					game.spawn_enemy(this.game.rnd.integerInRange(0, this.game.width), -30, 3);
+				}
+			}
+			if(rounds[4] < count){
+				for (i = 0; i < 10; i++) {
+					game.spawn_enemy(this.game.rnd.integerInRange(0, this.game.width), -30, 4);
 				}
 			}
 			count++; // notice count
@@ -121,7 +127,7 @@ gameState.create = function () {
 
 			var nme = game.enemies.getFirstDead();
 			if (nme === null) {
-				nme = new e_missile(game, 0, 0);
+				nme = new e_fighter(game, 0, 0);
 			}
 
 		}else{
