@@ -16,10 +16,11 @@ var e = require('e');
 
 		this.events.onRevived.add(function(){this.health = 4}, this);
 		this.health = 4;
+		this.events.onKilled.add(function(){ e.explosion(game, this)}, this);
 
 		// Enable physics on the missile
 		game.physics.enable(this, Phaser.Physics.ARCADE);
-		this.TARGET = e.random_alive_player();
+		this.TARGET = e.random_alive_player(game);
 
 		this.RANDOM_X = game.rnd.integerInRange(-100, game.width+100);
 		this.RANDOM_Y = -30;//game.rnd.integerInRange(0, game.height);
@@ -42,7 +43,7 @@ var e = require('e');
 		if(this.alive){
 
 			if( game.stuck_on_path == 0){
-				pos = choose_player_target(this, this.TARGET);
+				pos = e.choose_player_target(this.game ,this, this.TARGET);
 				var distance = this.game.math.distance(this.x, this.y, pos[0], pos[1]);
 				var targetAngle = this.game.math.angleBetween(
 					this.x, this.y,
@@ -85,7 +86,7 @@ var e = require('e');
 				// Just set angle to target angle if they are close
 				if (Math.abs(delta) < this.game.math.degToRad(this.TURN_RATE)) {
 					this.rotation = targetAngle;
-					e.fire(this, targetAngle);
+					e.fire(this.game, this, targetAngle);
 				}
 			}
 			// Calculate velocity vector based on this.rotation and this.SPEED

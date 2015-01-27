@@ -11,8 +11,9 @@ var e_follower = function(game, x, y) {
 	// Set the pivot point for this sprite to the center
 	this.anchor.setTo(0.5, 0.5);
 
-	//this.events.onRevived.add(function(){this.health = 2}, this);
+	this.events.onRevived.add(function(){this.health = 2}, this);
 	this.health = 2;
+	this.events.onKilled.add(function(){ e.explosion(game, this)}, this);
 
 	//this.enableBody = true;
 	//this.physicsBodyType = Phaser.Physics.ARCADE;
@@ -23,6 +24,7 @@ var e_follower = function(game, x, y) {
 	// Define constants that affect motion
 	this.MAX_SPEED = 250; // pixels/second
 	this.MIN_DISTANCE = 90; // pixels
+	this.kill_point = 1;
 };
 
 // e_followers are a type of Phaser.Sprite

@@ -64,7 +64,7 @@ var e = {
 			x = game.players.getAt(target).x;
 			y = game.players.getAt(target).y;
 		/*
-		//not sure if using player group or zord group	
+		//not sure if using player group or zord group
 		}else if(player_combo.alive){
 			x = player_combo.x;
 			y = player_combo.y;

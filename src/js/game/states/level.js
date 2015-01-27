@@ -14,6 +14,7 @@ var sfx = require('sfx');
 var pickup = require('pickup');
 
 var m = require('pause');
+var k = require('kill');
 
 module.exports = function(game) {
 
@@ -59,6 +60,7 @@ gameState.create = function () {
 
 	//modal screen setups ie pause and popups
 	m.setup(game);
+	k.setup(game);
 
 	/* //working following
 	var gray = game.add.filter('Gray');
@@ -202,6 +204,7 @@ gameState.create = function () {
 		if(game.mega_zord.countDead() == 0){
 			if(game.players.countDead() == game.num_players){
 				console.log("everyone dead");
+				k.ill_screen(game);
 			}
 		}
 	}
