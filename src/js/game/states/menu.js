@@ -11,7 +11,7 @@ module.exports = function(game) {
 		c.setup(game); //setup controllers and keyboard
 
 		m.setup(game);	//modal screen setups ie pause and popups
-		
+
 		game.characters = game.add.group();
 
 		for (i = 0; i < 4; i++) {
@@ -107,7 +107,7 @@ module.exports = function(game) {
 	//calculations for starting a game
 	function begin(){
 
-		game.controls = ['K','0','1','2','3'];
+		game.controls = ['1','0','K','K','3'];
 		game.selected_colour = ['0','2','1','3'];
 
 		game.num_players = 3;

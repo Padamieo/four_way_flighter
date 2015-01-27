@@ -22,7 +22,7 @@ var player = {
 		game.bulletPool = game.add.group();
 		game.bulletPool.enableBody = true;
 		game.bulletPool.physicsBodyType = Phaser.Physics.ARCADE
-		game.bulletPool.createMultiple(10*game.num_players, 'bullet'); //needs to be based on amount of players
+		game.bulletPool.createMultiple(100*game.num_players, 'bullet'); //needs to be based on amount of players
 		game.bulletPool.setAll('anchor.x', 0.5);
 		game.bulletPool.setAll('anchor.y', 0.5);
 		game.bulletPool.setAll('outOfBoundsKill', true);
@@ -69,7 +69,7 @@ var player = {
 		player.update_score(game, 0);
 
 		//calculate groups health
-		game.starting_players_health = game.player_starting_health*game.num_players;
+		game.starting_group_health = game.player_starting_health*game.num_players;
 
 	},
 
@@ -90,15 +90,16 @@ var player = {
 			dead_player = game.players.getFirstDead();
 			dead_player.x = lives.x;
 			dead_player.y = lives.y;
-			dead_player.revive(game.starting_players_health/2);
+			dead_player.revive(game.starting_group_health/2);
 		}
 	},
 
 	add_health: function(player, health) {
 		game = player.game;
 		health.kill();
-		if(player.health < game.starting_players_health){
-			player.damage(-1);
+		if(player.health < game.starting_group_health){
+			value = game.player_starting_health/5
+			player.damage(-value);
 		}
 	},
 

@@ -111,7 +111,6 @@ var controls = {
 	controls_pad: function(game, player_id, pad_id){
 		h_test = 0;
 		v_test = 0;
-
 		if ( game.pad[pad_id].axis(Phaser.Gamepad.XBOX360_STICK_RIGHT_Y) > 0.01 || game.pad[pad_id].axis(Phaser.Gamepad.XBOX360_STICK_RIGHT_Y) < -0.01 || game.pad[pad_id].axis(Phaser.Gamepad.XBOX360_STICK_RIGHT_X) < -0.01 ||  game.pad[pad_id].axis(Phaser.Gamepad.XBOX360_STICK_RIGHT_X) > 0.01){
 			if(game.players.getAt(player_id).alive == 1){
 				controls.fire(game, player_id, pad_id);
@@ -120,6 +119,8 @@ var controls = {
 		}else{
 			speed = game.players.getAt(player_id).TOP_SPEED;
 		}
+
+		speed = game.players.getAt(player_id).TOP_SPEED;
 
 		if ( game.pad[pad_id].isDown(Phaser.Gamepad.XBOX360_DPAD_LEFT) || game.pad[pad_id].axis(Phaser.Gamepad.XBOX360_STICK_LEFT_X) < -0.01) {
 			game.players.getAt(player_id).body.velocity.x = -speed;
@@ -192,6 +193,18 @@ var controls = {
 	},
 
 	gamepad_fire: function(game, pad_id){
+		x = game.pad[pad_id].axis(Phaser.Gamepad.XBOX360_STICK_RIGHT_X)/2*Math.PI;
+		y = game.pad[pad_id].axis(Phaser.Gamepad.XBOX360_STICK_RIGHT_Y)/2*Math.PI;
+		if(game.pad[pad_id].axis(Phaser.Gamepad.XBOX360_STICK_RIGHT_X) < -0.01){
+			angle = (Math.atan(y/x)+Math.PI);
+		}else{
+			angle = Math.atan(y/x);
+		}
+		bullet.rotation = angle;
+		bullet.body.velocity.x = Math.cos(bullet.rotation) * 1000;
+		bullet.body.velocity.y = Math.sin(bullet.rotation) * 1000;
+		
+		/*
 		if (game.pad[pad_id].axis(Phaser.Gamepad.XBOX360_STICK_RIGHT_X) < -0.01 ){
 			bullet.body.velocity.x -= 500;
 		}else if (game.pad[pad_id].axis(Phaser.Gamepad.XBOX360_STICK_RIGHT_X) > 0.01 ){
@@ -202,18 +215,19 @@ var controls = {
 		}else if (game.pad[pad_id].axis(Phaser.Gamepad.XBOX360_STICK_RIGHT_Y) > 0.01){
 			bullet.body.velocity.y += 500;
 		}
+		*/
 	},
 
 	keyboard_fire: function(game, bullet){
 		if ( cursors.left.isDown){
-			bullet.body.velocity.x -= 500;
+			bullet.body.velocity.x -= 1000;
 		}else if (cursors.right.isDown ){
-			bullet.body.velocity.x += 500;
+			bullet.body.velocity.x += 1000;
 		}
 		if (cursors.up.isDown){
-			bullet.body.velocity.y -= 500;
+			bullet.body.velocity.y -= 1000;
 		}else if (cursors.down.isDown){
-			bullet.body.velocity.y += 500;
+			bullet.body.velocity.y += 1000;
 		}
 	}
 

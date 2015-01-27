@@ -79,40 +79,40 @@ gameState.create = function () {
 			}else{
 				i--;
 			}
-			//console.log(i);
+			console.log(i);
 		}
 		rounds.sort();
-		//console.log(rounds);
+		console.log(rounds);
 	}
 
 	function updateTick() {
 		//console.log(rounds);
 		//randomly generate change up on rounds and amount per round
 		//maybe look into array to store what comes when
-
-		if (game.enemies.countLiving() < 1) {
+		if (game.enemies.countLiving() <= 1) {
 
 			if(rounds[0] < count){
-				for (i = 0; i < 10; i++) {
+				for (i = 0; i < 20; i++) {
 					game.spawn_enemy(this.game.rnd.integerInRange(0, this.game.width), this.game.rnd.integerInRange(0, -(this.game.height/2)), 0);
 				}
 			}
 			if(rounds[1] < count){
-				for (i = 0; i < 10; i++) {
+				for (i = 0; i < 20; i++) {
 					game.spawn_enemy(this.game.rnd.integerInRange(0, this.game.width), -30, 1);
 				}
 			}
 			if(rounds[3] < count){
-				for (i = 0; i < 10; i++) {
+				for (i = 0; i < 20; i++) {
 					game.spawn_enemy(this.game.rnd.integerInRange(0, this.game.width), -30, 3);
 				}
 			}
 			if(rounds[4] < count){
-				for (i = 0; i < 10; i++) {
+				for (i = 0; i < 20; i++) {
 					game.spawn_enemy(this.game.rnd.integerInRange(0, this.game.width), -30, 4);
 				}
 			}
 			count++; // notice count
+			g.add_pickup(game);
 		}
 	}
 

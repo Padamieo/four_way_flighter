@@ -23,13 +23,13 @@ var general = {
 
 	add_pickup: function(game){
 		//game = spawn.game;
-		console.log("hello"+game);
-		console.log("hello"+c.game);
-		//health_threshold = (game.starting_players_health/4);
+		//console.log("hello"+game);
+		//console.log("hello"+c.game);
+		//health_threshold = (game.starting_group_health/4);
 		current_health = p.check_players_health(game, game.players);
 
 		//health
-		if(current_health < (game.starting_players_health/4)){
+		if(current_health < (game.starting_group_health/4)){
 			var item = game.pickups.getFirstDead();
 			if (item === null) {
 				item = new pickup(game, 0);
@@ -47,6 +47,7 @@ var general = {
 				item.revive();
 			}
 		}
+		
 	}
 
 };

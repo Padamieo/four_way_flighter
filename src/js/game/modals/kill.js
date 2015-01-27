@@ -10,7 +10,7 @@ var modal = {
 		game.pause_background.alpha = 0;
 
 		// Add a input listener that can help us return from being paused
-		game.input.onDown.add(modal.unpause, self);
+		//game.input.onDown.add(modal.unpause, self);
 	},
 
 	unpause: function(event){
