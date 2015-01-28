@@ -3,11 +3,11 @@ var modal = {
 	setup: function(game){
 
 		// Create a white rectangle that we'll use to represent the flash
-		game.pause_background = game.add.graphics(0, 0);
-		game.pause_background.beginFill(0x000000, 1);
-		game.pause_background.drawRect(0, 0, game.width, game.height);
-		game.pause_background.endFill();
-		game.pause_background.alpha = 0;
+		game.ended_background = game.add.graphics(0, 0);
+		game.ended_background.beginFill(0x000000, 1);
+		game.ended_background.drawRect(0, 0, game.width, game.height);
+		game.ended_background.endFill();
+		game.ended_background.alpha = 0;
 
 		// Add a input listener that can help us return from being paused
 		//game.input.onDown.add(modal.unpause, self);

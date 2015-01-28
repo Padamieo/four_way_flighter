@@ -37,9 +37,9 @@ module.exports = function (grunt) {
         ' * Copyright <%= pkg.author %>. <%= pkg.license %> licensed.\n' +
         ' * Made using Phaser Blank <https://github.com/lukewilde/phaser-blank/>\n' +
         ' */\n'
-      }
+      },
 
-    , connect:
+      connect:
       { dev:
         { options:
           { port: '<%= project.port %>'
@@ -78,9 +78,13 @@ module.exports = function (grunt) {
         { files: 'src/images/**/*'
         , tasks: ['copy:images']
         }
-      , audio:
-        { files: 'src/audio/**/*'
-        , tasks: ['copy:audio']
+      , audio:{
+          files: 'src/audio/**/*',
+          tasks: ['copy:audio']
+        },
+        fonts:{
+          files: 'src/fonts/**/*',
+          tasks: ['copy:fonts']
         }
       }
 
@@ -178,6 +182,14 @@ module.exports = function (grunt) {
               dest: 'build/audio/'
       			}]
       		},
+          fonts:{
+            files:[{
+              expand: true,
+              cwd: 'src/fonts/',
+              src: ['**'],
+              dest: 'build/fonts/'
+            }]
+          },
       		gen:{
       			files:[{
       				expand: true,

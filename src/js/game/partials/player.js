@@ -62,10 +62,11 @@ var player = {
 		//setup energy score info
 		game.score = 0;
 		game.scoreText;
-		textpos = (game.width)-(game.width/2);
-		game.scoreText = game.add.text(textpos, game.height-14, '0', { fontSize: '12px', fill: '#fff' });
-		game.scoreText.anchor.x=0.5;
-		game.scoreText.anchor.y=0.5;
+		game.scoreText = game.add.text(game.width, game.height, '', { fontSize: '200px', fill: '#fff', font: '200px d' });
+		game.scoreText.alpha = 0.3;
+		game.scoreText.anchor.x=1;
+		game.scoreText.anchor.y=0.9;
+
 		player.update_score(game, 0);
 
 		//calculate groups health
@@ -90,7 +91,7 @@ var player = {
 			dead_player = game.players.getFirstDead();
 			dead_player.x = lives.x;
 			dead_player.y = lives.y;
-			dead_player.revive(game.starting_group_health/2);
+			dead_player.revive(game.player_starting_health/2);
 		}
 	},
 
@@ -148,13 +149,15 @@ var player = {
 		player.damage(1);
 		enemy.damage(1);//should be based on players bullet damage
 		sfx.shake(game);
-
 	},
 
 	ricochet: function(bullet, player){
-		//this does not work quite right
-		bullet.body.velocity.x *= -1;
-		bullet.body.velocity.y *= -1;
+		//this if statement did nothing
+		if(bullet.name != player.name){
+			//this does not work quite right
+			bullet.body.velocity.x *= -1;
+			bullet.body.velocity.y *= -1;
+		}
 	},
 
 	update_energy: function(game, i){

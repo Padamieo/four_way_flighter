@@ -1,6 +1,6 @@
 var e = require('e');
 
-var e_follower = function(game, x, y) {
+var e_follower = function(game) {
 
 	Phaser.Sprite.call(this, game, x, y, 'e_follow');
 	game.enemies.add(this);

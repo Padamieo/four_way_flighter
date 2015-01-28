@@ -93,34 +93,33 @@ gameState.create = function () {
 
 			if(rounds[0] < count){
 				for (i = 0; i < 20; i++) {
-					game.spawn_enemy(0,0, 0);
+					spawn_enemy(0);
 				}
 			}
-			/*
 			if(rounds[1] < count){
 				for (i = 0; i < 20; i++) {
-					game.spawn_enemy(this.game.rnd.integerInRange(0, this.game.width), -30, 1);
+					spawn_enemy(1);
 				}
 			}
 			if(rounds[3] < count){
 				for (i = 0; i < 20; i++) {
-					game.spawn_enemy(this.game.rnd.integerInRange(0, this.game.width), -30, 3);
+					spawn_enemy(3);
 				}
 			}
 			if(rounds[4] < count){
 				for (i = 0; i < 20; i++) {
-					game.spawn_enemy(this.game.rnd.integerInRange(0, this.game.width), -30, 4);
+					spawn_enemy(4);
 				}
 			}
-			*/
+
 			count++; // notice count
 			g.add_pickup(game);
 		}
 	}
 
-	game.spawn_enemy = function(x, y, type) {
+	function spawn_enemy(type) {
 
-		type = 0;
+		//type = 0;
 
 		if(type == 0 || type == 1 || type == 2){
 
@@ -133,32 +132,24 @@ gameState.create = function () {
 
 			var nme = game.enemies.getFirstDead();
 			if (nme === null) {
-				nme = new e_fighter(game, 0, 0);
+				nme = new e_fighter(game);
 			}
 
 		}else{
 
 			var nme = game.enemies.getFirstDead();
 			if (nme === null) {
-				nme = new e_follower(game, 0, 0);
+				nme = new e_follower(game);
 			}
 
 		}
 
 		nme.revive(nme.health);
-
-		//nme.x = x;
-		//nme.y = y;
+		nme.x = game.rnd.integerInRange(0, game.width);
+		nme.y = game.rnd.integerInRange(0, -(game.height));
 
 		return nme;
 	};
-
-	/*
-	//this needs to be a modal general element
-	function gofull() {
-		game.scale.startFullScreen();
-	}
-	*/
 
 	gameState.update = function (){
 
@@ -204,7 +195,6 @@ gameState.create = function () {
 
 	//this is not used yet
 	function lose_condition(){
-
 		if(game.mega_zord.countDead() == 0){
 			if(game.players.countDead() == game.num_players){
 				console.log("everyone dead");
@@ -212,6 +202,7 @@ gameState.create = function () {
 			}
 		}
 	}
+	//
 
 	return gameState;
 };

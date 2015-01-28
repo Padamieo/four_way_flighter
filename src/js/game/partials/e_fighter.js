@@ -1,6 +1,6 @@
 var e = require('e');
 
-	var e_fighter = function(game, x, y) {
+	var e_fighter = function(game) {
 
 		Phaser.Sprite.call(this, game, x, y, 'e_swift');
 		game.enemies.add(this);
