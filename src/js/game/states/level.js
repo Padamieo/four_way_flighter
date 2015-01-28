@@ -93,9 +93,10 @@ gameState.create = function () {
 
 			if(rounds[0] < count){
 				for (i = 0; i < 20; i++) {
-					game.spawn_enemy(this.game.rnd.integerInRange(0, this.game.width), this.game.rnd.integerInRange(0, -(this.game.height/2)), 0);
+					game.spawn_enemy(0,0, 0);
 				}
 			}
+			/*
 			if(rounds[1] < count){
 				for (i = 0; i < 20; i++) {
 					game.spawn_enemy(this.game.rnd.integerInRange(0, this.game.width), -30, 1);
@@ -111,6 +112,7 @@ gameState.create = function () {
 					game.spawn_enemy(this.game.rnd.integerInRange(0, this.game.width), -30, 4);
 				}
 			}
+			*/
 			count++; // notice count
 			g.add_pickup(game);
 		}
@@ -118,11 +120,13 @@ gameState.create = function () {
 
 	game.spawn_enemy = function(x, y, type) {
 
+		type = 0;
+
 		if(type == 0 || type == 1 || type == 2){
 
 			var nme = game.enemies.getFirstDead();
 			if (nme === null) {
-				nme = new e_basic(game, 0, 0, type);
+				nme = new e_basic(game, type);
 			}
 
 		}else if(type == 3){
@@ -143,8 +147,8 @@ gameState.create = function () {
 
 		nme.revive(nme.health);
 
-		nme.x = x;
-		nme.y = y;
+		//nme.x = x;
+		//nme.y = y;
 
 		return nme;
 	};

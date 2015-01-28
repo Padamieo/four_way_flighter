@@ -110,7 +110,7 @@ module.exports = function(game) {
 		game.controls = ['1','0','K','K','3'];
 		game.selected_colour = ['0','2','1','3'];
 
-		game.num_players = 3;
+		game.num_players = 5;
 
 		game.state.start('level');
 	}

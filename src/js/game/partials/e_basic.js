@@ -2,14 +2,18 @@ var e = require('e');
 var g = require('general');
 
 // e_basic constructor
-var e_basic = function(game, x, y, type) {
+var e_basic = function(game, type) {
 
+	x = game.rnd.integerInRange(0, game.width);
+
+	y = game.rnd.integerInRange(0, -(game.height));
+	console.log(y);
 	Phaser.Sprite.call(this, game, x, y, 'box');
 	game.enemies.add(this);
 
 	//sprite.events.onRevived( doo,this);
 
-	this.events.onRevived.add(function(){this.health = 1}, this);
+	this.events.onRevived.add(function(){test(this.game, this)}, this);
 	this.events.onKilled.add(function(){ e.explosion(game, this)}, this);
 
 	game.next_e_ShotAt[this.z] = 0;
@@ -25,6 +29,13 @@ var e_basic = function(game, x, y, type) {
 	this.MIN_DISTANCE = 90;
 	this.kill_point = type+1;
 };
+
+var test = function(game, nme){
+	console.log("hello");
+	nme.health = 1;
+	x = game.width/2;
+	y = game.height/2;
+}
 
 // e_followers are a type of Phaser.Sprite
 e_basic.prototype = Object.create(Phaser.Sprite.prototype);

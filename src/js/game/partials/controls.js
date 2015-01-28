@@ -201,9 +201,9 @@ var controls = {
 			angle = Math.atan(y/x);
 		}
 		bullet.rotation = angle;
-		bullet.body.velocity.x = Math.cos(bullet.rotation) * 1000;
-		bullet.body.velocity.y = Math.sin(bullet.rotation) * 1000;
-		
+		bullet.body.velocity.x = Math.cos(bullet.rotation) * 750;
+		bullet.body.velocity.y = Math.sin(bullet.rotation) * 750;
+
 		/*
 		if (game.pad[pad_id].axis(Phaser.Gamepad.XBOX360_STICK_RIGHT_X) < -0.01 ){
 			bullet.body.velocity.x -= 500;
@@ -220,14 +220,14 @@ var controls = {
 
 	keyboard_fire: function(game, bullet){
 		if ( cursors.left.isDown){
-			bullet.body.velocity.x -= 1000;
+			bullet.body.velocity.x -= 750;
 		}else if (cursors.right.isDown ){
-			bullet.body.velocity.x += 1000;
+			bullet.body.velocity.x += 750;
 		}
 		if (cursors.up.isDown){
-			bullet.body.velocity.y -= 1000;
+			bullet.body.velocity.y -= 750;
 		}else if (cursors.down.isDown){
-			bullet.body.velocity.y += 1000;
+			bullet.body.velocity.y += 750;
 		}
 	}
 

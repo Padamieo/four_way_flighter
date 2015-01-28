@@ -4,7 +4,7 @@ var general = {
 
 	setup: function(game){
 
-		game.player_colours = ['0xff00ff','0xffff00','0x00ffff','0x0000ff','0xff0000']; //need to be varouse pallets assigned from main menu. example classic, normal
+		game.player_colours = ['0xE96151','0x1A7F9B','0x9CB53F','0xEF4562','0xff0000']; //need to be varouse pallets assigned from main menu. example classic, normal
 
 		//this is the standard physics with phaser
 		game.physics.startSystem(Phaser.Physics.ARCADE);
@@ -14,7 +14,7 @@ var general = {
 		//game.input.onDown.add(gofull, this);
 
 		//this is not a great background but it will do for now
-		game.stage.backgroundColor = '#28A3CA';
+		game.stage.backgroundColor = '#5B91A8';
 
 		//adding pickups
 		game.pickups = game.add.group();
@@ -47,7 +47,7 @@ var general = {
 				item.revive();
 			}
 		}
-		
+
 	}
 
 };
