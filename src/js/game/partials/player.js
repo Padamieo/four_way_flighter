@@ -193,7 +193,8 @@ var player = {
 		game.players.getAt(player.name).show_health = 1;
 		player.damage(1);
 
-		sfx.shake(game); // this might be a little too much
+		//sfx.shake(game); // this might be a little too much
+		sfx.smoke(game, player.x, player.y);
 	},
 
 	update_score: function(game, new_score){

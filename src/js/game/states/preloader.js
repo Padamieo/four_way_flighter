@@ -22,7 +22,7 @@ module.exports = function(game) {
 	game.load.spritesheet('explosion', 'images/explosion.svg', 256, 256);
 
 	game.load.image('test', 'images/test.png');
-
+  game.load.image('test1', 'images/test1.png');
   //enemiers
 	game.load.image('box', 'images/enemy.png');
 	game.load.image('e_follow', 'images/e_follow.png');

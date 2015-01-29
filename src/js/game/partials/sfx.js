@@ -22,12 +22,23 @@ var u = {
 		game.emitter = game.add.emitter(0, 0, 100);
 		game.emitter.makeParticles('test');
 		game.emitter.gravity = 200;
+
+		game.smoke = game.add.emitter(0, 0, 100);
+		game.smoke.makeParticles('test1');
+		game.smoke.gravity = 1000;
+
 	},
 
 	burst: function(game, x, y){
 		game.emitter.x = x;
 		game.emitter.y = y;
 		game.emitter.start(true, 2000, null, 10);
+	},
+
+	smoke: function(game, x, y){
+		game.smoke.x = x;
+		game.smoke.y = y;
+		game.smoke.start(false, 2000, 1, 5);
 	},
 
 	flash: function (game){
