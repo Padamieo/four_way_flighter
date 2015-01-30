@@ -5,9 +5,9 @@ var c = require('controls');
 // avatar constructor
 var avatar = function(game, i) {
 
-	h = (game.height/3);
+	h = (game.height/2);
 	w = (game.width/game.num_players+2);
-	if(i == 0){ w = (w/2)-5; }else{ w = w*i+(w/2)-5; }
+	if(i == 0){ w = (w/2); }else{ w = w*i+(w/2); }
 
 	Phaser.Sprite.call(this, game, w, h, 'fighter');
 	game.physics.enable(this, Phaser.Physics.ARCADE);

@@ -2,12 +2,14 @@
 var character_menu = function(game, x, y, i) {
 
 	posy = (game.height/2);
-	posx = (game.width/2);
+	posx = (game.width/i);
 
 	Phaser.Sprite.call(this, game, posx, posy, 'box');
 	game.characters.add(this);
 
 	this.anchor.setTo(0.5, 0.5);
+
+	this.i = i;
 
 };
 

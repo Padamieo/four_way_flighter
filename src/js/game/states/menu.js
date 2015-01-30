@@ -108,7 +108,7 @@ module.exports = function(game) {
 	function begin(){
 
 		game.controls = ['1','0','K','K','3'];
-		game.selected_colour = ['0','2','1','3'];
+		game.selected_colour = ['0','2','1','3','4'];
 
 		game.num_players = 5;
 

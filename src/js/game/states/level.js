@@ -18,10 +18,7 @@ var k = require('kill');
 
 module.exports = function(game) {
 
-	var count = 0; // this should probably be game.count
-
-	//var indicator = [];
-	//var special_active = 0;
+	// count = 0; // this should probably be game.count
 
 /*
 	var Gray = require('gray'); //filter grey
@@ -37,7 +34,18 @@ gameState.create = function () {
 		logo.anchor.setTo(0.5, 0.5);
 	*/
 
-	generate_rounds();
+	game.level_range = {
+		level: { 0:{enemy: 3, min: 2, max: 10}, 1:{enemy: 0, min: 2, max: 10} },
+		levelA: { min: 1, max: 3 }
+	};
+	/*
+	var x = new Array(10);
+	for (var i = 0; i < 10; i++) {
+		x[i] = new Array(20);
+	}
+	x[5][12] = 3.0;
+	*/
+	generate_rounds('level');
 
 	//general setups
 	g.setup(game);
@@ -69,9 +77,25 @@ gameState.create = function () {
 
 };
 ////////// end of create /////////
+function numProps(obj) {
+	var c = 0;
+	for (var key in obj) {
+		if (obj.hasOwnProperty(key)) ++c;
+	}
+	return c;
+}
+	//var rounds = [];
+	function generate_rounds(name){
 
-	var rounds = [];
-	function generate_rounds(){
+		l = numProps(game.level_range[name]);
+		console.log(l);
+
+		for (i = 0; i < l; i++){
+			value = game.level_range[name][i];
+			//console.log(value);
+		}
+
+		/*
 		for (i = 0; i < 5; i++) {
 			element = game.rnd.integerInRange(1, 5);
 			if(rounds.indexOf(element) == -1){
@@ -83,7 +107,9 @@ gameState.create = function () {
 		}
 		rounds.sort();
 		console.log(rounds);
+		*/
 	}
+
 
 	function updateTick() {
 		//console.log(rounds);
@@ -96,20 +122,9 @@ gameState.create = function () {
 					spawn_enemy(0);
 				}
 			}
-			if(rounds[1] < count){
-				for (i = 0; i < 20; i++) {
-					spawn_enemy(1);
-				}
-			}
-			if(rounds[3] < count){
-				for (i = 0; i < 20; i++) {
-					spawn_enemy(3);
-				}
-			}
-			if(rounds[4] < count){
-				for (i = 0; i < 20; i++) {
-					spawn_enemy(4);
-				}
+
+			if(rounds[0] >= 10){
+				//spawn boss
 			}
 
 			count++; // notice count
@@ -147,6 +162,24 @@ gameState.create = function () {
 		nme.revive(nme.health);
 		nme.x = game.rnd.integerInRange(0, game.width);
 		nme.y = game.rnd.integerInRange(0, -(game.height));
+
+		return nme;
+	};
+
+	function spawn_boss(type) {
+
+		//type = 0;
+
+		if(type == 0){
+			var boss = game.enemies.getFirstDead();
+			if (boss === null) {
+				boss = new boss(game, type);
+			}
+		}
+
+		boss.revive(boss.health);
+		boss.x = game.rnd.integerInRange(0, game.width);
+		boss.y = game.rnd.integerInRange(0, -(game.height));
 
 		return nme;
 	};
