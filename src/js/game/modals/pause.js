@@ -9,6 +9,12 @@ var modal = {
 		game.pause_background.endFill();
 		game.pause_background.alpha = 0;
 
+		game.test = game.add.graphics(0, 0);
+		game.test.beginFill(0xffffff, 1);
+		game.test.drawRect(game.width/2, game.height/2, 100, 100);
+		game.test.endFill();
+		game.test.alpha = 0;
+
 		// Add a input listener that can help us return from being paused
 		game.input.onDown.add(modal.unpause, self);
 	},

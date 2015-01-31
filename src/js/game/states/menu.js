@@ -9,12 +9,14 @@ module.exports = function(game) {
 	menu.preload = function () {
 
 		c.setup(game); //setup controllers and keyboard
+		//this does not work as no know number of players exists
+
 
 		m.setup(game);	//modal screen setups ie pause and popups
 
 		game.characters = game.add.group();
 
-		for (i = 0; i < 4; i++) {
+		for (i = 0; i < 5; i++) {
 			//switch_button(i);
 			//c.pad_setup(game, i);
 			//controller_indicator(i);

@@ -4,8 +4,14 @@ var controls = {
 		game.input.gamepad.start();
 		cursors = game.input.keyboard.createCursorKeys();
 		game.pad = [];
-		for (i = 0; i < game.num_players; i++) {
-			controls.pad_setup(game, i);
+		if(game.num_players == null){
+			for (i = 0; i < 5; i++) {
+				controls.pad_setup(game, i);
+			}
+		}else{
+			for (i = 0; i < game.num_players; i++) {
+				controls.pad_setup(game, i);
+			}
 		}
 	},
 

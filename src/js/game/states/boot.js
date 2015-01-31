@@ -27,9 +27,15 @@ module.exports = function(game) {
     if (properties.showStats) {
       addStats();
     }
-	
-    game.scale.pageAlignHorizontally = false;
-    game.scale.pageAlignVertically = false;
+
+    //
+    this.scale.scaleMode = Phaser.ScaleManager.SHOW_ALL;
+    this.scale.pageAlignHorizontally = true;
+    this.scale.pageAlignVertically = true;
+    this.scale.setScreenSize(true);
+
+    //game.scale.pageAlignHorizontally = false;
+    //game.scale.pageAlignVertically = false;
     game.scale.refresh();
 
     game.state.start('preloader');
