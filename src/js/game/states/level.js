@@ -16,9 +16,11 @@ var pickup = require('pickup');
 var m = require('pause');
 var k = require('kill');
 
+var e_boss = require('e_boss');
+
 module.exports = function(game) {
 
-	// count = 0; // this should probably be game.count
+	count = 0; // this should probably be game.count
 
 /*
 	var Gray = require('gray'); //filter grey
@@ -38,13 +40,7 @@ gameState.create = function () {
 		level: { 0:{enemy: 3, min: 2, max: 10}, 1:{enemy: 0, min: 2, max: 10} },
 		levelA: { min: 1, max: 3 }
 	};
-	/*
-	var x = new Array(10);
-	for (var i = 0; i < 10; i++) {
-		x[i] = new Array(20);
-	}
-	x[5][12] = 3.0;
-	*/
+
 	generate_rounds('level');
 
 	//general setups
@@ -76,23 +72,27 @@ gameState.create = function () {
 	*/
 
 };
+
 ////////// end of create /////////
-function numProps(obj) {
-	var c = 0;
-	for (var key in obj) {
-		if (obj.hasOwnProperty(key)) ++c;
+	function numProps(obj) {
+		var c = 0;
+		for (var key in obj) {
+			if (obj.hasOwnProperty(key)) ++c;
+		}
+		return c;
 	}
-	return c;
-}
+
 	//var rounds = [];
 	function generate_rounds(name){
-
+		boss_active = 0;
 		l = numProps(game.level_range[name]);
 		console.log(l);
 
 		for (i = 0; i < l; i++){
 			value = game.level_range[name][i];
 			//console.log(value);
+			element = game.rnd.integerInRange(game.level_range[name][i]['min'], game.level_range[name][i]['max']);
+			console.log(element);
 		}
 
 		/*
@@ -115,21 +115,30 @@ function numProps(obj) {
 		//console.log(rounds);
 		//randomly generate change up on rounds and amount per round
 		//maybe look into array to store what comes when
-		if (game.enemies.countLiving() <= 1) {
+		if(boss_active == 0){
 
-			if(rounds[0] < count){
-				for (i = 0; i < 20; i++) {
-					spawn_enemy(0);
+
+			if (game.enemies.countLiving() <= 1) {
+
+				/*
+				if(rounds[0] < count){
+					for (i = 0; i < 20; i++) {
+						spawn_enemy(0);
+					}
 				}
-			}
+				*/
 
-			if(rounds[0] >= 10){
-				//spawn boss
-			}
+				//if(rounds[0] >= 10){
+					spawn_boss(0);
+					boss_active = 1;
+				//}
 
-			count++; // notice count
-			g.add_pickup(game);
+				count++; // notice count
+				g.add_pickup(game);
+			}
 		}
+
+
 	}
 
 	function spawn_enemy(type) {
@@ -173,15 +182,15 @@ function numProps(obj) {
 		if(type == 0){
 			var boss = game.enemies.getFirstDead();
 			if (boss === null) {
-				boss = new boss(game, type);
+				boss = new e_boss(game, type);
 			}
 		}
 
 		boss.revive(boss.health);
 		boss.x = game.rnd.integerInRange(0, game.width);
-		boss.y = game.rnd.integerInRange(0, -(game.height));
+		boss.y = game.rnd.integerInRange(0, -50);
 
-		return nme;
+		return boss;
 	};
 
 	gameState.update = function (){

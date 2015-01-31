@@ -11,7 +11,11 @@ var modal = {
 
 		game.test = game.add.graphics(0, 0);
 		game.test.beginFill(0xffffff, 1);
-		game.test.drawRect(game.width/2, game.height/2, 100, 100);
+
+		w = game.width/3;
+		pw = game.width/2-w/2
+		h = game.height/1.5;
+		game.test.drawRect(pw, h/2.5, w, h);
 		game.test.endFill();
 		game.test.alpha = 0;
 
@@ -40,11 +44,15 @@ var modal = {
 			// }
 			// else{
 			// // Remove the menu and the label
-			game.menu.destroy();
+
+			//}
+			console.log(event.y);
+
+			//game.menu.destroy();
 			game.choiseLabel.destroy();
 			game.pause_background.alpha = 0;
+			game.test.alpha = 0;
 			game.paused = false;
-			//}
 		}
 	},
 
@@ -52,10 +60,13 @@ var modal = {
 		// When the pause button is pressed, we pause the game
 		game.paused = true;
 		// Then add the menu
-		w = game.width/2;
-		h = game.height/2;
-		game.menu = game.add.sprite(w, h, 'menu');
-		game.menu.anchor.setTo(0.5, 0.5);
+
+	// w = game.width/2;
+	// h = game.height/2;
+	// game.menu = game.add.sprite(w, h, 'menu');
+	// game.menu.anchor.setTo(0.5, 0.5);
+		game.test.alpha = 1;
+
 		// And a label to illustrate which menu item was chosen. (This is not necessary)
 		game.choiseLabel = game.add.text(w, h-150, 'Click outside menu to continue', { font: '30px Arial', fill: '#fff' });
 		game.choiseLabel.anchor.setTo(0.5, 0.5);
