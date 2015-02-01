@@ -84,31 +84,35 @@ gameState.create = function () {
 
 	//var rounds = [];
 	function generate_rounds(name){
-		game.rounds = [];
+		var rounds = [ [[]]];
 		boss_active = 0;
 		l = numProps(game.level_range[name]);
-		console.log(l);
+		//console.log(l);
 
+		/*
 		for (i = 0; i < l; i++){
 			value = game.level_range[name][i];
 			//console.log(value);
 			element = game.rnd.integerInRange(game.level_range[name][i]['min'], game.level_range[name][i]['max']);
-			console.log(element);
+			//console.log(element);
 		}
+		*/
+		test = [];
 
-
-		for (i = 0; i < 2; i++) {
+		for (i = 0; i < 3; i++) {
 			//element = game.rnd.integerInRange(1, 5);
 			//if(game.rounds.indexOf(element) == -1){
-				game.rounds.push(element);
-			//}else{
-				//i--;
-			//}
-			console.log(i);
-		}
-		game.rounds.sort();
-		console.log(game.rounds);
+			element = game.rnd.integerInRange(1, 20);
+			//console.log(element);
 
+			test.push(element);
+			rounds.push(test);
+			//console.log(game.rounds[i]);
+
+		}
+		//game.rounds.sort();
+		console.log(rounds);
+		console.log(rounds[0]);
 	}
 
 
@@ -116,25 +120,36 @@ gameState.create = function () {
 		//console.log(game.rounds);
 		//randomly generate change up on rounds and amount per round
 		//maybe look into array to store what comes when
-		if(boss_active == 0){
+
+		console.log(count);
+		//if(!boss_active){
 
 			if (game.enemies.countLiving() <= 1) {
+				//console.log(game.enemies.countLiving()+"L");
 
-				if(game.rounds[0] < count){
+				if(game.rounds[count] == count){
+					//console.log(game.rounds[count]+" - "+count);
 					for (i = 0; i < 20; i++) {
 						spawn_enemy(0);
 					}
 				}
 
-				if(game.rounds[0] = 3){
+				if(count == 3){
+					console.log("boss");
 					spawn_boss(0);
 					boss_active = 1;
 				}
 
 				count++; // notice count
 				g.add_pickup(game);
+
 			}
-		}
+		//}
+
+
+
+
+
 
 
 	}
@@ -174,17 +189,18 @@ gameState.create = function () {
 	};
 
 	function spawn_boss(type) {
-
+		console.log("spawn boss");
 		//type = 0;
 
 		if(type == 0){
 			var boss = game.enemies.getFirstDead();
-			if (boss === null) {
+			//if (boss === null) {
 				boss = new e_boss(game, type);
-			}
+			//}
 		}
 
 		boss.revive(boss.health);
+			boss.tint = "0xff00ff";
 		boss.x = game.rnd.integerInRange(0, game.width);
 		boss.y = game.rnd.integerInRange(0, -50);
 
