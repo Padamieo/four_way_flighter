@@ -20,7 +20,7 @@ var e_boss = require('e_boss');
 
 module.exports = function(game) {
 
-	count = 0; // this should probably be game.count
+	var count = 0; // this should probably be game.count
 
 /*
 	var Gray = require('gray'); //filter grey
@@ -84,6 +84,7 @@ gameState.create = function () {
 
 	//var rounds = [];
 	function generate_rounds(name){
+		game.rounds = [];
 		boss_active = 0;
 		l = numProps(game.level_range[name]);
 		console.log(l);
@@ -95,43 +96,40 @@ gameState.create = function () {
 			console.log(element);
 		}
 
-		/*
-		for (i = 0; i < 5; i++) {
-			element = game.rnd.integerInRange(1, 5);
-			if(rounds.indexOf(element) == -1){
-				rounds.push(element);
-			}else{
-				i--;
-			}
+
+		for (i = 0; i < 2; i++) {
+			//element = game.rnd.integerInRange(1, 5);
+			//if(game.rounds.indexOf(element) == -1){
+				game.rounds.push(element);
+			//}else{
+				//i--;
+			//}
 			console.log(i);
 		}
-		rounds.sort();
-		console.log(rounds);
-		*/
+		game.rounds.sort();
+		console.log(game.rounds);
+
 	}
 
 
 	function updateTick() {
-		//console.log(rounds);
+		//console.log(game.rounds);
 		//randomly generate change up on rounds and amount per round
 		//maybe look into array to store what comes when
 		if(boss_active == 0){
 
-
 			if (game.enemies.countLiving() <= 1) {
 
-				/*
-				if(rounds[0] < count){
+				if(game.rounds[0] < count){
 					for (i = 0; i < 20; i++) {
 						spawn_enemy(0);
 					}
 				}
-				*/
 
-				//if(rounds[0] >= 10){
+				if(game.rounds[0] = 3){
 					spawn_boss(0);
 					boss_active = 1;
-				//}
+				}
 
 				count++; // notice count
 				g.add_pickup(game);
