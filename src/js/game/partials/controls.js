@@ -207,8 +207,8 @@ var controls = {
 			angle = Math.atan(y/x);
 		}
 		bullet.rotation = angle;
-		bullet.body.velocity.x = Math.cos(bullet.rotation) * 750;
-		bullet.body.velocity.y = Math.sin(bullet.rotation) * 750;
+		bullet.body.velocity.x = Math.cos(bullet.rotation) * 1000;
+		bullet.body.velocity.y = Math.sin(bullet.rotation) * 1000;
 
 		/*
 		if (game.pad[pad_id].axis(Phaser.Gamepad.XBOX360_STICK_RIGHT_X) < -0.01 ){

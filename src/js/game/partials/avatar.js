@@ -14,7 +14,7 @@ var avatar = function(game, i) {
 	game.players.add(this);
 
 	game.nextShotAt[i] = 0;
-	game.shotDelay[i] = 50;
+	game.shotDelay[i] = 70;
 
 	game.nextKillAt[i] = 0;
 	game.KillDelay[i] = 600

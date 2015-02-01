@@ -34,7 +34,7 @@ var e = {
 		e_bullet.reset(e.x, e.y, 'bullet');
 
 		//e_bullet.body.animations.frame = 2; //needs to set bullet colour on who fired
-
+		e_bullet.tint = "0x000000";
 		e_bullet.rotation = targetAngle;
 		e_bullet.SPEED = 400;
 		e_bullet.body.velocity.x = Math.cos(e_bullet.rotation) * e_bullet.SPEED;

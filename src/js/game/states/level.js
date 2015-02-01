@@ -37,11 +37,9 @@ gameState.create = function () {
 	*/
 
 	game.level_range = {
-		level: { 0:{enemy: 3, min: 2, max: 10}, 1:{enemy: 0, min: 2, max: 10} },
+		level: { 0:{enemy: 3, min: 1, max: 5}, 1:{enemy: 2, min: 5, max: 10}, 2:{enemy: 4, min: 6, max: 8}  },
 		levelA: { min: 1, max: 3 }
 	};
-
-	generate_rounds('level');
 
 	//general setups
 	g.setup(game);
@@ -52,9 +50,15 @@ gameState.create = function () {
 	//player
 	p.setup(game);
 
+
+
+	generate_rounds('level');
+
 	tick = game.time.create(false);
 	tick.loop(2000, updateTick, this);
 	tick.start();
+
+
 
 	//setup controlers and keyboards
 	c.setup(game);
@@ -82,59 +86,66 @@ gameState.create = function () {
 		return c;
 	}
 
-	//var rounds = [];
 	function generate_rounds(name){
-		var rounds = [ [[]]];
+		game.rounds = [];
 		boss_active = 0;
 		l = numProps(game.level_range[name]);
-		//console.log(l);
+		console.log(l);
 
-		/*
-		for (i = 0; i < l; i++){
-			value = game.level_range[name][i];
-			//console.log(value);
-			element = game.rnd.integerInRange(game.level_range[name][i]['min'], game.level_range[name][i]['max']);
-			//console.log(element);
+		for (r = 0; r < 9; r++) {
+			test = [];
+
+				for (e = 0; e < l; e++){
+
+					min = game.level_range[name][e]['min']
+					max = game.level_range[name][e]['max']
+
+					element = game.rnd.integerInRange(min, max);
+
+					round_factor = element/game.num_players;
+
+					tt = round_factor*r;
+
+					if(game.num_players >= 2){
+						add = element*game.num_players;
+						nnn = tt+add;
+					}else{
+						nnn = tt;
+					}
+
+					final_element = nnn+element;
+					final_element = Math.round(final_element);
+
+					console.log(v+":"+final_element+"send");
+
+					test.push(element);
+
+				}
+			game.rounds.push(test);
 		}
-		*/
-		test = [];
-
-		for (i = 0; i < 3; i++) {
-			//element = game.rnd.integerInRange(1, 5);
-			//if(game.rounds.indexOf(element) == -1){
-			element = game.rnd.integerInRange(1, 20);
-			//console.log(element);
-
-			test.push(element);
-			rounds.push(test);
-			//console.log(game.rounds[i]);
-
-		}
+		console.log(game.rounds);
 		//game.rounds.sort();
-		console.log(rounds);
-		console.log(rounds[0]);
 	}
 
 
 	function updateTick() {
-		//console.log(game.rounds);
-		//randomly generate change up on rounds and amount per round
-		//maybe look into array to store what comes when
 
 		console.log(count);
 		//if(!boss_active){
 
 			if (game.enemies.countLiving() <= 1) {
-				//console.log(game.enemies.countLiving()+"L");
 
-				if(game.rounds[count] == count){
-					//console.log(game.rounds[count]+" - "+count);
-					for (i = 0; i < 20; i++) {
-						spawn_enemy(0);
+				l = numProps(game.rounds[count]);
+				num = game.rounds[count][i];
+				type = game.level_range['level'][i]['enemy'];
+
+				for (i = 0; i < l; i++) {
+					for (j = 0; j < num; j++){
+						spawn_enemy(type);
 					}
 				}
 
-				if(count == 3){
+				if(count == 10){
 					console.log("boss");
 					spawn_boss(0);
 					boss_active = 1;
@@ -145,13 +156,6 @@ gameState.create = function () {
 
 			}
 		//}
-
-
-
-
-
-
-
 	}
 
 	function spawn_enemy(type) {
