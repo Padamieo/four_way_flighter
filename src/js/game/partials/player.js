@@ -172,7 +172,10 @@ var player = {
 	add_point: function(bullet, enemy){
 		//I think this is a player function
 		game = enemy.game;
+		x = bullet.x;
+		y = bullet.y;
 		bullet.kill();
+		sfx.ping(game, x, y);
 		enemy.damage(1);
 		if(enemy.health <= 0){
 			player.update_energy(game, bullet.name);
