@@ -30,13 +30,13 @@ powerbar.prototype.update = function(game) {
 		this.y = game.players.getAt(this.for_player).y;
 
 		if(game.players.getAt(this.for_player).show_energy == 1){
-			this.lineStyle(2, 0x00ff00, 1);
+			this.lineStyle(2, 0x00fff0, 1);
 			game.players.getAt(this.for_player).show_energy = 2;
 			this.fadeAt = game.time.now + this.displayDelay;
 
 		}else{
 			if (this.fadeAt > game.time.now) {
-				this.lineStyle(2, 0x00ff00, 1);
+				this.lineStyle(2, 0x00fff0, 1);
 			}else{
 				game.players.getAt(this.for_player).show_energy = 0;
 			}

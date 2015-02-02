@@ -36,7 +36,7 @@ healthbar.prototype.update = function(game) {
 		this.y = game.players.getAt(this.for_player).y;
 
 		if(game.players.getAt(this.for_player).show_health == 1){
-			this.lineStyle(2, 0x00fff0, 1);
+			this.lineStyle(2, 0x00ff00, 1);
 			game.players.getAt(this.for_player).show_health = 2;
 			this.fadeAt = game.time.now + this.displayDelay;
 			//console.log("fade at"+this.fadeAt+" gametime"+game.time.now);
@@ -44,7 +44,7 @@ healthbar.prototype.update = function(game) {
 
 		}else{
 			if (this.fadeAt > game.time.now) {
-				this.lineStyle(2, 0x00fff0, 1);
+				this.lineStyle(2, 0x00ff00, 1);
 				//this.sprite_tween.start();
 			}else{
 				game.players.getAt(this.for_player).show_health = 0;
