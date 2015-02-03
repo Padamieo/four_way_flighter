@@ -33,6 +33,7 @@ var avatar = function(game, i) {
 	this.TOP_SPEED = 300;
 	this.LOW_SPEED = 220;
 	this.zoid_request = 0;
+	this.fire_power = 1;
 	//game.avatar[num].body.bounce.y=0.2;
 
 	//game.avatar[num].body.immovable = false;
@@ -59,7 +60,9 @@ avatar.prototype.constructor = avatar;
 avatar.prototype.update = function(game) {
 	game = this.game;
 	if(this.alive){
+
 		if(this.zoid_request){console.log(this.name+"wants to zoid")}
+
 		if(isNaN(game.controls[this.name])){
 			if(game.controls[this.name] == 'K'){
 				c.controls_key(game, this.name);
@@ -68,6 +71,24 @@ avatar.prototype.update = function(game) {
 			}
 		}else{
 			c.controls_pad(game, this.name, this.pad);
+			/**/
+			//this needs to be functioned out
+			v = game.pad[this.pad].buttonValue(Phaser.Gamepad.XBOX360_RIGHT_TRIGGER);
+			//console.log(v);
+			if(v == 0 || v == null ){
+				this.fire_power = 1;
+				value = 0;
+			}else{
+				value = v*5;
+				this.fire_power = value;
+			}
+			if (game.nextShotAt[this.name] > game.time.now) {
+				return;
+			}else{
+				this.energy = (this.energy)-value;
+				game.players.getAt(this.name).show_energy = 1;
+			}
+			/**/
 		}
 
 		if (game.nextKillAt[this.name] < game.time.now) {

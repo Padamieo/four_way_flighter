@@ -13,6 +13,8 @@ var controls = {
 				controls.pad_setup(game, i);
 			}
 		}
+
+		game.formerMouse=-1;
 	},
 
 	pad_setup: function(game, num){
@@ -42,7 +44,7 @@ var controls = {
 		h_test = 0;
 		v_test = 0;
 
-		if ( cursors.left.isDown || cursors.right.isDown || cursors.up.isDown || cursors.down.isDown ){
+		if ( cursors.left.isDown || cursors.right.isDown || cursors.up.isDown || cursors.down.isDown || game.input.mouse.button == 0){
 			controls.fire(game, player_id);
 			speed = game.players.getAt(player_id).LOW_SPEED;
 		}else{
@@ -107,16 +109,15 @@ var controls = {
 					game.players.getAt(player_id).angle -= 1;
 				}
 			}
-
 			game.players.getAt(player_id).body.velocity.y *= 0.96;
 			game.players.getAt(player_id).body.velocity.x *= 0.96;
-
 		}
 	},
 
 	controls_pad: function(game, player_id, pad_id){
 		h_test = 0;
 		v_test = 0;
+
 		if ( game.pad[pad_id].axis(Phaser.Gamepad.XBOX360_STICK_RIGHT_Y) > 0.01 || game.pad[pad_id].axis(Phaser.Gamepad.XBOX360_STICK_RIGHT_Y) < -0.01 || game.pad[pad_id].axis(Phaser.Gamepad.XBOX360_STICK_RIGHT_X) < -0.01 ||  game.pad[pad_id].axis(Phaser.Gamepad.XBOX360_STICK_RIGHT_X) > 0.01){
 			if(game.players.getAt(player_id).alive == 1){
 				controls.fire(game, player_id, pad_id);
@@ -170,7 +171,6 @@ var controls = {
 
 		if(game.pad[pad_id].isDown(Phaser.Gamepad.XBOX360_B)){
 			game.players.getAt(player_id).show_health = 1;
-			game.players.getAt(player_id).show_energy = 1;
 		}
 
 	},
@@ -185,10 +185,16 @@ var controls = {
 			return;
 		}
 
+		player = game.players.getAt(player_id);
+
 		bullet = game.bulletPool.getFirstExists(false);
-		bullet.reset(game.players.getAt(player_id).x, game.players.getAt(player_id).y, 'bullet');
+		bullet.reset(player.x, player.y, 'bullet');
 		bullet.name = player_id;
-		bullet.tint = speed = game.players.getAt(player_id).tint;
+		bullet.tint = player.tint;
+		bullet.damage = player.fire_power;
+		bullet.scale.y = player.fire_power;
+		bullet.scale.x = player.fire_power;
+		console.log(player.fire_power);
 
 		if(game.controls[player_id] == 'K'){
 			controls.keyboard_fire(game, bullet);
@@ -225,15 +231,24 @@ var controls = {
 	},
 
 	keyboard_fire: function(game, bullet){
-		if ( cursors.left.isDown){
-			bullet.body.velocity.x -= 750;
-		}else if (cursors.right.isDown ){
-			bullet.body.velocity.x += 750;
-		}
-		if (cursors.up.isDown){
-			bullet.body.velocity.y -= 750;
-		}else if (cursors.down.isDown){
-			bullet.body.velocity.y += 750;
+		if (game.input.mouse.button==0){
+			x = game.input.mousePointer.x;
+			y = game.input.mousePointer.y;
+			var angle = game.math.angleBetween( bullet.x, bullet.y, x, y );
+			bullet.rotation = angle;
+			bullet.body.velocity.x = Math.cos(bullet.rotation) * 1000;
+			bullet.body.velocity.y = Math.sin(bullet.rotation) * 1000;
+		}else{
+			if ( cursors.left.isDown){
+				bullet.body.velocity.x -= 750;
+			}else if (cursors.right.isDown ){
+				bullet.body.velocity.x += 750;
+			}
+			if (cursors.up.isDown){
+				bullet.body.velocity.y -= 750;
+			}else if (cursors.down.isDown){
+				bullet.body.velocity.y += 750;
+			}
 		}
 	}
 

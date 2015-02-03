@@ -28,11 +28,11 @@ var u = {
 		game.smoke.gravity = 1000;
 
 		//this is when bullets dont kill but particles burst off
-		game.ping = game.add.emitter(0, 0, 10);
-		game.ping.makeParticles('test1');
-		game.ping.setYSpeed(1000, 2000);
-		game.ping.setXSpeed(1000, 2000);
-		game.ping.gravity = 200;
+			// game.ping = game.add.emitter(0, 0, 10);
+			// game.ping.makeParticles('test1');
+			// game.ping.setYSpeed(1000, 2000);
+			// game.ping.setXSpeed(1000, 2000);
+			// game.ping.gravity = 200;
 
 	},
 
@@ -49,10 +49,9 @@ var u = {
 	},
 
 	ping: function(game, x, y){
-		//not working
-		game.ping.x = x;
-		game.ping.y = y;
-		game.ping.start(true, 2000, null, 1);
+		// game.ping.x = x;
+		// game.ping.y = y;
+		// game.ping.start(true, 2000, null, 1);
 	},
 
 	flash: function (game){

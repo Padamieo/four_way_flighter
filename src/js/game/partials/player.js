@@ -175,8 +175,11 @@ var player = {
 		x = bullet.x;
 		y = bullet.y;
 		bullet.kill();
+
 		sfx.ping(game, x, y);
-		enemy.damage(1);
+
+		enemy.damage(bullet.damage);
+
 		if(enemy.health <= 0){
 			player.update_energy(game, bullet.name);
 			player.update_score(game, enemy.kill_point);
