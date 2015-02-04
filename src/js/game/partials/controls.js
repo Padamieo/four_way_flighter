@@ -194,7 +194,7 @@ var controls = {
 		bullet.damage = player.fire_power;
 		bullet.scale.y = player.fire_power;
 		bullet.scale.x = player.fire_power;
-		console.log(player.fire_power);
+		//console.log(player.fire_power);
 
 		if(game.controls[player_id] == 'K'){
 			controls.keyboard_fire(game, bullet);

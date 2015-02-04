@@ -54,6 +54,51 @@ var avatar = function(game, i) {
 
 };
 
+var poop = function(game, player){
+	if(player.pad == 'K'){
+
+		v = game.input.keyboard.isDown(Phaser.Keyboard.CONTROL);
+		if(v == 0 || v == null){
+			player.fire_power = 1;
+			value = 0;
+		}else{
+				// value = 0;
+				value = 1; //this is why holding control with no energy "stops" the shooting; scale is 0 in this case
+			if(player.energy == 0){
+				player.fire_power = value;
+				return;
+			}
+			if(player.energy > 0){
+				value = 5;
+				player.fire_power = value;
+				game.players.getAt(player.name).show_energy = 1;
+				player.energy = player.energy-1;
+			}
+		}
+
+
+	}else{
+		//this needs to be functioned out
+		v = game.pad[player.pad].buttonValue(Phaser.Gamepad.XBOX360_RIGHT_TRIGGER);
+		//console.log(v);
+		if(v == 0 || v == null ){
+			player.fire_power = 1;
+			value = 0;
+		}else{
+			value = v*5;
+			player.fire_power = value;
+		}
+		if (game.nextShotAt[player.name] > game.time.now) {
+			return;
+		}else{
+			player.energy = (player.energy)-value;
+			game.players.getAt(player.name).show_energy = 1;
+		}
+
+	}
+
+}
+
 avatar.prototype = Object.create(Phaser.Sprite.prototype);
 avatar.prototype.constructor = avatar;
 
@@ -66,29 +111,13 @@ avatar.prototype.update = function(game) {
 		if(isNaN(game.controls[this.name])){
 			if(game.controls[this.name] == 'K'){
 				c.controls_key(game, this.name);
+				poop(game, this);
 			}else{
 				//custom controls
 			}
 		}else{
 			c.controls_pad(game, this.name, this.pad);
-			/**/
-			//this needs to be functioned out
-			v = game.pad[this.pad].buttonValue(Phaser.Gamepad.XBOX360_RIGHT_TRIGGER);
-			//console.log(v);
-			if(v == 0 || v == null ){
-				this.fire_power = 1;
-				value = 0;
-			}else{
-				value = v*5;
-				this.fire_power = value;
-			}
-			if (game.nextShotAt[this.name] > game.time.now) {
-				return;
-			}else{
-				this.energy = (this.energy)-value;
-				game.players.getAt(this.name).show_energy = 1;
-			}
-			/**/
+			poop(game, this);
 		}
 
 		if (game.nextKillAt[this.name] < game.time.now) {
