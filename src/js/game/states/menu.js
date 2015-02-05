@@ -11,7 +11,6 @@ module.exports = function(game) {
 		c.setup(game); //setup controllers and keyboard
 		//this does not work as no know number of players exists
 
-
 		m.setup(game);	//modal screen setups ie pause and popups
 
 		game.characters = game.add.group();
@@ -21,7 +20,6 @@ module.exports = function(game) {
 			//c.pad_setup(game, i);
 			//controller_indicator(i);
 			//test(i);
-			test(i);
 
 			var pc = game.characters.getFirstDead();
 			if (pc === null) {
@@ -41,21 +39,21 @@ module.exports = function(game) {
 
 	};
 
-	function test(i){
-
-	}
-
-	/*
 	//add currently active pads up
-	function pad_connect_indicator(num){
-		if(game.input.gamepad.supported && game.input.gamepad.active && game.pad[num].connected) {
-			count = count+1;
+	function pad_connect_indicator(i){
+		if(game.input.gamepad.supported && game.input.gamepad.active && game.pad[i].connected) {
+			console.log("pad"+i+"ACTIVE");
 		}else{
-			count = count+0;
+			console.log("pad"+i);
 		}
-	}
-	*/
-	/*
+	};
+
+	function constantly_checking_for_pads(){
+		for (i = 0; i < 4; i++) {
+			pad_connect_indicator(i);
+		}
+	};
+
 	//set-up default indicators
 	function controller_indicator(num){
 		posy = (game.height/2.8);
@@ -71,6 +69,7 @@ module.exports = function(game) {
 		indicator[num].inputEnabled = true;
 	}
 
+	/*
 	//define button switches
 	function switch_button(num){
 		posy = (game.height/4);
@@ -131,6 +130,7 @@ module.exports = function(game) {
 			pad_connect_indicator(i);
 		}
 		*/
+		constantly_checking_for_pads();
 		game.start.events.onInputDown.add(begin, game.start);
 		if(game.input.keyboard.isDown(Phaser.Keyboard.ESC)){ m.pause(game);}
 	};

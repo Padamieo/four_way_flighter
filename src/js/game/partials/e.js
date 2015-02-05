@@ -30,6 +30,14 @@ var e = {
 			return;
 		}
 
+		bounds = 100;
+		if(e.x < -bounds || e.x > game.width+bounds ){
+			return;
+		}
+		if(e.y < -bounds || e.y > game.length+bounds){
+			return;
+		}
+
 		e_bullet = game.e_bulletPool.getFirstExists(false);
 		e_bullet.reset(e.x, e.y, 'bullet');
 

@@ -50,15 +50,11 @@ gameState.create = function () {
 	//player
 	p.setup(game);
 
-
-
 	generate_rounds('level');
 
 	tick = game.time.create(false);
 	tick.loop(2000, updateTick, this);
 	tick.start();
-
-
 
 	//setup controlers and keyboards
 	c.setup(game);

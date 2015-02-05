@@ -55,46 +55,33 @@ var avatar = function(game, i) {
 };
 
 var poop = function(game, player){
+
+	//move this out to special_abilities file
 	if(player.pad == 'K'){
-
 		v = game.input.keyboard.isDown(Phaser.Keyboard.CONTROL);
-		if(v == 0 || v == null){
-			player.fire_power = 1;
-			value = 0;
-		}else{
-				// value = 0;
-				value = 1; //this is why holding control with no energy "stops" the shooting; scale is 0 in this case
-			if(player.energy == 0){
-				player.fire_power = value;
-				return;
-			}
-			if(player.energy > 0){
-				value = 5;
-				player.fire_power = value;
-				game.players.getAt(player.name).show_energy = 1;
-				player.energy = player.energy-1;
-			}
-		}
-
-
 	}else{
-		//this needs to be functioned out
 		v = game.pad[player.pad].buttonValue(Phaser.Gamepad.XBOX360_RIGHT_TRIGGER);
-		//console.log(v);
-		if(v == 0 || v == null ){
-			player.fire_power = 1;
-			value = 0;
-		}else{
-			value = v*5;
+	}
+
+	if(v == 0 || v == null){
+		player.fire_power = 1;
+	}else{
+
+		value = 1;
+		if(player.energy == 0){
 			player.fire_power = value;
-		}
-		if (game.nextShotAt[player.name] > game.time.now) {
 			return;
-		}else{
-			player.energy = (player.energy)-value;
-			game.players.getAt(player.name).show_energy = 1;
 		}
 
+		if(player.energy >= 1){
+
+			value = 5;
+			player.fire_power = value;
+
+			game.players.getAt(player.name).show_energy = 1;
+			player.energy = player.energy-1;
+
+		}
 	}
 
 }
