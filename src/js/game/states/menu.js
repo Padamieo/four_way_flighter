@@ -37,23 +37,18 @@ module.exports = function(game) {
 
 		game.stage.backgroundColor = '#565756';
 
+		//game.oddarr = [0,1,2,3];
+
 	};
 
-	//add currently active pads up
-	function pad_connect_indicator(i){
-		if(game.input.gamepad.supported && game.input.gamepad.active && game.pad[i].connected) {
-			console.log("pad"+i+"ACTIVE");
-		}else{
-			console.log("pad"+i);
+	function check(player, i){
+		if(player.assigned == 'N'){
+			player.assigned = i;
+
 		}
+		//game.current_players_health =  game.current_players_health+player.health;
 	};
-
-	function constantly_checking_for_pads(){
-		for (i = 0; i < 4; i++) {
-			pad_connect_indicator(i);
-		}
-	};
-
+	
 	//set-up default indicators
 	function controller_indicator(num){
 		posy = (game.height/2.8);
@@ -130,7 +125,7 @@ module.exports = function(game) {
 			pad_connect_indicator(i);
 		}
 		*/
-		constantly_checking_for_pads();
+		//constantly_checking_for_pads();
 		game.start.events.onInputDown.add(begin, game.start);
 		if(game.input.keyboard.isDown(Phaser.Keyboard.ESC)){ m.pause(game);}
 	};

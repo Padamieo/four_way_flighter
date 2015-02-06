@@ -1,4 +1,3 @@
-
 var character_menu = function(game, x, y, i) {
 
 	posy = (game.height/2);
@@ -11,27 +10,36 @@ var character_menu = function(game, x, y, i) {
 	this.anchor.setTo(0.5, 0.5);
 	this.assigned = 'N';
 	this.i = i;
-
+	this.tint ='0xff00ff';
 };
 
 character_menu.prototype = Object.create(Phaser.Sprite.prototype);
 character_menu.prototype.constructor = character_menu;
 
 character_menu.prototype.update = function(game) {
-	/*
-	if(this.assigned == 'N'){
-		//listend for pad or keyboard press
-		game = this.game;
-		for (i = 0; i < 4; i++){
-			if(game.pad[i].isDown(Phaser.Gamepad.XBOX360_A)){
-				console.log(i+"pad "+this.i+"player");
-				this.assigned = i;
+
+	if(this.i <= 3){
+		if(this.game.input.gamepad.supported && this.game.input.gamepad.active){
+			if(this.game.pad[this.i].connected) {
+				if(this.assigned != 'N'){
+					return;
+				}else{
+					console.log("activated for"+this.i);
+					this.assigned = this.i;
+				}
 			}
 		}
 	}else{
-		console.log(this.i+"pad "+this.assigned);
+		//keybord
 	}
-	*/
+
+
+	if(this.assigned == 'N'){
+		this.tint = '0xffffff';
+	}else{
+		this.tint = '0x0000ff';
+	}
+
 };
 
 module.exports = character_menu;

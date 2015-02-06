@@ -5,7 +5,7 @@ var controls = {
 		cursors = game.input.keyboard.createCursorKeys();
 		game.pad = [];
 		if(game.num_players == null){
-			for (i = 0; i < 5; i++) {
+			for (i = 0; i < 3; i++) {
 				controls.pad_setup(game, i);
 			}
 		}else{
