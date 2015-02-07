@@ -48,7 +48,7 @@ module.exports = function(game) {
 		}
 		//game.current_players_health =  game.current_players_health+player.health;
 	};
-	
+
 	//set-up default indicators
 	function controller_indicator(num){
 		posy = (game.height/2.8);
@@ -100,13 +100,25 @@ module.exports = function(game) {
 	}
 	*/
 
+	function cal(char, game){
+		console.log(char.assigned);
+		console.log("test");
+		game.controls.push(char.assigned);
+	};
+
 	//calculations for starting a game
 	function begin(){
 
-		game.controls = ['1','0','K','K','3'];
+		//game.controls = ['0','1','2','3','K'];
+		game.controls = [];
+		
 		game.selected_colour = ['0','2','1','3','4'];
 
-		game.num_players = 3;
+		game.characters.forEachAlive( cal, this, game);
+
+		game.num_players = game.characters.countLiving();
+
+
 
 		game.state.start('level');
 	}

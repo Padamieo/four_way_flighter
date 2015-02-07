@@ -10,6 +10,7 @@ var character_menu = function(game, x, y, i) {
 	this.anchor.setTo(0.5, 0.5);
 	this.assigned = 'N';
 	this.i = i;
+	this.alive = 0;
 	this.tint ='0xff00ff';
 };
 
@@ -24,13 +25,24 @@ character_menu.prototype.update = function(game) {
 				if(this.assigned != 'N'){
 					return;
 				}else{
-					console.log("activated for"+this.i);
-					this.assigned = this.i;
+					if( this.game.pad[this.i].isDown(Phaser.Gamepad.XBOX360_A) ){
+						console.log("activated for"+this.i);
+						this.assigned = this.i;
+						this.alive = true;
+					}
 				}
 			}
 		}
 	}else{
-		//keybord
+		if(this.assigned != 'N'){
+			return;
+		}else{
+			if ( this.game.input.keyboard.isDown(Phaser.Keyboard.SPACEBAR) ) {
+				console.log("activated for"+this.i);
+				this.assigned = 'K';
+				this.alive = true;
+			}
+		}
 	}
 
 

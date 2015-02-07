@@ -86,7 +86,7 @@ gameState.create = function () {
 		game.rounds = [];
 		boss_active = 0;
 		l = numProps(game.level_range[name]);
-		console.log(l);
+		//console.log(l);
 
 		for (r = 0; r < 9; r++) {
 			test = [];
