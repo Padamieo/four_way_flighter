@@ -11,7 +11,8 @@ var character_menu = function(game, x, y, i) {
 	this.assigned = 'N';
 	this.i = i;
 	this.alive = 0;
-	this.tint ='0xff00ff';
+	this.selected_colour = 0;
+	this.tint ='0xffffff';
 };
 
 character_menu.prototype = Object.create(Phaser.Sprite.prototype);
@@ -23,7 +24,8 @@ character_menu.prototype.update = function(game) {
 		if(this.game.input.gamepad.supported && this.game.input.gamepad.active){
 			if(this.game.pad[this.i].connected) {
 				if(this.assigned != 'N'){
-					return;
+
+				//	return;
 				}else{
 					if( this.game.pad[this.i].isDown(Phaser.Gamepad.XBOX360_A) ){
 						console.log("activated for"+this.i);
@@ -35,7 +37,8 @@ character_menu.prototype.update = function(game) {
 		}
 	}else{
 		if(this.assigned != 'N'){
-			return;
+
+		//	return;
 		}else{
 			if ( this.game.input.keyboard.isDown(Phaser.Keyboard.SPACEBAR) ) {
 				console.log("activated for"+this.i);
@@ -45,11 +48,35 @@ character_menu.prototype.update = function(game) {
 		}
 	}
 
+	if(this.assigned != 'N'){
+		if(this.assigned == 'K'){
 
-	if(this.assigned == 'N'){
-		this.tint = '0xffffff';
-	}else{
-		this.tint = '0x0000ff';
+			if(cursors.left.isDown || this.game.input.keyboard.isDown(Phaser.Keyboard.A) ){
+				if(this.selected_colour != 0){
+					this.selected_colour--;
+				}
+			}
+
+			if(cursors.right.isDown || this.game.input.keyboard.isDown(Phaser.Keyboard.D) ){
+				if(this.selected_colour != 5){
+					this.selected_colour++;
+				}
+			}
+			console.log(this.selected_colour);
+
+		}else{
+			if ( this.game.pad[this.i].axis(Phaser.Gamepad.XBOX360_STICK_RIGHT_X) < -0.01 || this.game.pad[this.i].axis(Phaser.Gamepad.XBOX360_STICK_RIGHT_Y) < -0.01){
+				if(this.selected_colour != 0){
+					this.selected_colour--;
+				}
+			}else if (this.game.pad[this.i].axis(Phaser.Gamepad.XBOX360_STICK_RIGHT_X) > 0.01 || this.game.pad[this.i].axis(Phaser.Gamepad.XBOX360_STICK_RIGHT_Y) > 0.01){
+				if(this.selected_colour != 5){
+					this.selected_colour++;
+				}
+			}
+		}
+
+		this.tint = this.game.player_colours[this.selected_colour];
 	}
 
 };

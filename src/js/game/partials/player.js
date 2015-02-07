@@ -1,4 +1,5 @@
 var sfx = require('sfx');
+var pickup = require('pickup');
 
 var player = {
 
@@ -71,6 +72,9 @@ var player = {
 
 		//calculate groups health
 		game.starting_group_health = game.player_starting_health*game.num_players;
+
+		//adding pickups
+		game.pickups = game.add.group();
 
 	},
 
@@ -201,6 +205,32 @@ var player = {
 
 		//sfx.shake(game); // this might be a little too much
 		sfx.smoke(game, player.x, player.y);
+	},
+
+	add_pickup: function(game){
+		//game = spawn.game;
+		//console.log("hello"+game);
+		//console.log("hello"+c.game);
+		//health_threshold = (game.starting_group_health/4);
+		current_health = player.check_players_health(game, game.players);
+		//health
+		if(current_health < (game.starting_group_health/4)){
+			var item = game.pickups.getFirstDead();
+			if (item === null) {
+				item = new pickup(game, 0);
+			}else{
+				item.revive();
+			}
+		}
+		//lives
+		if(game.players.countLiving() != game.num_players){
+			var item = game.pickups.getFirstDead();
+			if (item === null) {
+				item = new pickup(game, 1);
+			}else{
+				item.revive();
+			}
+		}
 	},
 
 	update_score: function(game, new_score){

@@ -36,6 +36,9 @@ gameState.create = function () {
 		logo.anchor.setTo(0.5, 0.5);
 	*/
 
+	//this is not a great background but it will do for now
+	game.stage.backgroundColor = '#5B91A8';
+
 	game.level_range = {
 		level: { 0:{enemy: 3, min: 1, max: 4}, 1:{enemy: 2, min: 2, max: 10}, 2:{enemy: 4, min: 1, max: 4}  },
 		levelA: { min: 1, max: 3 }
@@ -146,7 +149,7 @@ gameState.create = function () {
 				}
 
 				count++; // notice count
-				g.add_pickup(game);
+				p.add_pickup(game);
 
 			}
 		//}

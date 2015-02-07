@@ -1,12 +1,16 @@
 var c = require('controls');
 var something = require('something');
 var m = require('pause');
+var general = require('general');
 
 module.exports = function(game) {
 
 	var menu = {};
 
 	menu.preload = function () {
+
+		//need to sort out general later, its not really used.
+		general.setup(game);
 
 		c.setup(game); //setup controllers and keyboard
 		//this does not work as no know number of players exists
@@ -104,6 +108,7 @@ module.exports = function(game) {
 		console.log(char.assigned);
 		console.log("test");
 		game.controls.push(char.assigned);
+		game.selected_colour.push(char.selected_colour);
 	};
 
 	//calculations for starting a game
@@ -111,8 +116,9 @@ module.exports = function(game) {
 
 		//game.controls = ['0','1','2','3','K'];
 		game.controls = [];
-		
-		game.selected_colour = ['0','2','1','3','4'];
+
+		//game.selected_colour = ['0','2','1','3','4'];
+		game.selected_colour = [];
 
 		game.characters.forEachAlive( cal, this, game);
 
