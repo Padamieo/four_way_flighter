@@ -9,9 +9,8 @@ var e_basic = function(game, type) {
 	Phaser.Sprite.call(this, game, x, y, 'box');
 	game.enemies.add(this);
 
-	//this.events.onRevived.add(function(){test(this.game, this)}, this);
-	//this.events.onRevived.add(function(){nme.health = 1;}, this);
-	this.events.onKilled.add(function(){ e.explosion(game, this)}, this);
+	this.events.onRevived.add(function(){ alive(game, this)}, this);
+	this.events.onKilled.add(function(){ death(game, this)}, this);
 
 	game.next_e_ShotAt[this.z] = 0;
 	game.e_shotDelay[this.z] = 1400;
@@ -25,13 +24,17 @@ var e_basic = function(game, type) {
 	this.MAX_SPEED = 250;
 	this.MIN_DISTANCE = 90;
 	this.kill_point = type+1;
+
+	this.tint = '0x999999';
 };
 
-var test = function(game, nme){
-	console.log("hello");
+var alive = function(game, nme){
 	nme.health = 1;
-	//x = game.rnd.integerInRange(0, game.width);
-	//y = game.rnd.integerInRange(0, -(game.height)+50);
+	nme.tint = '0x999999';
+}
+
+var death = function(game, nme){
+	e.explosion(game, this);
 }
 
 // e_followers are a type of Phaser.Sprite

@@ -14,8 +14,9 @@ var e = require('e');
 		// Set the pivot point for this sprite to the center
 		this.anchor.setTo(0.5, 0.5);
 
-		this.events.onRevived.add(function(){this.health = 4}, this);
 		this.health = 4;
+
+		this.events.onRevived.add(function(){ alive(game, this)}, this);
 		this.events.onKilled.add(function(){ e.explosion(game, this)}, this);
 
 		// Enable physics on the missile
@@ -31,6 +32,13 @@ var e = require('e');
 		this.MIN_DISTANCE = 150;
 		this.MAX_DISTANCE = 300;
 		this.kill_point = 4;
+
+		this.tint = '0x999999';
+	};
+
+	var alive = function(game, nme){
+		nme.health = 4;
+		nme.tint = '0x999999';
 	};
 
 	e_fighter.prototype = Object.create(Phaser.Sprite.prototype);

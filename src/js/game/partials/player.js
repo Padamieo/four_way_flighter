@@ -184,6 +184,9 @@ var player = {
 
 		enemy.damage(bullet.damage);
 
+		enemy.tint = '0xffffff'; // this need to be switched off in time relationship
+		//enemy.tint = '0x999999';
+
 		if(enemy.health <= 0){
 			player.update_energy(game, bullet.name);
 			player.update_score(game, enemy.kill_point);
