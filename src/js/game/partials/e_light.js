@@ -26,14 +26,12 @@ var e_light = function(game) {
 
 	this.tint = '0x999999';
 
-
-
 	this.bitmap = this.game.add.bitmapData(this.game.width, this.game.height);
 	this.bitmap.context.fillStyle = 'rgb(255, 255, 255)';
 	this.bitmap.context.strokeStyle = 'rgb(255, 255, 255)';
 	var lightBitmap = this.game.add.image(0, 0, this.bitmap);
 
-	lightBitmap.blendMode = Phaser.blendModes.MULTIPLY;
+	lightBitmap.blendMode = Phaser.blendModes.ADD;
 	this.rayBitmap = this.game.add.bitmapData(this.game.width, this.game.height);
 	this.rayBitmapImage = this.game.add.image(0, 0, this.rayBitmap);
 	this.rayBitmapImage.visible = true;
@@ -55,7 +53,7 @@ e_light.prototype.constructor = e_light;
 
 e_light.prototype.update = function(game) {
 
-
+	if(this.alive){
 			// Next, fill the entire light bitmap with a dark shadow color.
 			this.bitmap.context.fillStyle = 'rgb(100, 100, 100)';
 			this.bitmap.context.fillRect(0, 0, this.game.width, this.game.height);
@@ -221,7 +219,7 @@ e_light.prototype.update = function(game) {
 			// the white color will allow the full color of the background to
 			// shine through.
 			this.bitmap.context.beginPath();
-			this.bitmap.context.fillStyle = 'rgb(255, 255, 255)';
+			this.bitmap.context.fillStyle = 'rgb(150, 10, 150)';
 			this.bitmap.context.moveTo(points[0].x, points[0].y);
 			for(var j = 0; j < points.length; j++) {
 					this.bitmap.context.lineTo(points[j].x, points[j].y);
@@ -247,7 +245,7 @@ e_light.prototype.update = function(game) {
 			this.rayBitmap.dirty = true;
 
 /////////////////////////////////////
-	if(this.alive){
+
 
 			// v = this.game.math.degToRad(90);
 			// e.fire(this.game, this, v);
@@ -260,6 +258,12 @@ e_light.prototype.update = function(game) {
 			this.x = this.game.rnd.integerInRange(0, this.game.width);
 			this.y = -50;
 		}
+	}else{
+		//cant seem to kill it.
+		this.rayBitmapImage.visible = false;
+		this.bitmap.visible = false;
+		this.rayBitmap.visible = false;
+
 	}
 /////////////////////////////////////
 };

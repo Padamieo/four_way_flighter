@@ -68,45 +68,7 @@ module.exports = function(game) {
 		indicator[num].inputEnabled = true;
 	}
 
-	/*
-	//define button switches
-	function switch_button(num){
-		posy = (game.height/4);
-		posx = (game.width/4);
-		if(num == 0){ posx = (posx/2)-5; }else{ posx = posx*num+(posx/2)-5; }
-		button[num] = game.add.sprite(posx, posy*2, 'switch');
-		if(num == 0){
-			button[num].animations.frame = 2;
-		}else{
-			button[num].animations.frame = 0;
-		}
-		button[num].anchor.setTo(0.5, 0.5);
-		button[num].inputEnabled = true;
-	}
-
-	//button action
-	function actionOnClick () {
-		if(this.z == 1){
-			if( this.animations.frame == 1){
-				this.animations.frame = 2;
-				indicator[this.z-1].animations.frame = 3;
-			}else if( this.animations.frame == 2){
-				this.animations.frame = 1;
-				indicator[this.z-1].animations.frame = 0;
-			}
-		}else{
-			if( this.animations.frame == 0){
-				this.animations.frame = 1;
-			}else if( this.animations.frame == 1){
-				this.animations.frame = 0;
-			}
-		}
-	}
-	*/
-
 	function cal(char, game){
-		console.log(char.assigned);
-		console.log("test");
 		game.controls.push(char.assigned);
 		game.selected_colour.push(char.selected_colour);
 	};
@@ -124,9 +86,9 @@ module.exports = function(game) {
 
 		game.num_players = game.characters.countLiving();
 
-
-
-		game.state.start('level');
+		if(game.num_players != 0){
+			game.state.start('level');
+		}
 	}
 
 	//start it now not used

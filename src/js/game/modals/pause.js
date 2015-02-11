@@ -47,7 +47,7 @@ var modal = {
 			//Check if the click was inside the menu
 
 			//event.x > x1 && event.x < x2 && event.y > y1 && event.y < y2
-			if( ){
+			if(event.x > x1 ){
 				// // The choicemap is an array that will help us see which item was clicked
 				// var choisemap = ['one', 'two', 'three', 'four', 'five', 'six'];
 				// // Get menu local coordinates for the click
@@ -57,10 +57,11 @@ var modal = {
 				// var choise = Math.floor(x / 90) + 3*Math.floor(y / 90);
 				// // Display the choice
 				// choiseLabel.text = 'You chose menu item: ' + choisemap[choise];
-				modal.button( 'poop', 100, 100);
+
 
 			}else{
 				//game.menu.destroy();
+				game.button.destroy();
 				game.choiseLabel.destroy();
 				game.pause_background.alpha = 0;
 				game.test.alpha = 0;
@@ -78,6 +79,7 @@ var modal = {
 	// h = game.height/2;
 	// game.menu = game.add.sprite(w, h, 'menu');
 	// game.menu.anchor.setTo(0.5, 0.5);
+		modal.button( 'poop', 100, 100);
 		game.test.alpha = 1;
 
 		// And a label to illustrate which menu item was chosen. (This is not necessary)

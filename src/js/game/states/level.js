@@ -130,11 +130,10 @@ gameState.create = function () {
 
 		//if(boss_active == 0){
 
-			if (game.enemies.countLiving() <= 1) {
+			if (game.enemies.countLiving() <= 0) {
 
 				l = numProps(game.rounds[count]);
 
-				/*
 				for (i = 0; i < l; i++) {
 					num = game.rounds[count][i];
 					type = game.level_range['level'][i]['enemy'];
@@ -142,8 +141,6 @@ gameState.create = function () {
 						spawn_enemy(type);
 					}
 				}
-				*/
-				spawn_enemy(5);
 
 				if(count == 10){
 					console.log("boss");
@@ -160,7 +157,7 @@ gameState.create = function () {
 
 	function spawn_enemy(type) {
 
-		type = 5 ;
+		//type = 5 ;
 
 		if(type == 0 || type == 1 || type == 2){
 
