@@ -23,36 +23,49 @@ var modal = {
 		game.input.onDown.add(modal.unpause, self);
 	},
 
+	button: function(text, x, y){
+
+		game.button = game.add.graphics(0, 0);
+		game.button.beginFill(0x00ffff, 1);
+		game.button.drawRect(x, y, 120, 25);
+		game.button.endFill();
+		game.button.alpha = 1;
+
+		game.button_label = game.add.text(25, 25, text, { font: '30px Arial', fill: '#fff' });
+		game.button_label.anchor.setTo(0.5, 0.5);
+		game.button_label.alpha = 1;
+
+	},
+
 	unpause: function(event){
 		game = event.game;
 		if(game.paused){
-			// Calculate the corners of the menu
-			//var x1 = w/2 - 270/2, x2 = w/2 + 270/2,
-			//   y1 = h/2 - 180/2, y2 = h/2 + 180/2;
-			// Check if the click was inside the menu
 
-			// if(event.x > x1 && event.x < x2 && event.y > y1 && event.y < y2 ){
-			// // The choicemap is an array that will help us see which item was clicked
-			// var choisemap = ['one', 'two', 'three', 'four', 'five', 'six'];
-			// // Get menu local coordinates for the click
-			// var x = event.x - x1,
-			// y = event.y - y1;
-			// // Calculate the choice
-			// var choise = Math.floor(x / 90) + 3*Math.floor(y / 90);
-			// // Display the choice
-			// choiseLabel.text = 'You chose menu item: ' + choisemap[choise];
-			// }
-			// else{
-			// // Remove the menu and the label
+			//Calculate the corners of the menu
+			var x1 = w/2 - 270/2, x2 = w/2 + 270/2,
+			  y1 = h/2 - 180/2, y2 = h/2 + 180/2;
+			//Check if the click was inside the menu
 
-			//}
-			console.log(event.y);
+			//event.x > x1 && event.x < x2 && event.y > y1 && event.y < y2
+			if( ){
+				// // The choicemap is an array that will help us see which item was clicked
+				// var choisemap = ['one', 'two', 'three', 'four', 'five', 'six'];
+				// // Get menu local coordinates for the click
+				// var x = event.x - x1,
+				// y = event.y - y1;
+				// // Calculate the choice
+				// var choise = Math.floor(x / 90) + 3*Math.floor(y / 90);
+				// // Display the choice
+				// choiseLabel.text = 'You chose menu item: ' + choisemap[choise];
+				modal.button( 'poop', 100, 100);
 
-			//game.menu.destroy();
-			game.choiseLabel.destroy();
-			game.pause_background.alpha = 0;
-			game.test.alpha = 0;
-			game.paused = false;
+			}else{
+				//game.menu.destroy();
+				game.choiseLabel.destroy();
+				game.pause_background.alpha = 0;
+				game.test.alpha = 0;
+				game.paused = false;
+			}
 		}
 	},
 
