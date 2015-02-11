@@ -2,6 +2,8 @@
 var e_basic = require('e_basic');
 var e_follower = require('e_follower');
 var e_fighter = require('e_fighter');
+var e_light = require('e_light');
+
 var e = require('e');
 
 var p = require('player');
@@ -41,7 +43,7 @@ gameState.create = function () {
 
 	game.level_range = {
 		level: { 0:{enemy: 3, min: 1, max: 4}, 1:{enemy: 2, min: 2, max: 10}, 2:{enemy: 4, min: 1, max: 4}  },
-		levelA: { min: 1, max: 3 }
+		levelA: { 0:{enemy: 3, min: 1, max: 4}, 1:{enemy: 2, min: 2, max: 10}, 2:{enemy: 4, min: 1, max: 4}  }
 	};
 
 	//general setups
@@ -89,7 +91,6 @@ gameState.create = function () {
 		game.rounds = [];
 		boss_active = 0;
 		l = numProps(game.level_range[name]);
-		//console.log(l);
 
 		for (r = 0; r < 9; r++) {
 			test = [];
@@ -127,13 +128,13 @@ gameState.create = function () {
 
 	function updateTick() {
 
-		//if(!boss_active){
+		//if(boss_active == 0){
 
 			if (game.enemies.countLiving() <= 1) {
 
 				l = numProps(game.rounds[count]);
 
-
+				/*
 				for (i = 0; i < l; i++) {
 					num = game.rounds[count][i];
 					type = game.level_range['level'][i]['enemy'];
@@ -141,6 +142,8 @@ gameState.create = function () {
 						spawn_enemy(type);
 					}
 				}
+				*/
+				spawn_enemy(5);
 
 				if(count == 10){
 					console.log("boss");
@@ -157,7 +160,7 @@ gameState.create = function () {
 
 	function spawn_enemy(type) {
 
-		//type = 0;
+		type = 5 ;
 
 		if(type == 0 || type == 1 || type == 2){
 
@@ -173,11 +176,18 @@ gameState.create = function () {
 				nme = new e_fighter(game);
 			}
 
-		}else{
+		}else if(type == 4){
 
 			var nme = game.enemies.getFirstDead();
 			if (nme === null) {
 				nme = new e_follower(game);
+			}
+
+		}else{
+
+			var nme = game.enemies.getFirstDead();
+			if (nme === null) {
+				nme = new e_light(game);
 			}
 
 		}

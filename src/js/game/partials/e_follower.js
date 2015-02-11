@@ -1,6 +1,6 @@
 var e = require('e');
 
-var e_follower = function(game) {
+var e_follower = function(game, type) {
 
 	Phaser.Sprite.call(this, game, x, y, 'e_follow');
 	game.enemies.add(this);
@@ -12,7 +12,7 @@ var e_follower = function(game) {
 	this.anchor.setTo(0.5, 0.5);
 
 	this.health = 2;
-	
+
 	this.events.onRevived.add(function(){ alive(game, this)}, this);
 	this.events.onKilled.add(function(){ e.explosion(game, this)}, this);
 
@@ -24,6 +24,7 @@ var e_follower = function(game) {
 
 	// Define constants that affect motion
 	this.MAX_SPEED = 250; // pixels/second
+	this.type = type;
 	this.MIN_DISTANCE = 90; // pixels
 	this.kill_point = 1;
 
