@@ -55,7 +55,7 @@ e_light.prototype.update = function(game) {
 
 	if(this.alive){
 			// Next, fill the entire light bitmap with a dark shadow color.
-			this.bitmap.context.fillStyle = 'rgb(100, 100, 100)';
+			this.bitmap.context.fillStyle = 'rgb(0, 0, 0)';
 			this.bitmap.context.fillRect(0, 0, this.game.width, this.game.height);
 
 			// An array of the stage corners that we'll use later
@@ -218,8 +218,14 @@ e_light.prototype.update = function(game) {
 			// with a bright white color. When multiplied with the background,
 			// the white color will allow the full color of the background to
 			// shine through.
+
 			this.bitmap.context.beginPath();
-			this.bitmap.context.fillStyle = 'rgb(150, 10, 150)';
+			// var myBitmap = this.game.add.bitmapData(300, 300);
+			// var grd = myBitmap.context.createLinearGradient(this.x ,this.y, 10 , 10);
+			// grd.addColorStop(0,"rgb(170,170,170);");
+			// grd.addColorStop(1,"rgba(20,20,20, 0);");
+			// this.bitmap.context.fillStyle = grd;
+			this.bitmap.context.fillStyle = 'rgb(150, 150, 150)';
 			this.bitmap.context.moveTo(points[0].x, points[0].y);
 			for(var j = 0; j < points.length; j++) {
 					this.bitmap.context.lineTo(points[j].x, points[j].y);
@@ -229,6 +235,7 @@ e_light.prototype.update = function(game) {
 
 			// Draw each of the rays on the rayBitmap
 			this.rayBitmap.context.clearRect(0, 0, this.game.width, this.game.height);
+
 			this.rayBitmap.context.beginPath();
 			this.rayBitmap.context.strokeStyle = 'rgb(255, 255, 255)';
 			this.rayBitmap.context.fillStyle = 'rgb(255, 255, 255)';

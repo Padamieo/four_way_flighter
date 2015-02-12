@@ -43,7 +43,7 @@ gameState.create = function () {
 
 	game.level_range = {
 		level: { 0:{enemy: 3, min: 1, max: 4}, 1:{enemy: 2, min: 2, max: 10}, 2:{enemy: 4, min: 1, max: 4}  },
-		levelA: { 0:{enemy: 3, min: 1, max: 4}, 1:{enemy: 2, min: 2, max: 10}, 2:{enemy: 4, min: 1, max: 4}  }
+		test: { 0:{enemy: 6, min: 1, max: 1} }
 	};
 
 	//general setups
@@ -58,7 +58,7 @@ gameState.create = function () {
 	generate_rounds('level');
 
 	tick = game.time.create(false);
-	tick.loop(2000, updateTick, this);
+	tick.loop(2000, updateTick, this, 'level');
 	tick.start();
 
 	//setup controlers and keyboards
@@ -126,8 +126,7 @@ gameState.create = function () {
 	}
 
 
-	function updateTick() {
-
+	function updateTick(name) {
 		//if(boss_active == 0){
 
 			if (game.enemies.countLiving() <= 0) {
@@ -136,7 +135,7 @@ gameState.create = function () {
 
 				for (i = 0; i < l; i++) {
 					num = game.rounds[count][i];
-					type = game.level_range['level'][i]['enemy'];
+					type = game.level_range[name][i]['enemy'];
 					for (j = 0; j < num; j++){
 						spawn_enemy(type);
 					}
