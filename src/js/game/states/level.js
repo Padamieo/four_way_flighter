@@ -22,8 +22,6 @@ var e_boss = require('e_boss');
 
 module.exports = function(game) {
 
-	var count = 0; // this should probably be game.count
-
 /*
 	var Gray = require('gray'); //filter grey
 	var gray;
@@ -38,7 +36,7 @@ gameState.create = function () {
 		logo.anchor.setTo(0.5, 0.5);
 	*/
 
-	//this is not a great background but it will do for now
+	game.count_rounds = 0;
 	game.stage.backgroundColor = '#5B91A8';
 
 	game.level_range = {
@@ -131,23 +129,23 @@ gameState.create = function () {
 
 			if (game.enemies.countLiving() <= 0) {
 
-				l = numProps(game.rounds[count]);
+				l = numProps(game.rounds[game.count_rounds]);
 
 				for (i = 0; i < l; i++) {
-					num = game.rounds[count][i];
+					num = game.rounds[game.count_rounds][i];
 					type = game.level_range[name][i]['enemy'];
 					for (j = 0; j < num; j++){
 						spawn_enemy(type);
 					}
 				}
 
-				if(count == 10){
+				if(game.count_rounds == 10){
 					console.log("boss");
 					spawn_boss(0);
 					boss_active = 1;
 				}
 
-				count++; // notice count
+				game.count_rounds++; // notice count
 				p.add_pickup(game);
 
 			}
@@ -231,7 +229,7 @@ gameState.create = function () {
 		game.physics.arcade.overlap(game.e_bulletPool, game.players, p.hit, null, this);
 
 		//this is for a bit of fun players shoot move other players, may want to drop if resources are concern
-		game.physics.arcade.collide(game.bulletPool, game.players, p.ricochet, null, this);
+		game.physics.arcade.overlap(game.bulletPool, game.players, p.ricochet, null, this);
 
 		if((p.check_players_megazoid(game, game.players)) == game.num_players){
 			//animation

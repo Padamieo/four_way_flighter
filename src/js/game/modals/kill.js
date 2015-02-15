@@ -1,4 +1,4 @@
-var modal = {
+var kill_modal = {
 
 	setup: function(game){
 
@@ -10,7 +10,7 @@ var modal = {
 		game.ended_background.alpha = 0;
 
 		// Add a input listener that can help us return from being paused
-		//game.input.onDown.add(modal.unpause, self);
+		//game.input.onDown.add(kill_modal.unpause, self);
 	},
 
 	unpause: function(event){
@@ -58,4 +58,4 @@ var modal = {
 
 };
 
-module.exports = modal;
+module.exports = kill_modal;

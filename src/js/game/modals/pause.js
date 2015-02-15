@@ -1,8 +1,9 @@
-var modal = {
+var button = require('button');
+
+var pause_modal = {
 
 	setup: function(game){
 
-		// Create a white rectangle that we'll use to represent the flash
 		game.pause_background = game.add.graphics(0, 0);
 		game.pause_background.beginFill(0x000000, 1);
 		game.pause_background.drawRect(0, 0, game.width, game.height);
@@ -20,7 +21,7 @@ var modal = {
 		game.test.alpha = 0;
 
 		// Add a input listener that can help us return from being paused
-		game.input.onDown.add(modal.unpause, self);
+		game.input.onDown.add(pause_modal.unpause, self);
 	},
 
 	button: function(text, x, y){
@@ -33,6 +34,8 @@ var modal = {
 
 		game.button_label = game.add.text(25, 25, text, { font: '30px Arial', fill: '#fff' });
 		game.button_label.anchor.setTo(0.5, 0.5);
+		//v = game.button_label.length;
+		//console.log(v);
 		game.button_label.alpha = 1;
 
 	},
@@ -61,13 +64,17 @@ var modal = {
 
 			}else{
 				//game.menu.destroy();
-				game.button.destroy();
-				game.choiseLabel.destroy();
+				// game.button.destroy();
+				// game.choiseLabel.destroy();
 				game.pause_background.alpha = 0;
 				game.test.alpha = 0;
 				game.paused = false;
 			}
 		}
+	},
+
+	p: function(){
+		console.log("pancakes");
 	},
 
 	pause: function(game) {
@@ -79,8 +86,11 @@ var modal = {
 	// h = game.height/2;
 	// game.menu = game.add.sprite(w, h, 'menu');
 	// game.menu.anchor.setTo(0.5, 0.5);
-		modal.button( 'poop', 100, 100);
-		game.test.alpha = 1;
+
+		// pause_modal.button( 'poop', 100, 100);
+		// game.test.alpha = 1;
+
+		btn = new button(game, pause_modal.p);
 
 		// And a label to illustrate which menu item was chosen. (This is not necessary)
 		game.choiseLabel = game.add.text(w, h-150, 'Click outside menu to continue', { font: '30px Arial', fill: '#fff' });
@@ -90,4 +100,4 @@ var modal = {
 
 };
 
-module.exports = modal;
+module.exports = pause_modal;
