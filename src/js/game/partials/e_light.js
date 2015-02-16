@@ -220,15 +220,17 @@ e_light.prototype.update = function(game) {
 			// shine through.
 
 			this.bitmap.context.beginPath();
-			// var myBitmap = this.game.add.bitmapData(300, 300);
-			// var grd = myBitmap.context.createLinearGradient(this.x ,this.y, 10 , 10);
-			// grd.addColorStop(0,"rgb(170,170,170);");
-			// grd.addColorStop(1,"rgba(20,20,20, 0);");
-			// this.bitmap.context.fillStyle = grd;
+
+				// var myBitmap = this.game.add.bitmapData(300, 300);
+				// var grd = myBitmap.context.createRadialGradient(this.x ,this.y, 600, this.x ,this.y, 1500);
+				// grd.addColorStop(0,"rgb(150,150,150);");
+				// grd.addColorStop(1,"rgba(100,100,100, 0);");
+				// this.bitmap.context.fillStyle = grd;
 			this.bitmap.context.fillStyle = 'rgb(150, 150, 150)';
+
 			this.bitmap.context.moveTo(points[0].x, points[0].y);
 			for(var j = 0; j < points.length; j++) {
-					this.bitmap.context.lineTo(points[j].x, points[j].y);
+				this.bitmap.context.lineTo(points[j].x, points[j].y);
 			}
 			this.bitmap.context.closePath();
 			this.bitmap.context.fill();
@@ -241,9 +243,9 @@ e_light.prototype.update = function(game) {
 			this.rayBitmap.context.fillStyle = 'rgb(255, 255, 255)';
 			this.rayBitmap.context.moveTo(points[0].x, points[0].y);
 			for(var k = 0; k < points.length; k++) {
-					this.rayBitmap.context.moveTo(this.x, this.y);
-					this.rayBitmap.context.lineTo(points[k].x, points[k].y);
-					this.rayBitmap.context.fillRect(points[k].x-2, points[k].y-2, 4, 4);
+				this.rayBitmap.context.moveTo(this.x, this.y);
+				this.rayBitmap.context.lineTo(points[k].x, points[k].y);
+				this.rayBitmap.context.fillRect(points[k].x-2, points[k].y-2, 4, 4);
 			}
 			this.rayBitmap.context.stroke();
 
@@ -252,7 +254,6 @@ e_light.prototype.update = function(game) {
 			this.rayBitmap.dirty = true;
 
 /////////////////////////////////////
-
 
 			// v = this.game.math.degToRad(90);
 			// e.fire(this.game, this, v);

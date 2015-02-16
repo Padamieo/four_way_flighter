@@ -13,7 +13,6 @@ module.exports = function(game) {
 		general.setup(game);
 
 		c.setup(game); //setup controllers and keyboard
-		//this does not work as no know number of players exists
 
 		m.setup(game);	//modal screen setups ie pause and popups
 
@@ -87,7 +86,7 @@ module.exports = function(game) {
 		game.num_players = game.characters.countLiving();
 
 		if(game.num_players != 0){
-			game.state.start('level');
+			game.state.start('level_0');
 		}
 	}
 

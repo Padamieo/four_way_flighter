@@ -36,6 +36,7 @@
     "something": "./src/js/game/modals/SOMETHING.js",
     "kill": "./src/js/game/modals/kill.js",
     "gray": "./src/js/lib/filters/Gray.js",
+    "manager": "./src/js/game/partials/manager.js",
     "button": "./src/js/game/modals/button.js"
   },
   "browserify-shim": {

@@ -36,6 +36,16 @@ var alive = function(game, nme){
 	nme.tint = '0x999999';
 }
 
+var follow = function(nme, pos){
+	// Calculate the angle to the target
+	var rotation = this.game.math.angleBetween(nme.x, nme.y, pos[0], pos[1]);
+	// Calculate velocity vector based on rotation and this.MAX_SPEED
+	nme.body.velocity.x = Math.cos(rotation) * nme.MAX_SPEED;
+	nme.body.velocity.y = Math.sin(rotation) * nme.MAX_SPEED;
+	//this.body.angle -= 10;
+
+}
+
 // e_followers are a type of Phaser.Sprite
 e_follower.prototype = Object.create(Phaser.Sprite.prototype);
 e_follower.prototype.constructor = e_follower;
@@ -47,18 +57,16 @@ e_follower.prototype.update = function() {
 	pos = e.choose_player_target(this.game, this, this.TARGET);
 	var distance = this.game.math.distance(this.x, this.y, pos[0], pos[1]);
 
-	// If the distance > MIN_DISTANCE then move
 	if (distance > this.MIN_DISTANCE) {
-		// Calculate the angle to the target
-		var rotation = this.game.math.angleBetween(this.x, this.y, pos[0], pos[1]);
-
-		// Calculate velocity vector based on rotation and this.MAX_SPEED
-		this.body.velocity.x = Math.cos(rotation) * this.MAX_SPEED;
-		this.body.velocity.y = Math.sin(rotation) * this.MAX_SPEED;
-		//this.body.angle -= 10;
+		follow(this, pos);
 	} else {
-		this.body.velocity.setTo(0, 0);
+		if(type == 5){
+			follow(this, pos);
+		}else{
+			this.body.velocity.setTo(0, 0);
+		}
 	}
+
 };
 
 module.exports = e_follower;
