@@ -9,7 +9,6 @@ var pause_modal = {
 
 		game.test = game.add.graphics(0, 0);
 		game.test.beginFill(0xffffff, 1);
-
 		w = game.width/3;
 		pw = game.width/2-w/2
 		h = game.height/1.5;

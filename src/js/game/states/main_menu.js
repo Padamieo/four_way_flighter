@@ -4,6 +4,8 @@ module.exports = function(game) {
 
 	menu.preload = function () {
 		//add buttons background image titles
+
+		game.stage.backgroundColor = '#fff123';
 	};
 
 	menu.update = function (){

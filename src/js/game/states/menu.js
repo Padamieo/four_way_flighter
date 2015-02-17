@@ -1,6 +1,6 @@
 var c = require('controls');
 var something = require('something');
-var m = require('pause');
+var pause = require('pause');
 var general = require('general');
 
 module.exports = function(game) {
@@ -14,7 +14,7 @@ module.exports = function(game) {
 
 		c.setup(game); //setup controllers and keyboard
 
-		m.setup(game);	//modal screen setups ie pause and popups
+		pause.setup(game);	//modal screen setups ie pause and popups
 
 		game.characters = game.add.group();
 
@@ -40,7 +40,6 @@ module.exports = function(game) {
 
 		game.stage.backgroundColor = '#565756';
 
-		//game.oddarr = [0,1,2,3];
 
 	};
 
@@ -74,18 +73,17 @@ module.exports = function(game) {
 
 	//calculations for starting a game
 	function begin(){
-
-		//game.controls = ['0','1','2','3','K'];
-		game.controls = [];
-
-		//game.selected_colour = ['0','2','1','3','4'];
-		game.selected_colour = [];
-
-		game.characters.forEachAlive( cal, this, game);
-
 		game.num_players = game.characters.countLiving();
 
 		if(game.num_players != 0){
+			//game.controls = ['0','1','2','3','K'];
+			game.controls = [];
+
+			//game.selected_colour = ['0','2','1','3','4'];
+			game.selected_colour = [];
+
+			game.characters.forEachAlive( cal, this, game);
+
 			game.state.start('level_0');
 		}
 	}
