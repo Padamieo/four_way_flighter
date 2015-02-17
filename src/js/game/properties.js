@@ -1,5 +1,5 @@
 module.exports =
-  { title: 'Blank Phaser Project'
+  { title: 'Four Way Flighter'
   , description: 'A grunty Phaser.js SDK'
   , port: 3017
   , liveReloadPort: 3018
@@ -13,5 +13,5 @@ module.exports =
   /*
     { x: 770
     , y: 433
-    
+
 	*/

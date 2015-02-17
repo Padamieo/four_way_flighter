@@ -1,14 +1,11 @@
 var button = require('button');
+var modal = require('modal');
 
 var pause_modal = {
 
 	setup: function(game){
 
-		game.pause_background = game.add.graphics(0, 0);
-		game.pause_background.beginFill(0x000000, 1);
-		game.pause_background.drawRect(0, 0, game.width, game.height);
-		game.pause_background.endFill();
-		game.pause_background.alpha = 0;
+		modal.cover(game, 0);
 
 		game.test = game.add.graphics(0, 0);
 		game.test.beginFill(0xffffff, 1);
@@ -66,7 +63,8 @@ var pause_modal = {
 				//game.menu.destroy();
 				// game.button.destroy();
 				// game.choiseLabel.destroy();
-				game.pause_background.alpha = 0;
+
+				modal.cover(game, 2);
 				game.test.alpha = 0;
 				game.paused = false;
 			}
@@ -90,12 +88,13 @@ var pause_modal = {
 		// pause_modal.button( 'poop', 100, 100);
 		// game.test.alpha = 1;
 
-		btn = new button(game, pause_modal.p);
+	//	btn = new button(game, pause_modal.p);
 
 		// And a label to illustrate which menu item was chosen. (This is not necessary)
 		game.choiseLabel = game.add.text(w, h-150, 'Click outside menu to continue', { font: '30px Arial', fill: '#fff' });
 		game.choiseLabel.anchor.setTo(0.5, 0.5);
-		game.pause_background.alpha = 0.5;
+		//game.pause_background.alpha = 0.5;
+		modal.cover(game, 1);
 	}
 
 };

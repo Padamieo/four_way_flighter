@@ -1,13 +1,10 @@
+var modal = require('modal');
+
 var kill_modal = {
 
 	setup: function(game){
 
-		// Create a white rectangle that we'll use to represent the flash
-		game.ended_background = game.add.graphics(0, 0);
-		game.ended_background.beginFill(0x000000, 1);
-		game.ended_background.drawRect(0, 0, game.width, game.height);
-		game.ended_background.endFill();
-		game.ended_background.alpha = 0;
+		modal.cover(game, 0);
 
 		// Add a input listener that can help us return from being paused
 		//game.input.onDown.add(kill_modal.unpause, self);
@@ -36,7 +33,9 @@ var kill_modal = {
 			// // Remove the menu and the label
 			game.menu.destroy();
 			game.choiseLabel.destroy();
-			game.ended_background.alpha = 0;
+
+			modal.cover(game, 2);
+
 			game.ended = false;
 			//}
 		}
@@ -53,7 +52,8 @@ var kill_modal = {
 		// And a label to illustrate which menu item was chosen. (This is not necessary)
 		game.choiseLabel = game.add.text(w, h-150, 'YOU DEAD!', { font: '30px Arial', fill: '#fff' });
 		game.choiseLabel.anchor.setTo(0.5, 0.5);
-		game.ended_background.alpha = 0.5;
+
+		modal.cover(game, 1);
 	}
 
 };
