@@ -1,6 +1,6 @@
 Four way flighter
 ==============
-#A simple old school game with co-op twist
+A simple old school game with co-op twist
 ==============
 
 To run and develop four_way_flighter the following is required on your system:
