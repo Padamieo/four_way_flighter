@@ -44,6 +44,8 @@ var controls = {
 		h_test = 0;
 		v_test = 0;
 
+		console.log(game.Pointer.leftButton); // issue is with game.input.mouse.button
+
 		if ( cursors.left.isDown || cursors.right.isDown || cursors.up.isDown || cursors.down.isDown || game.input.mouse.button == 0){
 			controls.fire(game, player_id);
 			speed = game.players.getAt(player_id).LOW_SPEED;
@@ -232,6 +234,7 @@ var controls = {
 
 	keyboard_fire: function(game, bullet){
 		if (game.input.mouse.button==0){
+			console.log("click");
 			x = game.input.mousePointer.x;
 			y = game.input.mousePointer.y;
 			var angle = game.math.angleBetween( bullet.x, bullet.y, x, y );
