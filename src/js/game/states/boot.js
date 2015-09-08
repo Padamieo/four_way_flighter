@@ -32,7 +32,8 @@ module.exports = function(game) {
     this.scale.scaleMode = Phaser.ScaleManager.SHOW_ALL;
     this.scale.pageAlignHorizontally = true;
     this.scale.pageAlignVertically = true;
-    this.scale.setScreenSize(true);
+    //this.scale.setScreenSize = true; // this broke phaser 2.4.3
+    
 
     //game.scale.pageAlignHorizontally = false;
     //game.scale.pageAlignVertically = false;
