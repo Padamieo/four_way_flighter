@@ -13,7 +13,10 @@ var button = function(game, callback) {
 	//game.cache.addBitmapData("ttt", game.button);
 
 	//this.anchor.setTo(0.5, 0.5);
-	Phaser.Button.call(this, game, 300, 300, game.button);
+	//Phaser.Button.call(this, game, 300, 300, game.button);
+
+	game.buttonlabel = game.add.text(w, h, 'buttons label', { font: '30px Arial', fill: '#fff' });
+	game.buttonlabel.anchor.setTo(0.5, 0.5);
 
 };
 

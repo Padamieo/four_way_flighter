@@ -7,17 +7,18 @@ var pause_modal = {
 
 		modal.cover(game, 0);
 
-		game.test = game.add.graphics(0, 0);
-		game.test.beginFill(0xffffff, 1);
+		// game.test = game.add.graphics(0, 0);
+		// game.test.beginFill(0xffffff, 1);
 		w = game.width/3;
-		pw = game.width/2-w/2
+		// pw = game.width/2-w/2
 		h = game.height/1.5;
-		game.test.drawRect(pw, h/2.5, w, h);
-		game.test.endFill();
-		game.test.alpha = 0;
+		// game.test.drawRect(pw, h/2, w, h);
+		// game.test.endFill();
+		// game.test.alpha = 0;
 
 		// Add a input listener that can help us return from being paused
 		game.input.onDown.add(pause_modal.unpause, self);
+		console.log("active");
 	},
 
 	button: function(text, x, y){
@@ -64,7 +65,7 @@ var pause_modal = {
 				// game.choiseLabel.destroy();
 
 				modal.cover(game, 2);
-				game.test.alpha = 0;
+				//game.test.alpha = 0;
 				game.paused = false;
 			}
 		}
@@ -88,12 +89,16 @@ var pause_modal = {
 		// game.test.alpha = 1;
 
 	//	btn = new button(game, pause_modal.p);
+		button = new button(game);
 
 		// And a label to illustrate which menu item was chosen. (This is not necessary)
-		game.choiseLabel = game.add.text(w, h-150, 'Click outside menu to continue', { font: '30px Arial', fill: '#fff' });
+		game.choiseLabel = game.add.text(w, h, 'Click outside menu to continue', { font: '30px Arial', fill: '#fff' });
 		game.choiseLabel.anchor.setTo(0.5, 0.5);
 		//game.pause_background.alpha = 0.5;
 		modal.cover(game, 1);
+
+
+
 	}
 
 };
