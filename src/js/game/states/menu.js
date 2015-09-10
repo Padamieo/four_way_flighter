@@ -39,7 +39,7 @@ module.exports = function(game) {
 		game.start.scale.x = 3;
 
 		game.stage.backgroundColor = '#565756';
-		
+
 		pause.setup(game);	//modal screen setups ie pause and popups
 
 	};
@@ -105,7 +105,7 @@ module.exports = function(game) {
 		*/
 		//constantly_checking_for_pads();
 		game.start.events.onInputDown.add(begin, game.start);
-		if(game.input.keyboard.isDown(Phaser.Keyboard.ESC)){ pause.pause(game);}
+		//if(game.input.keyboard.isDown(Phaser.Keyboard.ESC)){ pause.pause(game);} //moved out to pause.js as expriment
 	};
 
 	menu.create = function () {

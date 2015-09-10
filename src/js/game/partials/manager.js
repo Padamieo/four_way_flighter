@@ -82,7 +82,7 @@ var manage = {
 		if( bulletspeed < 200){ bullet.kill(); }
 		});
 
-		if(game.input.keyboard.isDown(Phaser.Keyboard.ESC)){ m.pause(game);}
+		//if(game.input.keyboard.isDown(Phaser.Keyboard.ESC)){ m.pause(game);} //moved out to pause.js as expriment
 
 		manage.lose_condition(game);
 	},
