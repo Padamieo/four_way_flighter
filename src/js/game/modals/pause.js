@@ -18,18 +18,16 @@ var pause_modal = {
 
 		// Add a input listener that can help us return from being paused
 		//game.input.onDown.add(pause_modal.unpause, self);
-
-
 		//if(game.input.keyboard.isDown(Phaser.Keyboard.K)){ m.pause(game);}
-		gunfire2 = game.input.keyboard.addKey(Phaser.Keyboard.K);
+
+		gunfire2 = game.input.keyboard.addKey(Phaser.Keyboard.ESC);
 		gunfire2.onDown.add(pause_modal.pause, self);
 
 		gunfire = game.input.keyboard.addKey(Phaser.Keyboard.M);
+
 		gunfire.onDown.add(pause_modal.unpause, self);
 
 		console.log("active");
-
-		//button2 = new button(game);
 
 	},
 
@@ -84,12 +82,8 @@ var pause_modal = {
 		}
 	},
 
-	p: function(){
-		console.log("pancakes");
-	},
-
-	pause: function() {
-		game = this.game;
+	pause: function(event) {
+		game = event.game;
 
 		console.log("unpause action");
 		// When the pause button is pressed, we pause the game
@@ -108,12 +102,14 @@ var pause_modal = {
 		//button = new button.button(game);
 
 		// And a label to illustrate which menu item was chosen. (This is not necessary)
+
 		game.choiseLabel = game.add.text(w, h, 'Click outside menu to continue', { font: '30px Arial', fill: '#fff' });
 		game.choiseLabel.anchor.setTo(0.5, 0.5);
+
+			button2 = new button(game);
+
 		//game.pause_background.alpha = 0.5;
 		modal.cover(game, 1);
-
-
 
 	}
 

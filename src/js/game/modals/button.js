@@ -34,7 +34,7 @@ var over = function(that){
 }
 
 var actionOnClick = function(that){
-	that.button.alpha = 0.5;
+	that.alpha = 0.5;
 	console.log("over");
 }
 
