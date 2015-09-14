@@ -9,23 +9,22 @@ var pause_modal = {
 
 		// game.test = game.add.graphics(0, 0);
 		// game.test.beginFill(0xffffff, 1);
-		w = game.width/3;
+		//w = game.width/3;
 		// pw = game.width/2-w/2
-		h = game.height/1.5;
+		//h = game.height/1.5;
 		// game.test.drawRect(pw, h/2, w, h);
 		// game.test.endFill();
 		// game.test.alpha = 0;
 
 		// Add a input listener that can help us return from being paused
-		//game.input.onDown.add(pause_modal.unpause, self);
+		game.input.onDown.add(pause_modal.unpause, self);
 		//if(game.input.keyboard.isDown(Phaser.Keyboard.K)){ m.pause(game);}
 
 		gunfire2 = game.input.keyboard.addKey(Phaser.Keyboard.ESC);
 		gunfire2.onDown.add(pause_modal.pause, self);
 
-		gunfire = game.input.keyboard.addKey(Phaser.Keyboard.M);
-
-		gunfire.onDown.add(pause_modal.unpause, self);
+		//gunfire = game.input.keyboard.addKey(Phaser.Keyboard.M);
+		//gunfire.onDown.add(pause_modal.unpause, self);
 
 		console.log("active");
 
@@ -53,9 +52,9 @@ var pause_modal = {
 		if(game.paused){
 
 			//Calculate the corners of the menu
-			var x1 = w/2 - 270/2, x2 = w/2 + 270/2,
-			  y1 = h/2 - 180/2, y2 = h/2 + 180/2;
-			//Check if the click was inside the menu
+			var x1 = game.width/2 - 270/2, x2 = game.width/2 + 270/2,
+			  y1 = game.height/2 - 180/2, y2 = game.height/2 + 180/2;
+
 
 			//event.x > x1 && event.x < x2 && event.y > y1 && event.y < y2
 			if(event.x > x1 && event.x < x2 && event.y > y1 && event.y < y2){
@@ -103,10 +102,10 @@ var pause_modal = {
 
 		// And a label to illustrate which menu item was chosen. (This is not necessary)
 
-		game.choiseLabel = game.add.text(w, h, 'Click outside menu to continue', { font: '30px Arial', fill: '#fff' });
+		game.choiseLabel = game.add.text(game.width, game.height, 'Click outside menu to continue', { font: '30px Arial', fill: '#fff' });
 		game.choiseLabel.anchor.setTo(0.5, 0.5);
 
-			button2 = new button(game);
+		game.button2 = new button(game);
 
 		//game.pause_background.alpha = 0.5;
 		modal.cover(game, 1);

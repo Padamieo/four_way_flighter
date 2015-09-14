@@ -11,14 +11,15 @@ var button = function(game, callback) {
 	button.alpha = 1;
 
 	//game.cache.addBitmapData("ttt", game.button);
-
-
-	button = game.add.button(game.world.centerX - 95, 400, button, actionOnClick, this, 2, 1, 0);
+	button_x_pos = game.rnd.integerInRange(game.world.centerX - 130, game.world.centerX + 130);
+	button_y_pos = game.rnd.integerInRange(game.world.centerY - 100, game.world.centerY + 100);
+//game.world.centerX
+	button = game.add.button(button_x_pos, button_y_pos , button, actionOnClick, this, 2, 1, 0);
 
 	//game.buttonlabel = game.add.text(w, h, 'buttons label', { font: '30px Arial', fill: '#fff' });
 	//game.buttonlabel.anchor.setTo(0.5, 0.5);
 
-	//this.button.events.onInputOver.add(over, this);
+	//this.events.onInputOver.add(over, this);
 	//game.buttonlabel.events.onInputOut.add(out, this);
 
 
@@ -29,7 +30,7 @@ var d = function(){
 }
 
 var over = function(that){
-	that.button.alpha = 0.5;
+this.alpha = 0.5;
 	console.log("over");
 }
 

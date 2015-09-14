@@ -14,8 +14,6 @@ module.exports = function(game) {
 
 		c.setup(game); //setup controllers and keyboard
 
-
-
 		game.characters = game.add.group();
 
 		for (i = 0; i < 5; i++) {
@@ -35,8 +33,9 @@ module.exports = function(game) {
 		game.start.animations.frame = 0;
 		game.start.anchor.setTo(0.5, 0.5);
 		game.start.inputEnabled = true;
-		game.start.scale.y = 3;
+		game.start.scale.y = 5;
 		game.start.scale.x = 3;
+
 
 		game.stage.backgroundColor = '#565756';
 
@@ -47,7 +46,6 @@ module.exports = function(game) {
 	function check(player, i){
 		if(player.assigned == 'N'){
 			player.assigned = i;
-
 		}
 		//game.current_players_health =  game.current_players_health+player.health;
 	};
