@@ -107,6 +107,12 @@ var pause_modal = {
 
 		game.button2 = new button(game);
 
+		// var para = document.createElement("a");
+		// var node = document.createTextNode("This is new.");
+		// para.appendChild(node);
+		// var element = document.getElementById("game");
+		// element.appendChild(para);
+
 		//game.pause_background.alpha = 0.5;
 		modal.cover(game, 1);
 
