@@ -33,15 +33,22 @@ module.exports = function(game) {
     this.scale.pageAlignHorizontally = true;
     this.scale.pageAlignVertically = true;
     //this.scale.setScreenSize = true; // this broke phaser 2.4.3
-    
+
 
     //game.scale.pageAlignHorizontally = false;
     //game.scale.pageAlignVertically = false;
     game.scale.refresh();
 
     game.level_range = {
-      level_0: { 0:{enemy: 3, min: 1, max: 4}, 1:{enemy: 2, min: 2, max: 10}, 2:{enemy: 5, min: 1, max: 4}  },
-      level_1A: { 0:{enemy: 6, min: 0, max: 1}, 1:{enemy: 5, min: 1, max: 4} }
+      level_0: {
+        0:{enemy: 3, min: 1, max: 4},
+        1:{enemy: 2, min: 2, max: 10},
+        2:{enemy: 5, min: 1, max: 4}
+      },
+      level_1A: {
+        0:{enemy: 6, min: 0, max: 1},
+        1:{enemy: 5, min: 1, max: 4}
+      }
     };
 
     game.state.start('preloader');

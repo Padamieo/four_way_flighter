@@ -25,8 +25,10 @@ var manage = {
 		//general setups
 		g.setup(game);
 
-		//enemies setup
-		e.setup(game);
+		if(level_name == "level_0"){
+			//enemies setup
+			e.setup(game); //dont know why but this breaks its when attempting to go to level_1A
+		}
 
 		//player
 		p.setup(game);
@@ -134,31 +136,36 @@ var manage = {
 	},
 
 	updateTick: function(name) {
-		//if(boss_active == 0){
+			if(boss_active == 0){
+			if (game.enemies.countLiving() <= 0) {
 
-		if (game.enemies.countLiving() <= 0) {
+				l = manage.numProps(game.rounds[game.count_rounds]);
 
-			l = manage.numProps(game.rounds[game.count_rounds]);
-
-			for (i = 0; i < l; i++) {
-				num = game.rounds[game.count_rounds][i];
-				type = game.level_range[name][i]['enemy'];
-				for (j = 0; j < num; j++){
-					manage.spawn_enemy(type);
+				for (i = 0; i < l; i++) {
+					num = game.rounds[game.count_rounds][i];
+					type = game.level_range[name][i]['enemy'];
+					for (j = 0; j < num; j++){
+						manage.spawn_enemy(type);
+					}
 				}
+
+				if(game.count_rounds == 10){
+					console.log("boss");
+					manage.spawn_boss(0);
+					boss_active = 1;
+				}
+
+				game.count_rounds++; // notice count
+				p.add_pickup(game);
+
 			}
-
-			if(game.count_rounds == 10){
-				console.log("boss");
-				manage.spawn_boss(0);
-				boss_active = 1;
+		}else{
+			if (game.enemies.countLiving() <= 0) {
+				console.log("end of boss");
+				//boss_active = 0;
+				game.state.start('level_1A');
 			}
-
-			game.count_rounds++; // notice count
-			p.add_pickup(game);
-
 		}
-		//}
 	},
 
 	spawn_enemy: function(type) {
