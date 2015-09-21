@@ -13,7 +13,7 @@ var sfx = require('sfx');
 var pickup = require('pickup');
 
 var m = require('pause');
-var k = require('kill');
+//var k = require('kill');
 
 var manage = {
 
@@ -47,7 +47,7 @@ var manage = {
 		sfx.setup(game);
 		//modal screen setups ie pause and popups
 		m.setup(game);
-		k.setup(game);
+		//k.setup(game);
 	},
 
 	update_level: function(game){
@@ -80,8 +80,8 @@ var manage = {
 
 		//if player bullets remove them please.
 		game.bulletPool.forEachAlive(function(bullet){
-		bulletspeed = Math.abs(bullet.body.velocity.y) + Math.abs(bullet.body.velocity.x);
-		if( bulletspeed < 200){ bullet.kill(); }
+			bulletspeed = Math.abs(bullet.body.velocity.y) + Math.abs(bullet.body.velocity.x);
+			if( bulletspeed < 200){ bullet.kill(); }
 		});
 
 		//if(game.input.keyboard.isDown(Phaser.Keyboard.ESC)){ m.pause(game);} //moved out to pause.js as expriment
@@ -102,7 +102,7 @@ var manage = {
 		boss_active = 0;
 		l = manage.numProps(game.level_range[name]);
 
-		for (r = 0; r < 9; r++) {
+		for (r = 0; r < game.set_rounds; r++) {
 			test = [];
 
 			for (e = 0; e < l; e++){
@@ -136,6 +136,7 @@ var manage = {
 	},
 
 	updateTick: function(name) {
+	console.log("alive"+game.enemies.countLiving());
 			if(boss_active == 0){
 			if (game.enemies.countLiving() <= 0) {
 
@@ -149,7 +150,7 @@ var manage = {
 					}
 				}
 
-				if(game.count_rounds == 10){
+				if(game.count_rounds == (game.set_rounds-1)){
 					console.log("boss");
 					manage.spawn_boss(0);
 					boss_active = 1;
@@ -162,7 +163,7 @@ var manage = {
 		}else{
 			if (game.enemies.countLiving() <= 0) {
 				console.log("end of boss");
-				//boss_active = 0;
+				//boss_active == 0
 				game.state.start('level_1A');
 			}
 		}
@@ -232,7 +233,7 @@ var manage = {
 		if(game.mega_zord.countDead() != 0){
 			if(game.players.countDead() == game.num_players){
 				console.log("everyone dead");
-				k.ill_screen(game);
+				//k.ill_screen(game);
 			}
 		}
 	}

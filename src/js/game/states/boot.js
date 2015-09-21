@@ -39,6 +39,8 @@ module.exports = function(game) {
     //game.scale.pageAlignVertically = false;
     game.scale.refresh();
 
+    game.set_rounds = 2; //deafult 9
+
     game.level_range = {
       level_0: {
         0:{enemy: 3, min: 1, max: 4},
