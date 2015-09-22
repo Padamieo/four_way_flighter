@@ -2,7 +2,7 @@ var e_basic = require('e_basic');
 var e_follower = require('e_follower');
 var e_fighter = require('e_fighter');
 var e_light = require('e_light');
-var e = require('e');
+var e_func = require('e');
 var e_boss = require('e_boss');
 
 var p = require('player');
@@ -25,10 +25,8 @@ var manage = {
 		//general setups
 		g.setup(game);
 
-		if(level_name == "level_0"){
-			//enemies setup
-			e.setup(game); //dont know why but this breaks its when attempting to go to level_1A
-		}
+		//enemies setup
+		e_func.setup(game); //dont know why but this breaks its when attempting to go to level_1A
 
 		//player
 		p.setup(game);
@@ -98,6 +96,7 @@ var manage = {
 	},
 
 	generate_rounds: function(name){
+		console.log("generate enemies");
 		game.rounds = [];
 		boss_active = 0;
 		l = manage.numProps(game.level_range[name]);

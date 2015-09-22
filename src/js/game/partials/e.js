@@ -4,6 +4,7 @@ var e = {
 
 	setup: function(game){
 		//setup the enemies group
+
 		game.enemies = game.add.group();
 		//enemies.events.onKilled(function(){console.log("dead"+this.x+this.y)}, this);
 
