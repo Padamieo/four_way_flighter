@@ -53,11 +53,27 @@ megazord.prototype.update = function(game) {
 	game = this.game;
 	if(this.alive){
 
+		if(game.num_players == 1){
+			if(isNaN(game.controls[this.name])){
+				if(game.controls[this.name] == 'K'){
+					console.log("keyboard megazord");
+					c.controls_key(game, this.name);
+				}else{
+					//custom controls
+				}
+			}else{
+				c.controls_pad(game, this.name, this.pad);
+			}
+		}else{
+
+		}
+
+
 	}else{
 		//console.log(this.name+"alive");
 		//we will need to make them visable for testing
 	}
-	
+
 };
 
 module.exports = megazord;

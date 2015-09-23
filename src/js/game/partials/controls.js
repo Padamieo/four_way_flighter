@@ -52,10 +52,11 @@ var controls = {
 		}
 
 		if ( game.input.keyboard.isDown(Phaser.Keyboard.A) ) {
-			game.players.getAt(player_id).body.velocity.x = -speed;
-			if( game.players.getAt(player_id).angle > -20 ){
-				game.players.getAt(player_id).angle -= 1;
-			}
+			// game.players.getAt(player_id).body.velocity.x = -speed;
+			// if( game.players.getAt(player_id).angle > -20 ){
+			// 	game.players.getAt(player_id).angle -= 1;
+			// }
+			controls.move_left(game, player_id); //this is way forward for megazord
 		}else if( game.input.keyboard.isDown(Phaser.Keyboard.D) ){
 			game.players.getAt(player_id).body.velocity.x = speed;
 			if( game.players.getAt(player_id).angle < 20 ){
@@ -173,6 +174,13 @@ var controls = {
 			game.players.getAt(player_id).show_health = 1;
 		}
 
+	},
+
+	move_left: function(game, player_id){
+		game.players.getAt(player_id).body.velocity.x = -speed;
+		if( game.players.getAt(player_id).angle > -20 ){
+		  game.players.getAt(player_id).angle -= 1;
+		}
 	},
 
 	fire: function(game, player_id, pad_id) {
