@@ -96,7 +96,6 @@ var manage = {
 	},
 
 	generate_rounds: function(name){
-		console.log("generate enemies");
 		game.rounds = [];
 		boss_active = 0;
 		l = manage.numProps(game.level_range[name]);
@@ -135,7 +134,6 @@ var manage = {
 	},
 
 	updateTick: function(name) {
-	console.log("alive"+game.enemies.countLiving());
 			if(boss_active == 0){
 			if (game.enemies.countLiving() <= 0) {
 
@@ -150,7 +148,6 @@ var manage = {
 				}
 
 				if(game.count_rounds == (game.set_rounds-1)){
-					console.log("boss");
 					manage.spawn_boss(0);
 					boss_active = 1;
 				}

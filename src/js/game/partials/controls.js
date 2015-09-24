@@ -52,26 +52,17 @@ var controls = {
 		}
 
 		if ( game.input.keyboard.isDown(Phaser.Keyboard.A) ) {
-			// game.players.getAt(player_id).body.velocity.x = -speed;
-			// if( game.players.getAt(player_id).angle > -20 ){
-			// 	game.players.getAt(player_id).angle -= 1;
-			// }
-			controls.move_left(game, player_id); //this is way forward for megazord
+			controls.move_left(game, player_id);
 		}else if( game.input.keyboard.isDown(Phaser.Keyboard.D) ){
-			game.players.getAt(player_id).body.velocity.x = speed;
-			if( game.players.getAt(player_id).angle < 20 ){
-				game.players.getAt(player_id).angle += 1;
-			}
+			controls.move_right(game, player_id);
 		}else{
 			h_test = 1;
 		}
 
 		if ( game.input.keyboard.isDown(Phaser.Keyboard.W) ) {
-			game.players.getAt(player_id).body.velocity.y = -speed;
-			//game.avatar.animations.play('forward');
+			controls.move_up(game, player_id);
 		}else if(game.input.keyboard.isDown(Phaser.Keyboard.S) ){
-			game.players.getAt(player_id).body.velocity.y = speed;
-			//game.avatar.animations.play('back');
+			controls.move_down(game, player_id);
 		}else{
 			v_test = 2;
 		}
@@ -131,25 +122,17 @@ var controls = {
 		speed = game.players.getAt(player_id).TOP_SPEED;
 
 		if ( game.pad[pad_id].isDown(Phaser.Gamepad.XBOX360_DPAD_LEFT) || game.pad[pad_id].axis(Phaser.Gamepad.XBOX360_STICK_LEFT_X) < -0.01) {
-			game.players.getAt(player_id).body.velocity.x = -speed;
-			if( game.players.getAt(player_id).angle > -20 ){
-				game.players.getAt(player_id).angle -= 1;
-			}
+			controls.move_left(game, player_id); //confirm this works
 		}else if( game.pad[pad_id].isDown(Phaser.Gamepad.XBOX360_DPAD_RIGHT) || game.pad[pad_id].axis(Phaser.Gamepad.XBOX360_STICK_LEFT_X) > 0.01){
-			game.players.getAt(player_id).body.velocity.x = speed;
-			if( game.players.getAt(player_id).angle < 20 ){
-				game.players.getAt(player_id).angle += 1;
-			}
+			controls.move_right(game, player_id);//confirm this works
 		}else{
 			h_test = 1;
 		}
 
 		if ( game.pad[pad_id].isDown(Phaser.Gamepad.XBOX360_DPAD_UP) || game.pad[pad_id].axis(Phaser.Gamepad.XBOX360_STICK_LEFT_Y) < -0.01) {
-			game.players.getAt(player_id).body.velocity.y = -speed;
-			//game.avatar.animations.play('forward');
+			controls.move_up(game, player_id);
 		}else if( game.pad[pad_id].isDown(Phaser.Gamepad.XBOX360_DPAD_DOWN) || game.pad[pad_id].axis(Phaser.Gamepad.XBOX360_STICK_LEFT_Y) > 0.01){
-			game.players.getAt(player_id).body.velocity.y = speed;
-			//game.avatar.animations.play('back');
+			controls.move_down(game, player_id);
 		}else{
 			v_test = 2;
 		}
@@ -181,6 +164,24 @@ var controls = {
 		if( game.players.getAt(player_id).angle > -20 ){
 		  game.players.getAt(player_id).angle -= 1;
 		}
+	},
+
+	move_right: function(game, player_id){
+		game.players.getAt(player_id).body.velocity.x = speed;
+		if( game.players.getAt(player_id).angle < 20 ){
+			game.players.getAt(player_id).angle += 1;
+		}
+	},
+
+	move_up: function(game, player_id){
+		game.players.getAt(player_id).body.velocity.y = -speed;
+		//game.avatar.animations.play('forward');
+	},
+
+	move_down: function(game, player_id){
+		console.log(speed); //not sure if it accepts speed
+		game.players.getAt(player_id).body.velocity.y = speed;
+		//game.avatar.animations.play('back');
 	},
 
 	fire: function(game, player_id, pad_id) {
