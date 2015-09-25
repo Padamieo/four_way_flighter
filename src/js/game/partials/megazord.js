@@ -17,7 +17,7 @@ var megazord = function(game) {
 	this.anchor.setTo(0.5, 0.5);
 
 	this.body.collideWorldBounds = true;
-	//this.name = megazord;
+	this.name = 'megazord';
 
 	this.energy = 0;
 	//this.health = game.player_starting_health;
@@ -35,8 +35,8 @@ var megazord = function(game) {
 	//this.animations.frame = i;
 
 	//this is how we will control variouse screen resolutions
-	this.scale.y = 5;
-	this.scale.x = 5;
+	this.scale.y = 4;
+	this.scale.x = 4;
 
 	// animations still usefull but not being used / set
 	//game.megazord[num].animations.add('default', [0, 1, 2, 3, 4, 5, 6, 7], 8, true);
@@ -55,11 +55,11 @@ megazord.prototype.update = function(game) {
 
 		if(game.num_players == 1){
 
-			if(isNaN(game.controls[this.name])){
+			if(isNaN(game.controls[0])){
 
-				if(game.controls[this.name] == 'K'){
+				if(game.controls[0] == 'K'){
 					console.log("keyboard megazord");
-					c.controls_key(game, this.name);
+					c.controls_key(game, 0, game.mega_zord);
 				}else{
 					//custom controls
 				}
@@ -67,7 +67,7 @@ megazord.prototype.update = function(game) {
 				c.controls_pad(game, this.name, this.pad);
 			}
 		}else{
-
+			//divide actions up down left right fires between players
 		}
 
 

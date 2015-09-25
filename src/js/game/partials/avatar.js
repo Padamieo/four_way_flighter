@@ -97,7 +97,7 @@ avatar.prototype.update = function(game) {
 
 		if(isNaN(game.controls[this.name])){
 			if(game.controls[this.name] == 'K'){
-				c.controls_key(game, this.name);
+				c.controls_key(game, this.name, game.players);
 				poop(game, this);
 			}else{
 				//custom controls

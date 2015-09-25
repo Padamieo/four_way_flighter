@@ -40,7 +40,7 @@ var controls = {
 		//indicator[num].animations.frame = 1;
 	},
 
-	controls_key: function(game, player_id){
+	controls_key: function(game, player_id, object){
 		h_test = 0;
 		v_test = 0;
 
@@ -52,57 +52,58 @@ var controls = {
 		}
 
 		if ( game.input.keyboard.isDown(Phaser.Keyboard.A) ) {
-			controls.move_left(game, player_id);
+			controls.move_left(game, player_id, object);
 		}else if( game.input.keyboard.isDown(Phaser.Keyboard.D) ){
-			controls.move_right(game, player_id);
+			controls.move_right(game, player_id, object);
 		}else{
 			h_test = 1;
 		}
 
 		if ( game.input.keyboard.isDown(Phaser.Keyboard.W) ) {
-			controls.move_up(game, player_id);
+			controls.move_up(game, player_id, object);
 		}else if(game.input.keyboard.isDown(Phaser.Keyboard.S) ){
-			controls.move_down(game, player_id);
+			controls.move_down(game, player_id, object);
 		}else{
 			v_test = 2;
 		}
 
-		controls.avatar_ani_reset(game, h_test, v_test, player_id);
+		controls.avatar_ani_reset(game, h_test, v_test, player_id, object);
 
-		if( game.input.keyboard.isDown(Phaser.Keyboard.F) ){
-				if(game.players.getAt(player_id).energy >= game.MAX_ENERGY){
-					game.players.getAt(player_id).zoid_request = 1;
+		if(!isNaN( object.getAt(player_id).name)){
+			if( game.input.keyboard.isDown(Phaser.Keyboard.F) ){
+					if(game.players.getAt(player_id).energy >= game.MAX_ENERGY){
+						game.players.getAt(player_id).zoid_request = 1;
+					}
+			}else{
+				if(game.players.getAt(player_id).zoid_request == 1){
+					game.players.getAt(player_id).zoid_request = 0;
 				}
-		}else{
-			if(game.players.getAt(player_id).zoid_request == 1){
-				game.players.getAt(player_id).zoid_request = 0;
+			}
+
+			if( game.input.keyboard.isDown(Phaser.Keyboard.Q) ){
+				game.players.getAt(player_id).show_energy = 1;
+			}
+
+			if(game.input.keyboard.isDown(Phaser.Keyboard.E)){
+				game.players.getAt(player_id).show_health = 1;
 			}
 		}
-
-		if( game.input.keyboard.isDown(Phaser.Keyboard.Q) ){
-			game.players.getAt(player_id).show_energy = 1;
-		}
-
-		if(game.input.keyboard.isDown(Phaser.Keyboard.E)){
-			game.players.getAt(player_id).show_health = 1;
-		}
-
 	},
 
-	avatar_ani_reset: function(game, h, v, player_id){
+	avatar_ani_reset: function(game, h, v, player_id, object){
 		if( h+v == 3){
-			if( game.players.getAt(player_id).angle != 0){
-				y = game.players.getAt(player_id).y;
+			if( object.getAt(player_id).angle != 0){
+				y = object.getAt(player_id).y;
 
-				if(game.players.getAt(player_id).angle < -0){
-					game.players.getAt(player_id).angle += 1;
+				if(object.getAt(player_id).angle < -0){
+					object.getAt(player_id).angle += 1;
 				}
-				if(game.players.getAt(player_id).angle > 0){
-					game.players.getAt(player_id).angle -= 1;
+				if(object.getAt(player_id).angle > 0){
+					object.getAt(player_id).angle -= 1;
 				}
 			}
-			game.players.getAt(player_id).body.velocity.y *= 0.96;
-			game.players.getAt(player_id).body.velocity.x *= 0.96;
+			object.getAt(player_id).body.velocity.y *= 0.96;
+			object.getAt(player_id).body.velocity.x *= 0.96;
 		}
 	},
 
@@ -159,28 +160,28 @@ var controls = {
 
 	},
 
-	move_left: function(game, player_id){
-		game.players.getAt(player_id).body.velocity.x = -speed;
-		if( game.players.getAt(player_id).angle > -20 ){
-		  game.players.getAt(player_id).angle -= 1;
+	move_left: function(game, player_id, object){
+		object.getAt(player_id).body.velocity.x = -speed;
+		if( object.getAt(player_id).angle > -20 ){
+		  object.getAt(player_id).angle -= 1;
 		}
 	},
 
-	move_right: function(game, player_id){
-		game.players.getAt(player_id).body.velocity.x = speed;
-		if( game.players.getAt(player_id).angle < 20 ){
-			game.players.getAt(player_id).angle += 1;
+	move_right: function(game, player_id, object){
+		object.getAt(player_id).body.velocity.x = speed;
+		if( object.getAt(player_id).angle < 20 ){
+			object.getAt(player_id).angle += 1;
 		}
 	},
 
-	move_up: function(game, player_id){
-		game.players.getAt(player_id).body.velocity.y = -speed;
+	move_up: function(game, player_id, object){
+		object.getAt(player_id).body.velocity.y = -speed;
 		//game.avatar.animations.play('forward');
 	},
 
-	move_down: function(game, player_id){
+	move_down: function(game, player_id, object){
 		console.log(speed); //not sure if it accepts speed
-		game.players.getAt(player_id).body.velocity.y = speed;
+		object.getAt(player_id).body.velocity.y = speed;
 		//game.avatar.animations.play('back');
 	},
 
