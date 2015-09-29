@@ -103,7 +103,7 @@ avatar.prototype.update = function(game) {
 				//custom controls
 			}
 		}else{
-			c.controls_pad(game, this.name, this.pad);
+			c.controls_pad(game, this.name, game.players, this.pad);
 			poop(game, this);
 		}
 

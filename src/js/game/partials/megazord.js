@@ -64,7 +64,7 @@ megazord.prototype.update = function(game) {
 					//custom controls
 				}
 			}else{
-				c.controls_pad(game, this.name, this.pad);
+				c.controls_pad(game, this.name, game.mega_zord, this.pad);
 			}
 		}else{
 			//divide actions up down left right fires between players

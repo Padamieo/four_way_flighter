@@ -45,7 +45,7 @@ var controls = {
 		v_test = 0;
 
 		if ( cursors.left.isDown || cursors.right.isDown || cursors.up.isDown || cursors.down.isDown || game.input.activePointer.isDown){
-			controls.fire(game, player_id);
+			controls.fire(game, player_id, object);
 			speed = game.players.getAt(player_id).LOW_SPEED;
 		}else{
 			speed = game.players.getAt(player_id).TOP_SPEED;
@@ -107,13 +107,13 @@ var controls = {
 		}
 	},
 
-	controls_pad: function(game, player_id, pad_id){
+	controls_pad: function(game, player_id, object, pad_id){
 		h_test = 0;
 		v_test = 0;
 
 		if ( game.pad[pad_id].axis(Phaser.Gamepad.XBOX360_STICK_RIGHT_Y) > 0.01 || game.pad[pad_id].axis(Phaser.Gamepad.XBOX360_STICK_RIGHT_Y) < -0.01 || game.pad[pad_id].axis(Phaser.Gamepad.XBOX360_STICK_RIGHT_X) < -0.01 ||  game.pad[pad_id].axis(Phaser.Gamepad.XBOX360_STICK_RIGHT_X) > 0.01){
 			if(game.players.getAt(player_id).alive == 1){
-				controls.fire(game, player_id, pad_id);
+				controls.fire(game, player_id, object, pad_id);
 				speed = game.players.getAt(player_id).LOW_SPEED;
 			}
 		}else{
@@ -185,7 +185,7 @@ var controls = {
 		//game.avatar.animations.play('back');
 	},
 
-	fire: function(game, player_id, pad_id) {
+	fire: function(game, player_id, object, pad_id) {
 		if (game.nextShotAt[player_id] > game.time.now) {
 			return;
 		}
@@ -195,7 +195,8 @@ var controls = {
 			return;
 		}
 
-		player = game.players.getAt(player_id);
+		player = object.getAt(player_id);
+		console.log(player_id);//megazzord NAME?!?
 
 		bullet = game.bulletPool.getFirstExists(false);
 		bullet.reset(player.x, player.y, 'bullet');
