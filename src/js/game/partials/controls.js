@@ -196,10 +196,11 @@ var controls = {
 		}
 
 		player = object.getAt(player_id);
-		console.log(player_id);//megazzord NAME?!?
 
 		bullet = game.bulletPool.getFirstExists(false);
+		
 		bullet.reset(player.x, player.y, 'bullet');
+
 		bullet.name = player_id;
 		bullet.tint = player.tint;
 		bullet.damage = player.fire_power;

@@ -32,6 +32,8 @@ var megazord = function(game) {
 
 	this.tint = 0xff00ff;
 
+	this.fire_power = 1;
+
 	//this.animations.frame = i;
 
 	//this is how we will control variouse screen resolutions
