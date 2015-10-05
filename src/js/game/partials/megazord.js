@@ -40,6 +40,8 @@ var megazord = function(game) {
 	this.scale.y = 4;
 	this.scale.x = 4;
 
+	this.alive = false; // dont think this is working i.e setting megazord to dead on preset
+
 	// animations still usefull but not being used / set
 	//game.megazord[num].animations.add('default', [0, 1, 2, 3, 4, 5, 6, 7], 8, true);
 	//game.megazord[num].animations.add('left', [0, 1, 2, 3, 4, 5, 6, 7], 8, true);

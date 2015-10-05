@@ -55,10 +55,6 @@ var player = {
 
 		var megazord = require('megazord');
 		game.mega_zord = game.add.group();
-		// var a_mega_zord = game.mega_zord.getFirstDead();
-		// if (a_mega_zord === null) {
-		// 	a_mega_zord = new megazord(game);
-		// }
 
 		//setup energy score info
 		game.score = 0;
