@@ -140,12 +140,14 @@ var player = {
 
 	collision_notice: function(player, enemy) {
 		game = player.game;
+
 		if (game.nextKillAt[player.name] > game.time.now) {
 			return;
 		}
 		game.nextKillAt[player.name] = game.time.now + game.KillDelay[player.name];
 		game.players.getAt(player.name).alpha = 0.2;
 		game.players.getAt(player.name).show_health = 1;
+
 		player.damage(1);
 		enemy.damage(1);//should be based on players bullet damage
 		sfx.shake(game);

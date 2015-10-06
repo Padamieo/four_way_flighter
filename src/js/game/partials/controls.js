@@ -84,6 +84,10 @@ var controls = {
 				game.players.getAt(player_id).show_energy = 1;
 			}
 
+			if(game.players.getAt(player_id).energy >= game.MAX_ENERGY){
+				game.players.getAt(player_id).show_energy = 1;
+			}
+
 			if(game.input.keyboard.isDown(Phaser.Keyboard.E)){
 				game.players.getAt(player_id).show_health = 1;
 			}
@@ -111,51 +115,55 @@ var controls = {
 		h_test = 0;
 		v_test = 0;
 
-		if ( game.pad[pad_id].axis(Phaser.Gamepad.XBOX360_STICK_RIGHT_Y) > 0.01 || game.pad[pad_id].axis(Phaser.Gamepad.XBOX360_STICK_RIGHT_Y) < -0.01 || game.pad[pad_id].axis(Phaser.Gamepad.XBOX360_STICK_RIGHT_X) < -0.01 ||  game.pad[pad_id].axis(Phaser.Gamepad.XBOX360_STICK_RIGHT_X) > 0.01){
+		if(game.pad[pad_id].axis(Phaser.Gamepad.XBOX360_STICK_RIGHT_Y) > 0.01 || game.pad[pad_id].axis(Phaser.Gamepad.XBOX360_STICK_RIGHT_Y) < -0.01 || game.pad[pad_id].axis(Phaser.Gamepad.XBOX360_STICK_RIGHT_X) < -0.01 ||  game.pad[pad_id].axis(Phaser.Gamepad.XBOX360_STICK_RIGHT_X) > 0.01){
 			if(game.players.getAt(player_id).alive == 1){
 				controls.fire(game, player_id, object, pad_id);
-				speed = game.players.getAt(player_id).LOW_SPEED;
+				speed = object.getAt(player_id).LOW_SPEED;
 			}
 		}else{
-			speed = game.players.getAt(player_id).TOP_SPEED;
+			speed = object.getAt(player_id).TOP_SPEED;
 		}
 
-		speed = game.players.getAt(player_id).TOP_SPEED;
-
 		if ( game.pad[pad_id].isDown(Phaser.Gamepad.XBOX360_DPAD_LEFT) || game.pad[pad_id].axis(Phaser.Gamepad.XBOX360_STICK_LEFT_X) < -0.01) {
-			controls.move_left(game, player_id); //confirm this works
+			controls.move_left(game, player_id, object); //confirm this works
 		}else if( game.pad[pad_id].isDown(Phaser.Gamepad.XBOX360_DPAD_RIGHT) || game.pad[pad_id].axis(Phaser.Gamepad.XBOX360_STICK_LEFT_X) > 0.01){
-			controls.move_right(game, player_id);//confirm this works
+			controls.move_right(game, player_id, object);//confirm this works
 		}else{
 			h_test = 1;
 		}
 
 		if ( game.pad[pad_id].isDown(Phaser.Gamepad.XBOX360_DPAD_UP) || game.pad[pad_id].axis(Phaser.Gamepad.XBOX360_STICK_LEFT_Y) < -0.01) {
-			controls.move_up(game, player_id);
+			controls.move_up(game, player_id, object);
 		}else if( game.pad[pad_id].isDown(Phaser.Gamepad.XBOX360_DPAD_DOWN) || game.pad[pad_id].axis(Phaser.Gamepad.XBOX360_STICK_LEFT_Y) > 0.01){
-			controls.move_down(game, player_id);
+			controls.move_down(game, player_id, object);
 		}else{
 			v_test = 2;
 		}
 
-		controls.avatar_ani_reset(game, h_test, v_test, player_id);
+		controls.avatar_ani_reset(game, h_test, v_test, player_id, object);
 
-		if( game.pad[pad_id].isDown(Phaser.Gamepad.XBOX360_Y) ){
+		if(!isNaN(object.getAt(player_id).name)){
+			if(game.pad[pad_id].isDown(Phaser.Gamepad.XBOX360_Y)){
+				if(game.players.getAt(player_id).energy >= game.MAX_ENERGY){
+					game.players.getAt(player_id).zoid_request = 1;
+				}
+			}else{
+				if(game.players.getAt(player_id).zoid_request == 1){
+					game.players.getAt(player_id).zoid_request = 0;
+				}
+			}
+
+			if( game.pad[pad_id].isDown(Phaser.Gamepad.XBOX360_A) ){
+				game.players.getAt(player_id).show_energy = 1;
+			}
+
 			if(game.players.getAt(player_id).energy >= game.MAX_ENERGY){
-				game.players.getAt(player_id).zoid_request = 1;
+				game.players.getAt(player_id).show_energy = 1;
 			}
-		}else{
-			if(game.players.getAt(player_id).zoid_request == 1){
-				game.players.getAt(player_id).zoid_request = 0;
+
+			if(game.pad[pad_id].isDown(Phaser.Gamepad.XBOX360_B)){
+				game.players.getAt(player_id).show_health = 1;
 			}
-		}
-
-		if( game.pad[pad_id].isDown(Phaser.Gamepad.XBOX360_A) ){
-			game.players.getAt(player_id).show_energy = 1;
-		}
-
-		if(game.pad[pad_id].isDown(Phaser.Gamepad.XBOX360_B)){
-			game.players.getAt(player_id).show_health = 1;
 		}
 
 	},
@@ -198,7 +206,7 @@ var controls = {
 		player = object.getAt(player_id);
 
 		bullet = game.bulletPool.getFirstExists(false);
-		
+
 		bullet.reset(player.x, player.y, 'bullet');
 
 		bullet.name = player_id;

@@ -79,7 +79,7 @@ var manage = {
 		//need a way to only be active when megazord is
 		if(game.mega_zord.alive == true){
 			console.log("megazord physic");
-			//game.physics.arcade.collide(game.players, game.enemies, p.collision_notice, null, this);
+			//game.physics.arcade.collide(game.mega_zord, game.enemies, p.collision_notice, null, this);
 		}
 
 		//if player bullets remove them please.

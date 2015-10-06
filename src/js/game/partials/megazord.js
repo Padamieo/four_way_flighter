@@ -37,10 +37,10 @@ var megazord = function(game) {
 	//this.animations.frame = i;
 
 	//this is how we will control variouse screen resolutions
-	this.scale.y = 4;
-	this.scale.x = 4;
+	this.scale.y = 3;
+	this.scale.x = 3;
 
-	this.alive = false; // dont think this is working i.e setting megazord to dead on preset
+	//this.alive = false; // dont think this is working i.e setting megazord to dead on preset
 
 	// animations still usefull but not being used / set
 	//game.megazord[num].animations.add('default', [0, 1, 2, 3, 4, 5, 6, 7], 8, true);

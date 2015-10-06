@@ -20,7 +20,7 @@ powerbar.prototype.constructor = powerbar;
 powerbar.prototype.update = function(game) {
 
 	//there must be a better way to just lock these together
-	//console.log("hello");
+
 	game = this.game;
 	this.clear();
 
