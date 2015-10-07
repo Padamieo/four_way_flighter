@@ -7,6 +7,7 @@ var e_boss = require('e_boss');
 
 var p = require('player');
 var megazord = require('megazord');
+var megabar = require('megabar');
 var c = require('controls');
 var g = require('general');
 var sfx = require('sfx');
