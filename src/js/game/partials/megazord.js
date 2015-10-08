@@ -1,4 +1,5 @@
 var c = require('controls');
+var megabar = require('megabar');
 
 // megazord constructor
 var megazord = function(game) {
@@ -46,6 +47,9 @@ var megazord = function(game) {
 	//game.megazord[num].animations.add('default', [0, 1, 2, 3, 4, 5, 6, 7], 8, true);
 	//game.megazord[num].animations.add('left', [0, 1, 2, 3, 4, 5, 6, 7], 8, true);
 	//game.megazord[num].animations.add('right', [0, 1, 2, 3, 4, 5, 6, 7], 20, true);
+	
+	//game.megabar = game.add.group();
+	megabar = new megabar(game);// this did not trigger
 
 };
 

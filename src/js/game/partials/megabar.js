@@ -2,20 +2,15 @@
 //var player = require('player');  // why is this needed
 
 // megabar constructor
-var megabar = function(game, i) {
+var megabar = function(game) {
 
-	// this.for_player = i;
-	// x = game.players.getAt(i).x;
-	// y = game.players.getAt(i).y;
-	// Phaser.Graphics.call(this, game, x, y);
-	// game.megabars.add(this);
-	//
-	// this.fadeAt = 0;
-	// this.displayDelay = 2000;
+	console.log("create megabar");
+	x = game.mega_zord.getAt(0).x;
+	y = game.mega_zord.getAt(0).y;
+	Phaser.Graphics.call(this, game, x, y);
+	//game.megabar.add(this);
 
-	//this.sprite_tween = this.game.add.tween(this);
-	//this.sprite_tween = this.game.add.tween(this).to({ alpha: 0 }, 1000, Phaser.Easing.Quartic.Out, false, 0, 0);
-	//this.alpha = 0;
+
 };
 
 megabar.prototype = Object.create(Phaser.Graphics.prototype);
@@ -24,35 +19,15 @@ megabar.prototype.constructor = megabar;
 megabar.prototype.update = function(game) {
 
 	game = this.game;
-	this.clear();
+	console.log("update megabar");
+	//this.clear();
+	this.lineStyle(2, 0x0ffff0, 1);
+	this.x = game.mega_zord.getAt(0).x;
+	this.y = game.mega_zord.getAt(0).y;
 
-	if(game.players.getAt(this.for_player).show_health != 0){
-	/*
-		//there must be a better way to just lock these together
-		this.x = game.players.getAt(this.for_player).x;
-		this.y = game.players.getAt(this.for_player).y;
-
-		if(game.players.getAt(this.for_player).show_health == 1){
-			this.lineStyle(2, 0x00ff00, 1);
-			game.players.getAt(this.for_player).show_health = 2;
-			this.fadeAt = game.time.now + this.displayDelay;
-			//console.log("fade at"+this.fadeAt+" gametime"+game.time.now);
-			//this.alpha = 1;
-
-		}else{
-			if (this.fadeAt > game.time.now) {
-				this.lineStyle(2, 0x00ff00, 1);
-				//this.sprite_tween.start();
-			}else{
-				game.players.getAt(this.for_player).show_health = 0;
-			}
-		}
-
-		value = player.health_visual_value(game, this.for_player);
-		start_point = game.math.degToRad(90);
-		this.arc(0, 0, 40, start_point, value, false);
-	*/
-	}
+	value = player.energy_visual_value(game, 0);
+	start_point = game.math.degToRad(90);
+	this.arc(0, 0, 70, start_point, value, false);
 
 };
 

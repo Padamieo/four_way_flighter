@@ -23,7 +23,7 @@ var player = {
 		game.bulletPool = game.add.group();
 		game.bulletPool.enableBody = true;
 		game.bulletPool.physicsBodyType = Phaser.Physics.ARCADE
-		game.bulletPool.createMultiple(100*game.num_players, 'bullet'); //needs to be based on amount of players
+		game.bulletPool.createMultiple(100 * game.num_players, 'bullet'); //needs to be based on amount of players
 		game.bulletPool.setAll('anchor.x', 0.5);
 		game.bulletPool.setAll('anchor.y', 0.5);
 		game.bulletPool.setAll('outOfBoundsKill', true);
@@ -178,7 +178,7 @@ var player = {
 		y = bullet.y;
 		bullet.kill();
 
-		sfx.ping(game, x, y);
+		//sfx.ping(game, x, y);
 
 		enemy.damage(bullet.damage);
 
@@ -205,7 +205,7 @@ var player = {
 		player.damage(1);
 
 		//sfx.shake(game); // this might be a little too much
-		sfx.smoke(game, player.x, player.y);
+		//sfx.smoke(game, player.x, player.y);
 	},
 
 	add_pickup: function(game){

@@ -86,28 +86,25 @@ module.exports = function (grunt) {
           files: 'src/fonts/**/*',
           tasks: ['copy:fonts']
         }
-      }
-
-    , browserify:
-      { app:
-        { src: ['<%= project.src %>/game/app.js']
-        , dest: '<%= project.bundle %>'
-        , options:
-          { transform: ['browserify-shim']
-          , watch: true
-          , bundleOptions:
-            { debug: !productionBuild
+      },
+      browserify:{
+        app:{
+          src: ['<%= project.src %>/game/app.js'],
+          dest: '<%= project.bundle %>',
+          options:{
+            transform: ['browserify-shim'],
+            watch: true,
+            browserifyOptions:{
+              debug: !productionBuild
             }
           }
         }
-      },
-
-	open:{
-		server:{
-			path: 'http://localhost:<%= project.port %>',
-			app: 'Chrome'
+      },open:{
+        server:{
+          path: 'http://localhost:<%= project.port %>',
+          app: 'Chrome'
         }
-	},
+      },
 
 	cacheBust:
       { options:
