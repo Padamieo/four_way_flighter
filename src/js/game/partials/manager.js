@@ -73,15 +73,16 @@ var manage = {
 			var a_mega_zord = game.mega_zord.getFirstDead();
 			if (a_mega_zord === null) {
 				a_mega_zord = new megazord(game);
+				megabar = new megabar(game);
 			}
 			game.players.forEach( p.kill_players, this, true);
 		}
 
-		//need a way to only be active when megazord is
-		if(game.mega_zord.alive == true){
-			console.log("megazord physic");
-			//game.physics.arcade.collide(game.mega_zord, game.enemies, p.collision_notice, null, this);
-		}
+		// //need a way to only be active when megazord is
+		// if(game.mega_zord.alive == true){
+		// 	console.log("megazord physic");
+		// 	//game.physics.arcade.collide(game.mega_zord, game.enemies, p.collision_notice, null, this);
+		// }
 
 		//if player bullets remove them please.
 		game.bulletPool.forEachAlive(function(bullet){
