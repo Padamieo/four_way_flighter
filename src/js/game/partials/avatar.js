@@ -10,6 +10,7 @@ var avatar = function(game, i) {
 	if(i == 0){ w = (w/2); }else{ w = w*i+(w/2); }
 
 	Phaser.Sprite.call(this, game, w, h, 'fighter');
+
 	game.physics.enable(this, Phaser.Physics.ARCADE);
 	game.players.add(this);
 
